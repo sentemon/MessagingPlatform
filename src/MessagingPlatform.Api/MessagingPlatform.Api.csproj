@@ -11,4 +11,10 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MessagingPlatform.Application\MessagingPlatform.Application.csproj" />
+      <ProjectReference Include="..\MessagingPlatform.Infrastructure\MessagingPlatform.Infrastructure.csproj" />
+      <ProjectReference Include="..\MessagingPlatform.Presentation\MessagingPlatform.Presentation.csproj" />
+    </ItemGroup>
+
 </Project>
