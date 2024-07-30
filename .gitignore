@@ -256,3 +256,4 @@ _Pvt_Extensions
 .DS_Store
 .config/
 *.DotSettings.user
+*global.json

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Api", "MessagingPlatform.Api\MessagingPlatform.Api.csproj", "{871E8E55-1930-4200-814E-1ABCAD02953E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src", "src", "{4AB0F831-7774-4077-89CD-B1BA60D9BEF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src/MessagingPlatform.Api", "src/MessagingPlatform.Api\MessagingPlatform.Api.csproj", "{871E8E55-1930-4200-814E-1ABCAD02953E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
