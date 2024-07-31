@@ -16,4 +16,13 @@
       <PackageReference Include="MediatR" Version="12.4.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Users\Commands\Add\" />
+      <Folder Include="Users\Commands\Delete\" />
+      <Folder Include="Users\Commands\Update\" />
+      <Folder Include="Users\Queries\GetAll\" />
+      <Folder Include="Users\Queries\GetById\" />
+      <Folder Include="Users\Queries\GetByUsername\" />
+    </ItemGroup>
+
 </Project>
