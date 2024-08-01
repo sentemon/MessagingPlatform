@@ -9,15 +9,10 @@ namespace MessagingPlatform.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static async Task<IServiceCollection> AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-        
-        var userInitializer =  services.BuildServiceProvider().GetRequiredService<AppDbContextInitializer>();
-        await userInitializer.InitialiseAsync();
-
-        services.AddScoped<IUserRepository, UserRepository>();
         
         return services;
     }

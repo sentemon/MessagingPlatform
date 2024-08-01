@@ -7,9 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-await builder.Services.AddInfrastructure(builder.Configuration);
-
 builder.Services
+    .AddInfrastructure(builder.Configuration)
     .AddApplication()
     .AddPresentation();
 
