@@ -14,16 +14,17 @@ public class UserRepository : IUserRepository
     {
         _context = context;
     }
+    
     public async Task<IQueryable<User>> GetAllAsync()
     {
         var users = await Task.FromResult(_context.Users.AsQueryable());
 
         return users;
     }
-
-    public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    
+    public async Task<User?> GetByIdAsync(Guid id)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
         return user;
     }
@@ -35,12 +36,12 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task AddAsync(User entity, CancellationToken cancellationToken)
+    public async Task AddAsync(User user)
     {
         try
         {
-            await _context.Users.AddAsync(entity, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
         }
         catch (Exception e)
         {
@@ -48,14 +49,14 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task UpdateAsync(Guid id, User entity, CancellationToken cancellationToken)
+    public async Task UpdateAsync(Guid id, User user)
     {
         try
         {
-            EntityEntry entityEntry = _context.Entry(entity);
+            EntityEntry entityEntry = _context.Entry(user);
             entityEntry.State = EntityState.Modified;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync();
         }
         catch (Exception e)
         {
@@ -63,11 +64,11 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<bool> DeleteAsync(Guid id)
     {
         try
         {
-            var user = await _context.Users.FirstOrDefaultAsync(n => n.Id == id, cancellationToken);
+            var user = await _context.Users.FirstOrDefaultAsync(n => n.Id == id);
             
             if (user == null)
             {
@@ -77,7 +78,7 @@ public class UserRepository : IUserRepository
             EntityEntry entityEntry = _context.Entry(user);
             entityEntry.State = EntityState.Deleted;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync();
             return true;
         }
         catch (Exception e)

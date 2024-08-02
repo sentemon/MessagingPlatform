@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using MessagingPlatform.Application.Common.Interfaces;
+using MessagingPlatform.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MessagingPlatform.Application;
@@ -13,6 +15,9 @@ public static class DependencyInjection
             configuration.RegisterServicesFromAssembly(assembly));
 
         services.AddValidatorsFromAssembly(assembly);
+
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IPasswordHasherService, PasswordHasherService>();
 
         return services;
     }
