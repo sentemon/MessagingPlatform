@@ -16,7 +16,7 @@ namespace MessagingPlatform.Application.Services
             _passwordHasher = passwordHasher;
         }
         
-        public async Task<Guid> SignUp(SignUpDto signUpDto)
+        public async Task<Guid> Create(SignUpDto? signUpDto)
         {
             if (signUpDto == null)
             {
@@ -48,28 +48,18 @@ namespace MessagingPlatform.Application.Services
             return newUser.Id;
         }
 
-        public async Task<Guid> SignIn(SignInDto signInDto)
+        public async Task<bool> IsExist(SignInDto? signInDto)
         {
-            if (signInDto == null)
-            {
-                throw new ArgumentNullException(nameof(signInDto));
-            }
-            
             var user = await _userRepository.GetByUsernameAsync(signInDto.Username);
             
             if (user == null)
             {
-                throw new InvalidOperationException("Invalid email or password.");
+                return false;
             }
             
             var isPasswordValid = _passwordHasher.Verify(signInDto.Password, user.PasswordHash);
             
-            if (!isPasswordValid)
-            {
-                throw new InvalidOperationException("Invalid email or password.");
-            }
-            
-            return user.Id;
+            return isPasswordValid;
         }
     }
 }
