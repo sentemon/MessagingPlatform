@@ -52,7 +52,7 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            EntityEntry entityEntry = _context.Entry<User>(entity);
+            EntityEntry entityEntry = _context.Entry(entity);
             entityEntry.State = EntityState.Modified;
 
             await _context.SaveChangesAsync(cancellationToken);
@@ -67,14 +67,14 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            var entity = await _context.Users.FirstOrDefaultAsync(n => n.Id == id, cancellationToken);
+            var user = await _context.Users.FirstOrDefaultAsync(n => n.Id == id, cancellationToken);
             
-            if (entity == null)
+            if (user == null)
             {
                 return false;
             }
 
-            EntityEntry entityEntry = _context.Entry(entity);
+            EntityEntry entityEntry = _context.Entry(user);
             entityEntry.State = EntityState.Deleted;
 
             await _context.SaveChangesAsync(cancellationToken);
