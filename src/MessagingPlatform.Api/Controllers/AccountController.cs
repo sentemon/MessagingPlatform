@@ -1,6 +1,10 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MessagingPlatform.Application.Common.Models;
 using MessagingPlatform.Application.Common.Interfaces;
+using MessagingPlatform.Application.Users.Commands.SignIn;
+using MessagingPlatform.Application.Users.Commands.SignOut;
+using MessagingPlatform.Application.Users.Commands.SignUp;
 
 namespace MessagingPlatform.Api.Controllers;
 
@@ -8,11 +12,11 @@ namespace MessagingPlatform.Api.Controllers;
 [Route("api/[controller]")]
 public class AccountController : ControllerBase
 {
-    private readonly IAccountService _accountService;
+    private readonly IMediator _mediator;
 
-    public AccountController(IAccountService accountService)
+    public AccountController(IMediator mediator)
     {
-        _accountService = accountService;
+        _mediator = mediator;
     }
 
     // POST: api/account/signup
@@ -24,14 +28,14 @@ public class AccountController : ControllerBase
             return BadRequest("Invalid user data.");
         }
 
-        var result = await _accountService.SignUp(signUpDto);
+        var result = await _mediator.Send(new SignUpCommand(signUpDto));
 
-        if (result)
+        if (!result)
         {
-            return Ok("User registered successfully.");
+            return BadRequest("Failed to register user.");
         }
 
-        return BadRequest("Failed to register user.");
+        return Ok("User registered successfully.");
     }
 
     // POST: api/account/signin
@@ -43,21 +47,22 @@ public class AccountController : ControllerBase
             return BadRequest("Invalid user data.");
         }
 
-        var result = await _accountService.SignIn(signInDto);
+        var result = await _mediator.Send(new SignInCommand(signInDto));
 
-        if (result)
+        if (!result)
         {
-            return Ok("User signed in successfully.");
+            return Unauthorized("Invalid username or password.");
         }
 
-        return Unauthorized("Invalid username or password.");
+        return Ok("User signed in successfully.");
     }
 
     // POST: api/account/signout
     [HttpPost("signout")]
     public new async Task<IActionResult> SignOut()
     {
-        await _accountService.SignOut();
+        await _mediator.Send(new SignOutCommand());
+        
         return Ok("User signed out successfully.");
     }
 }

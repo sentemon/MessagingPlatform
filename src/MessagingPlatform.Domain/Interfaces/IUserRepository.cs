@@ -6,7 +6,7 @@ public interface IUserRepository
 {
     public Task<IQueryable<User>> GetAllAsync();
     public Task<User?> GetByIdAsync(Guid id);
-    public Task<User?> GetByUsernameAsync(string username);
+    public Task<User?> GetByUsernameAsync(string? username);
     public Task AddAsync(User user);
     public Task UpdateAsync(Guid id, User user);
     public Task<bool> DeleteAsync(Guid id);

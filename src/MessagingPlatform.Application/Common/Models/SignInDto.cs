@@ -5,8 +5,9 @@ namespace MessagingPlatform.Application.Common.Models;
 public class SignInDto
 {
     [Required]
-    public string Username { get; set; }
+    public required string Username { get; set; }
     
     [Required]
-    public string Password { get; set; }
+    [DataType(DataType.Password)]
+    public required string Password { get; set; }
 }

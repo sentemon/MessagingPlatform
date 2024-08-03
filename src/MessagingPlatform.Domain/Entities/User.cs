@@ -23,11 +23,12 @@ public class User
     public required string Email { get; set; }
     
     [Required]
+    
     public required string PasswordHash { get; set; }
     
     public string? Bio { get; set; }
     public bool? IsOnline { get; set; }
-    public DateTime AccountCreatedAt { get; set; }
+    public required DateTime AccountCreatedAt { get; set; }
 
     public List<Chat>? Chats { get; set; }
     public List<Group>? Groups { get; set; }

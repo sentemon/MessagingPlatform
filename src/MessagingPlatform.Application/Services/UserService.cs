@@ -29,7 +29,7 @@ public class UserService : IUserService
         {
             throw new InvalidOperationException("User with this email already exists.");
         }
-
+        
         var hashedPassword = _passwordHasher.Hash(signUpDto.Password);
 
         var newUser = new User
@@ -50,6 +50,11 @@ public class UserService : IUserService
 
     public async Task<bool> IsExist(SignInDto? signInDto)
     {
+        if (signInDto == null)
+        {
+            throw new ArgumentNullException(nameof(signInDto));
+        }
+        
         var user = await _userRepository.GetByUsernameAsync(signInDto.Username);
 
         if (user == null)
