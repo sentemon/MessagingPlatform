@@ -2,63 +2,62 @@ using Microsoft.AspNetCore.Mvc;
 using MessagingPlatform.Application.Common.Models;
 using MessagingPlatform.Application.Common.Interfaces;
 
-namespace MessagingPlatform.Api.Controllers
+namespace MessagingPlatform.Api.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AccountController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AccountController : ControllerBase
+    private readonly IAccountService _accountService;
+
+    public AccountController(IAccountService accountService)
     {
-        private readonly IAccountService _accountService;
+        _accountService = accountService;
+    }
 
-        public AccountController(IAccountService accountService)
+    // POST: api/account/signup
+    [HttpPost("signup")]
+    public async Task<IActionResult> SignUp([FromBody] SignUpDto? signUpDto)
+    {
+        if (signUpDto == null)
         {
-            _accountService = accountService;
+            return BadRequest("Invalid user data.");
         }
 
-        // POST: api/account/signup
-        [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromBody] SignUpDto? signUpDto)
+        var result = await _accountService.SignUp(signUpDto);
+
+        if (result)
         {
-            if (signUpDto == null)
-            {
-                return BadRequest("Invalid user data.");
-            }
-
-            var result = await _accountService.SignUp(signUpDto);
-
-            if (result)
-            {
-                return Ok("User registered successfully.");
-            }
-
-            return BadRequest("Failed to register user.");
+            return Ok("User registered successfully.");
         }
 
-        // POST: api/account/signin
-        [HttpPost("signin")]
-        public async Task<IActionResult> SignIn([FromBody] SignInDto? signInDto)
+        return BadRequest("Failed to register user.");
+    }
+
+    // POST: api/account/signin
+    [HttpPost("signin")]
+    public async Task<IActionResult> SignIn([FromBody] SignInDto? signInDto)
+    {
+        if (signInDto == null)
         {
-            if (signInDto == null)
-            {
-                return BadRequest("Invalid user data.");
-            }
-
-            var result = await _accountService.SignIn(signInDto);
-
-            if (result)
-            {
-                return Ok("User signed in successfully.");
-            }
-
-            return Unauthorized("Invalid username or password.");
+            return BadRequest("Invalid user data.");
         }
 
-        // POST: api/account/signout
-        [HttpPost("signout")]
-        public new async Task<IActionResult> SignOut()
+        var result = await _accountService.SignIn(signInDto);
+
+        if (result)
         {
-            await _accountService.SignOut();
-            return Ok("User signed out successfully.");
+            return Ok("User signed in successfully.");
         }
+
+        return Unauthorized("Invalid username or password.");
+    }
+
+    // POST: api/account/signout
+    [HttpPost("signout")]
+    public new async Task<IActionResult> SignOut()
+    {
+        await _accountService.SignOut();
+        return Ok("User signed out successfully.");
     }
 }

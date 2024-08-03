@@ -1,11 +1,10 @@
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using MessagingPlatform.Application.Common.Interfaces;
 using MessagingPlatform.Application.Common.Models;
-using MessagingPlatform.Domain.Interfaces;
+using MessagingPlatform.Domain.Entities;
 
 namespace MessagingPlatform.Application.Services;
 
@@ -53,7 +52,7 @@ public class AccountService : IAccountService
         var authProperties = new AuthenticationProperties
         {
             IsPersistent = true,
-            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30) // Example expiration time
+            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
         };
         
         var httpContext = _httpContextAccessor.HttpContext;

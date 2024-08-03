@@ -16,10 +16,10 @@ builder.Services.AddControllers();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/api/account/signin";
-        options.LogoutPath = "/api/account/signout";
+        options.LoginPath = "/api/Account/SignIn";
+        options.LogoutPath = "/api/Account/SignOut";
         options.Cookie.HttpOnly = true;
-        options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+        options.Cookie.SameSite = SameSiteMode.Lax;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     });
 
