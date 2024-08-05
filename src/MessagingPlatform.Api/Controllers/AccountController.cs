@@ -2,9 +2,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MessagingPlatform.Application.Common.Models;
 using MessagingPlatform.Application.Common.Interfaces;
-using MessagingPlatform.Application.Users.Commands.SignIn;
-using MessagingPlatform.Application.Users.Commands.SignOut;
-using MessagingPlatform.Application.Users.Commands.SignUp;
+using MessagingPlatform.Application.CQRS.Users.Commands.SignIn;
+using MessagingPlatform.Application.CQRS.Users.Commands.SignOut;
+using MessagingPlatform.Application.CQRS.Users.Commands.SignUp;
 
 namespace MessagingPlatform.Api.Controllers;
 

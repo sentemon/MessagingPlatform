@@ -4,25 +4,32 @@ namespace MessagingPlatform.Domain.Entities;
 
 public class Message
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
+    
+    [Required]
+    public required Guid SenderId { get; init; }
+    
+    [Required]
+    public required User Sender { get; init; }
 
-    public Guid SenderId { get; set; }
-    public User Sender { get; set; }
+    [Required] 
+    public required Guid ReceiverId { get; set; }
+    
+    [Required]
+    public required User Receiver { get; set; }
 
-    public List<User> Receivers { get; set; } = [];
+    // [Required]
+    // public required string Type { get; set; }
 
     [Required]
-    public string Type { get; set; }
+    public required string Content { get; set; }
+
+    // public List<string> Details { get; set; } = [];
 
     [Required]
-    public string Content { get; set; }
-
-    public List<string> Details { get; set; } = [];
-
-    [Required]
-    public DateTime SentAt { get; set; }
+    public required DateTime SentAt { get; init; }
 
     public DateTime? UpdatedAt { get; set; }
 
-    public bool IsRead { get; set; }
+    public bool IsRead { get; set; } = false;
 }

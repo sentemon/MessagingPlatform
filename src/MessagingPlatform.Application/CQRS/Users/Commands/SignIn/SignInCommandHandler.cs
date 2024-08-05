@@ -1,7 +1,7 @@
 using MediatR;
 using MessagingPlatform.Application.Common.Interfaces;
 
-namespace MessagingPlatform.Application.Users.Commands.SignIn;
+namespace MessagingPlatform.Application.CQRS.Users.Commands.SignIn;
 
 public class SignInCommandHandler : IRequestHandler<SignInCommand, bool>
 {

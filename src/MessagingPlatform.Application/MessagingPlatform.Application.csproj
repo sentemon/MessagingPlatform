@@ -26,12 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Users\Commands\AddUser\" />
-      <Folder Include="Users\Commands\DeleteUser\" />
-      <Folder Include="Users\Commands\UpdateUser\" />
-      <Folder Include="Users\Queries\GetAll\" />
-      <Folder Include="Users\Queries\GetById\" />
-      <Folder Include="Users\Queries\GetByUsername\" />
+      <Folder Include="CQRS\Messages\" />
     </ItemGroup>
 
 </Project>

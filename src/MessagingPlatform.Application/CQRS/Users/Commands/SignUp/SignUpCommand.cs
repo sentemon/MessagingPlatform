@@ -1,7 +1,7 @@
 using MediatR;
 using MessagingPlatform.Application.Common.Models;
 
-namespace MessagingPlatform.Application.Users.Commands.SignUp;
+namespace MessagingPlatform.Application.CQRS.Users.Commands.SignUp;
 
 public class SignUpCommand : IRequest<bool>
 {

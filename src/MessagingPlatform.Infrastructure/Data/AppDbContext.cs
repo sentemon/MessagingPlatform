@@ -8,9 +8,9 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Message> Messages { get; set; }
     public DbSet<Chat> Chats { get; set; }
     public DbSet<Group> Groups { get; set; }
-    public DbSet<Message> Messages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -42,7 +42,7 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Message>()
-            .HasMany(m => m.Receivers)
+            .HasOne(m => m.Receiver)
             .WithMany(u => u.Messages);
     }
 }

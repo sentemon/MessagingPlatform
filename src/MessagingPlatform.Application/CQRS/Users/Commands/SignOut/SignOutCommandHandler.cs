@@ -1,7 +1,7 @@
 using MediatR;
 using MessagingPlatform.Application.Common.Interfaces;
 
-namespace MessagingPlatform.Application.Users.Commands.SignOut;
+namespace MessagingPlatform.Application.CQRS.Users.Commands.SignOut;
 
 
 public class SignOutCommandHandler : IRequestHandler<SignOutCommand>
