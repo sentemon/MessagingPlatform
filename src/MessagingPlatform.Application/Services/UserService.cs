@@ -16,7 +16,7 @@ public class UserService : IUserService
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<Guid> Create(SignUpDto? signUpDto)
+    public async Task<Guid> Create(AddUserDto? signUpDto)
     {
         if (signUpDto == null)
         {

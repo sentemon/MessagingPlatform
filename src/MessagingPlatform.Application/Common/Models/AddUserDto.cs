@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MessagingPlatform.Application.Common.Models;
 
-public class SignUpDto
+public class AddUserDto
 {
     [Required]
     [MaxLength(50)]

@@ -1,10 +1,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MessagingPlatform.Application.Common.Models;
-using MessagingPlatform.Application.Common.Interfaces;
+using MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
+using MessagingPlatform.Application.CQRS.Users.Commands.DeleteUser;
 using MessagingPlatform.Application.CQRS.Users.Commands.SignIn;
-using MessagingPlatform.Application.CQRS.Users.Commands.SignOut;
-using MessagingPlatform.Application.CQRS.Users.Commands.SignUp;
+using MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MessagingPlatform.Api.Controllers;
 
@@ -21,14 +22,14 @@ public class AccountController : ControllerBase
 
     // POST: api/account/signup
     [HttpPost("signup")]
-    public async Task<IActionResult> SignUp([FromBody] SignUpDto? signUpDto)
+    public async Task<IActionResult> SignUp([FromBody] AddUserDto? signUpDto)
     {
         if (signUpDto == null)
         {
             return BadRequest("Invalid user data.");
         }
 
-        var result = await _mediator.Send(new SignUpCommand(signUpDto));
+        var result = await _mediator.Send(new AddUserCommand(signUpDto));
 
         if (!result)
         {
@@ -61,8 +62,17 @@ public class AccountController : ControllerBase
     [HttpPost("signout")]
     public new async Task<IActionResult> SignOut()
     {
-        await _mediator.Send(new SignOutCommand());
+        await _mediator.Send(new DeleteUserCommand());
         
         return Ok("User signed out successfully.");
+    }
+
+    // POST: api/account/update
+    [HttpPost("update")]
+    public async Task<IActionResult> Update([FromBody] UpdateUserDto updateUserDto)
+    {
+        await _mediator.Send(new UpdateUserCommand(updateUserDto));
+
+        return Ok("User data updated successfully");
     }
 }

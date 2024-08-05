@@ -19,7 +19,7 @@ public class AccountService : IAccountService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<bool> SignUp(SignUpDto? signUpDto)
+    public async Task<bool> SignUp(AddUserDto? signUpDto)
     {
         try
         {
@@ -33,7 +33,7 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<bool> SignIn(SignInDto? signInDto)
+    public async Task<bool> SignIn(SignInDto signInDto)
     {
         var isValidUser = await _userService.IsExist(signInDto);
         

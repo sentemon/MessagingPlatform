@@ -49,7 +49,7 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task UpdateAsync(Guid id, User user)
+    public async Task UpdateAsync(User user)
     {
         try
         {

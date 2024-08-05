@@ -8,23 +8,23 @@ public class User
 
     [Required]
     [MaxLength(50)]
-    public required string FirstName { get; set; }
+    public string FirstName { get; set; }
 
     [Required]
     [MaxLength(50)]
-    public required string LastName { get; set; }
+    public string LastName { get; set; }
 
     [Required]
     [MaxLength(30)]
-    public required string Username { get; set; }
+    public string Username { get; set; }
 
     [Required]
     [MaxLength(320)]
-    public required string Email { get; set; }
+    public string Email { get; set; }
     
     [Required]
     
-    public required string PasswordHash { get; set; }
+    public string PasswordHash { get; set; }
     
     public string? Bio { get; set; }
     public bool? IsOnline { get; set; }

@@ -4,7 +4,7 @@ namespace MessagingPlatform.Application.Common.Interfaces;
 
 public interface IUserService
 {
-    public Task<Guid> Create(SignUpDto? signUpDto);
+    public Task<Guid> Create(AddUserDto? signUpDto);
     public Task<bool> IsExist(SignInDto? signInDto);
 
 }
