@@ -2,7 +2,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MessagingPlatform.Application.Common.Models;
 using MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
-using MessagingPlatform.Application.CQRS.Users.Commands.DeleteUser;
 using MessagingPlatform.Application.CQRS.Users.Commands.SignIn;
 using MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
 using Microsoft.AspNetCore.Authorization;
@@ -48,31 +47,58 @@ public class AccountController : ControllerBase
             return BadRequest("Invalid user data.");
         }
 
-        var result = await _mediator.Send(new SignInCommand(signInDto));
+        var token = await _mediator.Send(new SignInCommand(signInDto));
 
-        if (!result)
+        if (token == null)
         {
             return Unauthorized("Invalid username or password.");
         }
 
-        return Ok("User signed in successfully.");
+        return Ok(new { Token = token });
     }
-
+    
     // POST: api/account/signout
     [HttpPost("signout")]
     public new async Task<IActionResult> SignOut()
     {
-        await _mediator.Send(new DeleteUserCommand());
-        
         return Ok("User signed out successfully.");
     }
-
+    
     // POST: api/account/update
     [HttpPost("update")]
-    public async Task<IActionResult> Update([FromBody] UpdateUserDto updateUserDto)
+    public async Task<IActionResult> Update([FromBody] UpdateUserDto? updateUserDto)
     {
-        await _mediator.Send(new UpdateUserCommand(updateUserDto));
+        if (updateUserDto == null)
+        {
+            return BadRequest("Invalid user data.");
+        }
 
-        return Ok("User data updated successfully");
+        var currentUser = User.Identity?.Name;
+    
+        if (currentUser == null || !currentUser.Equals(updateUserDto.Username, StringComparison.OrdinalIgnoreCase))
+        {
+            return Unauthorized("You can only update your own profile.");
+        }
+
+        try
+        {
+            var result = await _mediator.Send(new UpdateUserCommand(updateUserDto));
+
+            if (!result)
+            {
+                return NotFound("User not found.");
+            }
+
+            return Ok("User data updated successfully.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
+
 }

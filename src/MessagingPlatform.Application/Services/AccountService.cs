@@ -1,22 +1,27 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Text;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using MessagingPlatform.Application.Common.Interfaces;
 using MessagingPlatform.Application.Common.Models;
 using MessagingPlatform.Domain.Entities;
+using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.Services;
 
 public class AccountService : IAccountService
 {
     private readonly IUserService _userService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IUserRepository _userRepository;
+    private readonly IConfiguration _configuration;
 
-    public AccountService(IUserService userService, IHttpContextAccessor httpContextAccessor)
+    public AccountService(IUserService userService, IUserRepository userRepository, IConfiguration configuration)
     {
         _userService = userService;
-        _httpContextAccessor = httpContextAccessor;
+        _userRepository = userRepository;
+        _configuration = configuration;
     }
 
     public async Task<bool> SignUp(AddUserDto? signUpDto)
@@ -33,39 +38,64 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<bool> SignIn(SignInDto signInDto)
+    public async Task<string?> SignIn(SignInDto signInDto)
     {
         var isValidUser = await _userService.IsExist(signInDto);
         
         if (!isValidUser)
         {
-            return false;
+            return null;
         }
         
+        var user = await _userRepository.GetByUsernameAsync(signInDto.Username);
+        
+        if (user == null)
+        {
+            return null;
+        }
+        
+        var token = GenerateJwtToken(user);
+        return token;
+    }
+
+    private string GenerateJwtToken(User user)
+    {
+        var jwtSettings = _configuration.GetSection("JwtSettings");
+        var secretKey = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!);
+
         var claims = new[]
         {
-            new Claim(ClaimTypes.Name, signInDto.Username)
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username)
         };
 
-        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        
-        var authProperties = new AuthenticationProperties
-        {
-            IsPersistent = true,
-            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
-        };
-        
-        var httpContext = _httpContextAccessor.HttpContext;
-        await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-            new ClaimsPrincipal(claimsIdentity),
-            authProperties);
+        var key = new SymmetricSecurityKey(secretKey);
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        return true;
+        var token = new JwtSecurityToken(
+            issuer: jwtSettings["Issuer"],
+            audience: jwtSettings["Audience"],
+            claims: claims,
+            expires: DateTime.UtcNow.AddMinutes(double.Parse(jwtSettings["ExpirationMinutes"]!)),
+            signingCredentials: creds);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
     public async Task SignOut()
     {
-        var httpContext = _httpContextAccessor.HttpContext;
-        await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        await Task.CompletedTask;
+    }
+
+    public string GetCurrentUsername(HttpContext context)
+    {
+        var username = context.User.FindFirst(ClaimTypes.Name)?.Value;
+        return username ?? "Not Found";
+    }
+
+    public async Task<User?> GetCurrentUser(HttpContext context)
+    {
+        var username = GetCurrentUsername(context);
+        return await _userRepository.GetByUsernameAsync(username);
     }
 }

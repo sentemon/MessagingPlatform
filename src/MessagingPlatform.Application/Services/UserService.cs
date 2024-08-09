@@ -66,4 +66,34 @@ public class UserService : IUserService
 
         return isPasswordValid;
     }
+    
+    public async Task<User?> GetUserByIdAsync(Guid userId)
+    {
+        return await _userRepository.GetByIdAsync(userId);
+    }
+    
+    public async Task<bool> Update(User user)
+    {
+        if (user == null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
+
+        var existingUser = await _userRepository.GetByIdAsync(user.Id);
+
+        if (existingUser == null)
+        {
+            throw new InvalidOperationException("User not found.");
+        }
+
+        existingUser.FirstName = user.FirstName;
+        existingUser.LastName = user.LastName;
+        existingUser.Email = user.Email;
+        existingUser.Bio = user.Bio;
+        existingUser.Username = user.Username;
+
+        await _userRepository.UpdateAsync(existingUser);
+
+        return true;
+    }
 }

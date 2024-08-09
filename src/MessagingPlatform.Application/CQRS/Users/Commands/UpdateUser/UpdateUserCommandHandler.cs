@@ -1,38 +1,32 @@
 using MediatR;
-using MessagingPlatform.Domain.Interfaces;
+using MessagingPlatform.Application.Common.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
 
-public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
+public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, bool>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
 
-    public UpdateUserCommandHandler(IUserRepository userRepository)
+    public UpdateUserCommandHandler(IUserService userService)
     {
-        _userRepository = userRepository;
+        _userService = userService;
     }
-    
-    public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
-    {
-        if (request.UpdateUser == null)
-        {
-            throw new ArgumentNullException(nameof(request), "Input cannot be null");
-        }
 
-        var user = await _userRepository.GetByIdAsync(request.UpdateUser.Id);
-        
+    public async Task<bool> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+    {
+        var user = await _userService.GetUserByIdAsync(request.UpdateUser.Id);
+
         if (user == null)
         {
-            throw new InvalidOperationException($"User with ID {request.UpdateUser.Id} not found");
+            throw new InvalidOperationException("User not found.");
         }
-
+        
         user.FirstName = request.UpdateUser.FirstName;
         user.LastName = request.UpdateUser.LastName;
-        user.Username = request.UpdateUser.Username;
+        user.Username = request.UpdateUser.Username; 
         user.Email = request.UpdateUser.Email;
         user.Bio = request.UpdateUser.Bio;
-        
-        await _userRepository.UpdateAsync(user);
+
+        return await _userService.Update(user);
     }
-    
 }
