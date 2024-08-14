@@ -1,6 +1,6 @@
 using MessagingPlatform.Domain.Entities;
 using MessagingPlatform.Domain.Interfaces;
-using MessagingPlatform.Infrastructure.Data;
+using MessagingPlatform.Infrastructure.Persistence;
 
 namespace MessagingPlatform.Infrastructure.Repositories;
 

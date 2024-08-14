@@ -1,5 +1,5 @@
 ﻿using MessagingPlatform.Domain.Interfaces;
-using MessagingPlatform.Infrastructure.Data;
+using MessagingPlatform.Infrastructure.Persistence;
 using MessagingPlatform.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;

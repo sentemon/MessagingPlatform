@@ -1,6 +1,5 @@
 using MessagingPlatform.Application;
 using MessagingPlatform.Infrastructure;
-using MessagingPlatform.Presentation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -73,8 +72,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // Register application layers
 builder.Services
     .AddInfrastructure(builder.Configuration)
-    .AddApplication()
-    .AddPresentation();
+    .AddApplication();
 
 var app = builder.Build();
 
