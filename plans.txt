@@ -1,0 +1,119 @@
+MessagingPlatform (Solution)
+│
+├── MessagingPlatform.Api
+│   ├── Controllers
+│   │   └── ChatController.cs
+│   │   └── GroupController.cs
+│   │   └── MessageController.cs
+│   │   └── UserController.cs
+│   ├── Program.cs
+│   ├── Middlewares
+│   │   └── AuthenticationMiddleware.cs
+│   │   └── ErrorHandlingMiddleware.cs
+│   ├── Filters
+│   │   └── ValidationFilter.cs
+│   └── SignalR
+│       └── ChatHub.cs
+│
+├── MessagingPlatform.Application
+│   ├── Interfaces
+│   │   └── IChatService.cs
+│   │   └── IGroupService.cs
+│   │   └── IMessageService.cs
+│   │   └── IUserService.cs
+│   ├── Services
+│   │   └── ChatService.cs
+│   │   └── GroupService.cs
+│   │   └── MessageService.cs
+│   │   └── UserService.cs
+│   ├── Behaviors
+│   │   └── ValidationBehavior.cs
+│   │   └── LoggingBehavior.cs
+│   ├── Commands
+│   │   └── Chats
+│   │       └── CreateChatCommand.cs
+│   │       └── DeleteChatCommand.cs
+│   │   └── Groups
+│   │       └── CreateGroupCommand.cs
+│   │       └── DeleteGroupCommand.cs
+│   │   └── Messages
+│   │       └── SendMessageCommand.cs
+│   │       └── DeleteMessageCommand.cs
+│   │   └── Users
+│   │       └── RegisterUserCommand.cs
+│   │       └── UpdateUserCommand.cs
+│   ├── Queries
+│   │   └── Chats
+│   │       └── GetChatByIdQuery.cs
+│   │       └── GetAllChatsQuery.cs
+│   │   └── Groups
+│   │       └── GetGroupByIdQuery.cs
+│   │       └── GetAllGroupsQuery.cs
+│   │   └── Messages
+│   │       └── GetMessagesByChatIdQuery.cs
+│   │   └── Users
+│   │       └── GetUserByIdQuery.cs
+│   │       └── GetAllUsersQuery.cs
+│   ├── DTOs
+│   │   └── ChatDto.cs
+│   │   └── GroupDto.cs
+│   │   └── MessageDto.cs
+│   │   └── UserDto.cs
+│   ├── Exceptions
+│   │   └── NotFoundException.cs
+│   │   └── ValidationException.cs
+│   ├── Mappings
+│   │   └── ChatMappingProfile.cs
+│   │   └── GroupMappingProfile.cs
+│   │   └── MessageMappingProfile.cs
+│   │   └── UserMappingProfile.cs
+│   └── Validators
+│       └── CreateChatCommandValidator.cs
+│       └── SendMessageCommandValidator.cs
+│
+├── MessagingPlatform.Domain
+│   ├── Entities
+│   │   └── Chat.cs
+│   │   └── Group.cs
+│   │   └── Message.cs
+│   │   └── User.cs
+│   ├── Enums
+│   │   └── ChatType.cs
+│   ├── ValueObjects
+│   │   └── Email.cs
+│   │   └── PhoneNumber.cs
+│   └── Common
+│       └── AuditableEntity.cs
+│       └── BaseEntity.cs
+│
+├── MessagingPlatform.Infrastructure
+│   ├── Persistence
+│   │   ├── MessagingPlatformDbContext.cs
+│   │   ├── EntityConfigurations
+│   │   │   └── ChatConfiguration.cs
+│   │   │   └── GroupConfiguration.cs
+│   │   │   └── MessageConfiguration.cs
+│   │   │   └── UserConfiguration.cs
+│   │   ├── Migrations
+│   │   │   └── [Migration files].cs
+│   ├── Repositories
+│   │   └── ChatRepository.cs
+│   │   └── GroupRepository.cs
+│   │   └── MessageRepository.cs
+│   │   └── UserRepository.cs
+│   ├── Identity
+│   │   └── ApplicationUser.cs
+│   │   └── RoleManager.cs
+│   │   └── UserManager.cs
+│   └── Services
+│       └── EmailService.cs
+│       └── AuthService.cs
+│
+└── MessagingPlatform.Shared
+    ├── Extensions
+    │   └── ServiceCollectionExtensions.cs
+    ├── Constants
+    │   └── ApplicationConstants.cs
+    └── Utilities
+        └── DateTimeProvider.cs
+        └── PasswordHasher.cs
