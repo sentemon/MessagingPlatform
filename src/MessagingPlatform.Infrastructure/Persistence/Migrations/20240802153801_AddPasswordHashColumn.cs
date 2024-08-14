@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace MessagingPlatform.Infrastructure.Persistance.Migrations
+namespace MessagingPlatform.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class AddPasswordHashColumn : Migration

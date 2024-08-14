@@ -16,11 +16,6 @@ MessagingPlatform (Solution)
 │       └── ChatHub.cs
 │
 ├── MessagingPlatform.Application
-│   ├── Interfaces
-│   │   └── IChatService.cs
-│   │   └── IGroupService.cs
-│   │   └── IMessageService.cs
-│   │   └── IUserService.cs
 │   ├── Services
 │   │   └── ChatService.cs
 │   │   └── GroupService.cs
@@ -77,6 +72,11 @@ MessagingPlatform (Solution)
 │   │   └── Group.cs
 │   │   └── Message.cs
 │   │   └── User.cs
+│   ├── Interfaces
+│   │   │   └── IChatService.cs
+│   │   │   └── IGroupService.cs
+│   │   │   └── IMessageService.cs
+│   │   │   └── IUserService.cs
 │   ├── Enums
 │   │   └── ChatType.cs
 │   ├── ValueObjects

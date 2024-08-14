@@ -1,6 +1,6 @@
 namespace MessagingPlatform.Domain.Interfaces;
 
-public interface IGroupService
+public interface IGroupRepository
 {
     
 }

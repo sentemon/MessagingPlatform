@@ -1,7 +1,7 @@
 using MessagingPlatform.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace MessagingPlatform.Infrastructure.Persistance;
+namespace MessagingPlatform.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext
 {

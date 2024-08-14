@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Applicati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Infrastructure", "src\MessagingPlatform.Infrastructure\MessagingPlatform.Infrastructure.csproj", "{A56AE376-4622-45F6-85FC-3F8F1C3DCB92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Presentation", "src\MessagingPlatform.Presentation\MessagingPlatform.Presentation.csproj", "{2A55B4EC-5D82-4EA3-8299-B0A8330347B8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,16 +32,11 @@ Global
 		{A56AE376-4622-45F6-85FC-3F8F1C3DCB92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A56AE376-4622-45F6-85FC-3F8F1C3DCB92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A56AE376-4622-45F6-85FC-3F8F1C3DCB92}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A55B4EC-5D82-4EA3-8299-B0A8330347B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A55B4EC-5D82-4EA3-8299-B0A8330347B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A55B4EC-5D82-4EA3-8299-B0A8330347B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A55B4EC-5D82-4EA3-8299-B0A8330347B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{871E8E55-1930-4200-814E-1ABCAD02953E} = {533118EF-BFBC-4140-83E1-A7F0701D92E2}
 		{FA908482-1173-4A8D-9D2C-3E7BE57BF43A} = {533118EF-BFBC-4140-83E1-A7F0701D92E2}
 		{414A56B7-0737-44FB-8BB6-5D063FBBC7AD} = {533118EF-BFBC-4140-83E1-A7F0701D92E2}
 		{A56AE376-4622-45F6-85FC-3F8F1C3DCB92} = {533118EF-BFBC-4140-83E1-A7F0701D92E2}
-		{2A55B4EC-5D82-4EA3-8299-B0A8330347B8} = {533118EF-BFBC-4140-83E1-A7F0701D92E2}
 	EndGlobalSection
 EndGlobal
