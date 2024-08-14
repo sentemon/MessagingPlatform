@@ -257,4 +257,6 @@ _Pvt_Extensions
 .config/
 *.DotSettings.user
 *global.json
+
+# my own
 plans.txt
