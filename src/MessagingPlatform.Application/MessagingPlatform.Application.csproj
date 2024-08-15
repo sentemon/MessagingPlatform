@@ -25,8 +25,4 @@
       <PackageReference Include="Microsoft.Identity.Client" Version="4.62.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="CQRS\Messages\" />
-    </ItemGroup>
-
 </Project>

@@ -1,4 +1,5 @@
 using MessagingPlatform.Application.Common.Models;
+using MessagingPlatform.Application.Common.Models.UserDTOs;
 using MessagingPlatform.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 

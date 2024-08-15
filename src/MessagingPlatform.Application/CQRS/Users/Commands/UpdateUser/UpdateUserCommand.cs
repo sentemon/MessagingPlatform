@@ -1,5 +1,6 @@
 using MediatR;
 using MessagingPlatform.Application.Common.Models;
+using MessagingPlatform.Application.Common.Models.UserDTOs;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
 

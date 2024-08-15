@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MessagingPlatform.Application.Common.Models;
+using MessagingPlatform.Application.Common.Models.UserDTOs;
 using MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
 using MessagingPlatform.Application.CQRS.Users.Commands.DeleteUser;
 using MessagingPlatform.Application.CQRS.Users.Commands.SignIn;

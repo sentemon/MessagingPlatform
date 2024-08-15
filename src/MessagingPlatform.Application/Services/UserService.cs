@@ -1,5 +1,6 @@
 using MessagingPlatform.Application.Common.Interfaces;
 using MessagingPlatform.Application.Common.Models;
+using MessagingPlatform.Application.Common.Models.UserDTOs;
 using MessagingPlatform.Domain.Interfaces;
 using MessagingPlatform.Domain.Entities;
 

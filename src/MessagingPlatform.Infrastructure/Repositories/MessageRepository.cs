@@ -1,6 +1,7 @@
 using MessagingPlatform.Domain.Entities;
 using MessagingPlatform.Domain.Interfaces;
 using MessagingPlatform.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace MessagingPlatform.Infrastructure.Repositories;
 
@@ -55,5 +56,41 @@ public class MessageRepository : IMessageRepository
             .Where(m => m.Receiver.Username == senderUsername && m.Content == content));
 
         return messages;
+    }
+
+    public async Task<Message> UpdateAsync(Guid senderId, Guid messageId, Message updatedMessage)
+    {
+        var message = await _appDbContext.Messages
+            .FirstOrDefaultAsync(m => m.Id == messageId && m.SenderId == senderId);
+
+        if (message is null)
+        {
+            throw new KeyNotFoundException("Message not found or user does not have permission to update this message.");
+        }
+        
+        message.Content = updatedMessage.Content;
+        message.UpdatedAt = DateTime.UtcNow;
+        
+        _appDbContext.Messages.Update(message);
+        await _appDbContext.SaveChangesAsync();
+
+        return message;
+    }
+
+
+    public async Task<bool> DeleteMessage(Guid senderId, Guid messageId)
+    {
+        var message = await _appDbContext.Messages
+            .FirstOrDefaultAsync(m => m.Id == messageId && m.SenderId == senderId);
+
+        if (message is null)
+        {
+            return false;
+        }
+        
+        _appDbContext.Messages.Remove(message);
+        await _appDbContext.SaveChangesAsync();
+
+        return true;
     }
 }
