@@ -64,7 +64,7 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(Guid? id)
     {
         try
         {

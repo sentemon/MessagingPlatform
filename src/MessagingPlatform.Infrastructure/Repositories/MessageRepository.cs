@@ -32,14 +32,14 @@ public class MessageRepository : IMessageRepository
         return message;
     }
 
-    public async Task<IQueryable<Message>>? GetAllAsync()
+    public async Task<IQueryable<Message>> GetAllAsync()
     {
         var messages = await Task.FromResult(_appDbContext.Messages.AsQueryable());
 
         return messages;
     }
 
-    public async Task<IQueryable<Message>>? GetByUsernameAsync(string senderUsername, string receiverUsername)
+    public async Task<IQueryable<Message>> GetByUsernameAsync(string senderUsername, string receiverUsername)
     {
         var messages = await Task.FromResult(_appDbContext.Messages
             .AsQueryable()
@@ -48,7 +48,7 @@ public class MessageRepository : IMessageRepository
         return messages;
     }
 
-    public async Task<IQueryable<Message>>? GetByContentAsync(string senderUsername, string content)
+    public async Task<IQueryable<Message>> GetByContentAsync(string senderUsername, string content)
     {
         var messages = await Task.FromResult(_appDbContext.Messages
             .AsQueryable()
