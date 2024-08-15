@@ -2,8 +2,12 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MessagingPlatform.Application.Common.Models;
 using MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
+using MessagingPlatform.Application.CQRS.Users.Commands.DeleteUser;
 using MessagingPlatform.Application.CQRS.Users.Commands.SignIn;
 using MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
+using MessagingPlatform.Application.CQRS.Users.Queries.GetAllUsers;
+using MessagingPlatform.Application.CQRS.Users.Queries.GetUserById;
+using MessagingPlatform.Application.CQRS.Users.Queries.GetUserByUsername;
 using Microsoft.AspNetCore.Authorization;
 
 namespace MessagingPlatform.Api.Controllers;
@@ -19,7 +23,30 @@ public class AccountController : ControllerBase
         _mediator = mediator;
     }
 
-    // POST: api/account/signup
+    [HttpGet("users")]
+    public async Task<IActionResult> GetAll() // ToDo: only for admins 
+    {
+        var users = await _mediator.Send(new GetAllUsersQuery());
+
+        return Ok(users);
+    }
+    
+    [HttpGet("userbyid")]
+    public async Task<IActionResult> GetById(Guid id) // ToDo: only for admins
+    {
+        var user = await _mediator.Send(new GetUserByIdQuery(id));
+
+        return Ok(user);
+    }
+    
+    [HttpGet("userbyusername")]
+    public async Task<IActionResult> GetByUsername(string username)
+    {
+        var user = await _mediator.Send(new GetUserByUsenameQuery(username));
+
+        return Ok(user);
+    }
+    
     [HttpPost("signup")]
     public async Task<IActionResult> SignUp([FromBody] AddUserDto? signUpDto)
     {
@@ -37,8 +64,7 @@ public class AccountController : ControllerBase
 
         return Ok("User registered successfully.");
     }
-
-    // POST: api/account/signin
+    
     [HttpPost("signin")]
     public async Task<IActionResult> SignIn([FromBody] SignInDto? signInDto)
     {
@@ -57,16 +83,14 @@ public class AccountController : ControllerBase
         return Ok(new { Token = token });
     }
     
-    // POST: api/account/signout
     [HttpPost("signout")]
     public new async Task<IActionResult> SignOut()
     {
         return Ok("User signed out successfully.");
     }
     
-    // PUT: api/account/update
     [HttpPut("update")]
-    public async Task<IActionResult> Update([FromBody] UpdateUserDto? updateUserDto)
+    public async Task<IActionResult> Update([FromBody] UpdateUserDto? updateUserDto) // ToDo: only for the owner of this account
     {
         if (updateUserDto == null)
         {
@@ -98,6 +122,31 @@ public class AccountController : ControllerBase
         catch (Exception ex)
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+    
+    [HttpDelete("delete")]
+    public async Task<IActionResult> Delete([FromBody] Guid? id) // ToDo: only for the owner of this account
+    {
+        if (id is null)
+        {
+            return BadRequest("Invalid user data.");
+        }
+
+        try
+        {
+            var result = await _mediator.Send(new DeleteUserCommand(id));
+
+            if (!result)
+            {
+                return NotFound("User not found.");
+            }
+
+            return Ok("User deleted successfully.");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
         }
     }
 
