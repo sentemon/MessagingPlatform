@@ -2,4 +2,4 @@ using MediatR;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.DeleteUser;
 
-public class DeleteUserCommand : IRequest;
+public record DeleteUserCommand(Guid? Id) : IRequest<bool>;

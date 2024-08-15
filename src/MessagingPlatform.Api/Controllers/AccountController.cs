@@ -64,8 +64,8 @@ public class AccountController : ControllerBase
         return Ok("User signed out successfully.");
     }
     
-    // POST: api/account/update
-    [HttpPost("update")]
+    // PUT: api/account/update
+    [HttpPut("update")]
     public async Task<IActionResult> Update([FromBody] UpdateUserDto? updateUserDto)
     {
         if (updateUserDto == null)

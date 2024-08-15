@@ -9,5 +9,5 @@ public interface IUserRepository
     public Task<User?> GetByUsernameAsync(string? username);
     public Task AddAsync(User user);
     public Task UpdateAsync(User user);
-    public Task<bool> DeleteAsync(Guid id);
+    public Task<bool> DeleteAsync(Guid? id);
 }

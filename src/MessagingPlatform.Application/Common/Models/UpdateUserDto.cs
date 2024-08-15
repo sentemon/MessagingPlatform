@@ -14,5 +14,5 @@ public class UpdateUserDto
 
     // public string PasswordHash { get; set; }
 
-    public string? Bio { get; set; }
+    public string Bio { get; set; } = string.Empty;
 }

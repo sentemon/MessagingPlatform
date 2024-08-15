@@ -83,7 +83,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Messaging Platform API v1");
-        c.RoutePrefix = string.Empty; // Serve Swagger UI at the app's root
+        c.RoutePrefix = "swagger";
     });
 }
 
