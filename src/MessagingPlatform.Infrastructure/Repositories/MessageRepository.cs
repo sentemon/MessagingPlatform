@@ -14,15 +14,15 @@ public class MessageRepository : IMessageRepository
         _appDbContext = appDbContext;
     }
     
-    public async Task<Message> CreateAsync(User sender, User receiver, string content)
+    public async Task<Message> CreateAsync(Guid senderId, Guid receiverId, string content)
     {
         var message = new Message
         {
             Id = Guid.NewGuid(),
-            SenderId = sender.Id,
-            Sender = sender,
-            ReceiverId = receiver.Id,
-            Receiver = receiver,
+            SenderId = senderId,
+            Sender = null, // ToDo: fix
+            ReceiverId = receiverId,
+            Receiver = null, // ToDo: fix
             Content = content.Trim(),
             SentAt = DateTime.UtcNow
         };
