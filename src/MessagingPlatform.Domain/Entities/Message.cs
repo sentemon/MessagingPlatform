@@ -5,26 +5,21 @@ namespace MessagingPlatform.Domain.Entities;
 public class Message
 {
     public Guid Id { get; init; }
-    
+
     [Required]
     public required Guid SenderId { get; init; }
-    
+
     [Required]
     public required User Sender { get; init; }
 
-    [Required] 
-    public required Guid ReceiverId { get; set; }
-    
     [Required]
-    public required User Receiver { get; set; }
+    public required Guid ChatId { get; set; }
 
-    // [Required]
-    // public required string Type { get; set; }
+    [Required]
+    public required Chat Chat { get; set; }
 
     [Required]
     public required string Content { get; set; }
-
-    // public List<string> Details { get; set; } = [];
 
     [Required]
     public required DateTime SentAt { get; init; }
