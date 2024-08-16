@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace MessagingPlatform.Infrastructure.Persistence.Migrations
+namespace MessagingPlatform.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240815111214_AddReceiverToMessages")]
-    partial class AddReceiverToMessages
+    [Migration("20240816064113_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,19 +25,19 @@ namespace MessagingPlatform.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("GroupUser", b =>
+            modelBuilder.Entity("ChatUser", b =>
                 {
-                    b.Property<Guid>("GroupsId")
+                    b.Property<Guid>("ChatsId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("UsersId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("GroupsId", "UsersId");
+                    b.HasKey("ChatsId", "UsersId");
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("GroupUser");
+                    b.ToTable("ChatUser");
                 });
 
             modelBuilder.Entity("MessagingPlatform.Domain.Entities.Chat", b =>
@@ -46,37 +46,13 @@ namespace MessagingPlatform.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("User1Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("User2Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("User1Id");
-
-                    b.HasIndex("User2Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Chats");
-                });
-
-            modelBuilder.Entity("MessagingPlatform.Domain.Entities.Group", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                    b.Property<int>("ChatType")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -84,7 +60,7 @@ namespace MessagingPlatform.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("MessagingPlatform.Domain.Entities.Message", b =>
@@ -93,21 +69,15 @@ namespace MessagingPlatform.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ChatId")
+                    b.Property<Guid>("ChatId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("GroupId")
-                        .HasColumnType("uuid");
-
                     b.Property<bool>("IsRead")
                         .HasColumnType("boolean");
-
-                    b.Property<Guid>("ReceiverId")
-                        .HasColumnType("uuid");
 
                     b.Property<Guid>("SenderId")
                         .HasColumnType("uuid");
@@ -121,10 +91,6 @@ namespace MessagingPlatform.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("ReceiverId");
 
                     b.HasIndex("SenderId");
 
@@ -180,11 +146,11 @@ namespace MessagingPlatform.Infrastructure.Persistence.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("GroupUser", b =>
+            modelBuilder.Entity("ChatUser", b =>
                 {
-                    b.HasOne("MessagingPlatform.Domain.Entities.Group", null)
+                    b.HasOne("MessagingPlatform.Domain.Entities.Chat", null)
                         .WithMany()
-                        .HasForeignKey("GroupsId")
+                        .HasForeignKey("ChatsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -197,33 +163,10 @@ namespace MessagingPlatform.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("MessagingPlatform.Domain.Entities.Chat", b =>
                 {
-                    b.HasOne("MessagingPlatform.Domain.Entities.User", "User1")
-                        .WithMany()
-                        .HasForeignKey("User1Id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("MessagingPlatform.Domain.Entities.User", "User2")
-                        .WithMany()
-                        .HasForeignKey("User2Id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("MessagingPlatform.Domain.Entities.User", null)
-                        .WithMany("Chats")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User1");
-
-                    b.Navigation("User2");
-                });
-
-            modelBuilder.Entity("MessagingPlatform.Domain.Entities.Group", b =>
-                {
                     b.HasOne("MessagingPlatform.Domain.Entities.User", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Creator");
@@ -231,27 +174,19 @@ namespace MessagingPlatform.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("MessagingPlatform.Domain.Entities.Message", b =>
                 {
-                    b.HasOne("MessagingPlatform.Domain.Entities.Chat", null)
+                    b.HasOne("MessagingPlatform.Domain.Entities.Chat", "Chat")
                         .WithMany("Messages")
-                        .HasForeignKey("ChatId");
-
-                    b.HasOne("MessagingPlatform.Domain.Entities.Group", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("GroupId");
-
-                    b.HasOne("MessagingPlatform.Domain.Entities.User", "Receiver")
-                        .WithMany("Messages")
-                        .HasForeignKey("ReceiverId")
+                        .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MessagingPlatform.Domain.Entities.User", "Sender")
-                        .WithMany()
+                        .WithMany("Messages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Receiver");
+                    b.Navigation("Chat");
 
                     b.Navigation("Sender");
                 });
@@ -268,15 +203,8 @@ namespace MessagingPlatform.Infrastructure.Persistence.Migrations
                     b.Navigation("Messages");
                 });
 
-            modelBuilder.Entity("MessagingPlatform.Domain.Entities.Group", b =>
-                {
-                    b.Navigation("Messages");
-                });
-
             modelBuilder.Entity("MessagingPlatform.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Chats");
-
                     b.Navigation("Friends");
 
                     b.Navigation("Messages");
