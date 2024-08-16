@@ -53,7 +53,7 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
         options.JsonSerializerOptions.WriteIndented = true;
-    });
+    }); // ToDo: опция чтобы нормально работало с enum (хз почитать)
 
 // Load JWT settings from configuration
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

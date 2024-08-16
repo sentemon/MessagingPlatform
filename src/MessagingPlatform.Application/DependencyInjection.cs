@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
 using MessagingPlatform.Application.Common.Interfaces;
 using MessagingPlatform.Application.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Http;
 
 namespace MessagingPlatform.Application;
 

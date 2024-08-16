@@ -1,5 +1,4 @@
 using MediatR;
-using MessagingPlatform.Application.Common.Interfaces;
 using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.DeleteUser;

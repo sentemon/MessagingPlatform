@@ -1,4 +1,3 @@
-using MessagingPlatform.Application.Common.Models;
 using MessagingPlatform.Application.Common.Models.UserDTOs;
 using MessagingPlatform.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -7,13 +6,13 @@ namespace MessagingPlatform.Application.Common.Interfaces;
 
 public interface IAccountService
 {
-    public Task<bool> SignUp(AddUserDto? signUpDto);
+    Task<bool> SignUp(AddUserDto? signUpDto);
 
-    public Task<string?> SignIn(SignInDto signInDto);
+    Task<string?> SignIn(SignInDto signInDto);
 
-    public Task SignOut();
+    Task SignOut();
 
-    public string GetCurrentUsername(HttpContext context);
+    string GetCurrentUsername(HttpContext context);
 
-    public Task<User?> GetCurrentUser(HttpContext context);
+    Task<User?> GetCurrentUser(HttpContext context);
 }

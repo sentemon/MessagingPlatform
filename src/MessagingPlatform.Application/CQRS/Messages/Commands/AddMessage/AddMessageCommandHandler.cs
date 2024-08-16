@@ -2,28 +2,27 @@ using MediatR;
 using MessagingPlatform.Domain.Entities;
 using MessagingPlatform.Domain.Interfaces;
 
-namespace MessagingPlatform.Application.CQRS.Messages.Commands.AddMessage
+namespace MessagingPlatform.Application.CQRS.Messages.Commands.AddMessage;
+
+public class AddMessageCommandHandler : IRequestHandler<AddMessageCommand, Message>
 {
-    public class AddMessageCommandHandler : IRequestHandler<AddMessageCommand, Message>
+    private readonly IMessageRepository _messageRepository;
+
+    public AddMessageCommandHandler(IMessageRepository messageRepository)
     {
-        private readonly IMessageRepository _messageRepository;
-
-        public AddMessageCommandHandler(IMessageRepository messageRepository)
-        {
-            _messageRepository = messageRepository;
-        }
+        _messageRepository = messageRepository;
+    }
         
-        public async Task<Message> Handle(AddMessageCommand request, CancellationToken cancellationToken)
-        {
-            var chatId = request.AddMessage.ChatId;
+    public async Task<Message> Handle(AddMessageCommand request, CancellationToken cancellationToken)
+    {
+        var chatId = request.AddMessage.ChatId;
             
-            var message = await _messageRepository.CreateAsync(
-                request.AddMessage.SenderId, 
-                chatId, 
-                request.AddMessage.Content
-            );
+        var message = await _messageRepository.CreateAsync(
+            request.AddMessage.SenderId, 
+            chatId, 
+            request.AddMessage.Content
+        );
 
-            return message;
-        }
+        return message;
     }
 }

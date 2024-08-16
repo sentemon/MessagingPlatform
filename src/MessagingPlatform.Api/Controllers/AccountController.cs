@@ -1,6 +1,5 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MessagingPlatform.Application.Common.Models;
 using MessagingPlatform.Application.Common.Models.UserDTOs;
 using MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
 using MessagingPlatform.Application.CQRS.Users.Commands.DeleteUser;
@@ -9,7 +8,6 @@ using MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetAllUsers;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserById;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserByUsername;
-using Microsoft.AspNetCore.Authorization;
 
 namespace MessagingPlatform.Api.Controllers;
 

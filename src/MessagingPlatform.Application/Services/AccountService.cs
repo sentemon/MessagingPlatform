@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MessagingPlatform.Application.Common.Interfaces;
-using MessagingPlatform.Application.Common.Models;
 using MessagingPlatform.Application.Common.Models.UserDTOs;
 using MessagingPlatform.Domain.Entities;
 using MessagingPlatform.Domain.Interfaces;
