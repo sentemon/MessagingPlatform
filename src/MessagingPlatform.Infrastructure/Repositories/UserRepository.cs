@@ -15,6 +15,13 @@ public class UserRepository : IUserRepository
         _context = context;
     }
     
+    public async Task<IEnumerable<User>> GetUsersByIdsAsync(IEnumerable<Guid> userIds)
+    {
+        return await _context.Users
+            .Where(u => userIds.Contains(u.Id))
+            .ToListAsync();
+    }
+    
     public async Task<IQueryable<User>> GetAllAsync()
     {
         var users = await Task.FromResult(_context.Users.AsQueryable());

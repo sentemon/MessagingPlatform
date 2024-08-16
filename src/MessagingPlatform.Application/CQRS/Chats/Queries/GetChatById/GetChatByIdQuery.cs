@@ -1,6 +1,6 @@
+using MediatR;
+using MessagingPlatform.Domain.Entities;
+
 namespace MessagingPlatform.Application.CQRS.Chats.Queries.GetChatById;
 
-public class GetChatByIdQuery
-{
-    
-}
+public record GetChatByIdQuery(Guid Id) : IRequest<Chat>;

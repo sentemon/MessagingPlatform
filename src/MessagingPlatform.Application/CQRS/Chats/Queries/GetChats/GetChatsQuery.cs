@@ -1,6 +1,6 @@
+using MediatR;
+using MessagingPlatform.Domain.Entities;
+
 namespace MessagingPlatform.Application.CQRS.Chats.Queries.GetChats;
 
-public class GetChatsQuery
-{
-    
-}
+public record GetChatsQuery : IRequest<IEnumerable<Chat>>;
