@@ -8,20 +8,30 @@ namespace MessagingPlatform.Infrastructure.Repositories;
 public class MessageRepository : IMessageRepository
 {
     private readonly AppDbContext _appDbContext;
+    private readonly IChatRepository _chatRepository;
 
-    public MessageRepository(AppDbContext appDbContext)
+    public MessageRepository(AppDbContext appDbContext, IChatRepository chatRepository)
     {
         _appDbContext = appDbContext;
+        _chatRepository = chatRepository;
     }
 
     public async Task<Message> CreateAsync(Guid senderId, Guid chatId, string content)
     {
-        var sender = await _appDbContext.Users.FindAsync(senderId);
-        var chat = await _appDbContext.Chats.Include(c => c.Users).FirstOrDefaultAsync(c => c.Id == chatId);
+        var chat = await _appDbContext.Chats
+            .Include(c => c.Users)
+            .FirstOrDefaultAsync(c => c.Id == chatId);
 
-        if (sender == null || chat == null || chat.Users.All(u => u.Id != senderId))
+        if (chat == null || chat.Users.All(u => u.Id != senderId))
         {
             throw new ArgumentException("Invalid sender or chat.");
+        }
+
+        var sender = await _appDbContext.Users.FindAsync(senderId);
+
+        if (sender == null)
+        {
+            throw new ArgumentException("Invalid sender.");
         }
 
         var message = new Message
@@ -43,7 +53,10 @@ public class MessageRepository : IMessageRepository
 
     public async Task<IQueryable<Message>> GetAllAsync()
     {
-        return await Task.FromResult(_appDbContext.Messages.AsQueryable());
+        return await Task.FromResult(_appDbContext.Messages
+            .Include(m => m.Sender)
+            .Include(m => m.Chat)
+            .AsQueryable());
     }
 
     public async Task<IQueryable<Message>> GetByUsernameAsync(string senderUsername, string chatTitle)
@@ -72,7 +85,7 @@ public class MessageRepository : IMessageRepository
         var message = await _appDbContext.Messages
             .FirstOrDefaultAsync(m => m.Id == messageId && m.SenderId == senderId);
 
-        if (message is null)
+        if (message == null)
         {
             throw new KeyNotFoundException("Message not found or user does not have permission to update this message.");
         }
@@ -91,7 +104,7 @@ public class MessageRepository : IMessageRepository
         var message = await _appDbContext.Messages
             .FirstOrDefaultAsync(m => m.Id == messageId && m.SenderId == senderId);
 
-        if (message is null)
+        if (message == null)
         {
             return false;
         }
