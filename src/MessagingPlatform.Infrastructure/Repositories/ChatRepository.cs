@@ -24,7 +24,8 @@ public class ChatRepository : IChatRepository
     public async Task<Chat?> GetByIdAsync(Guid id)
     {
         return await _appDbContext.Chats
-            .Include(c => c.Users)
+            .Include(c => c.UserChats)!
+            .ThenInclude(uc => uc.User)
             .Include(c => c.Messages)
             .FirstOrDefaultAsync(c => c.Id == id);
     }
@@ -32,7 +33,8 @@ public class ChatRepository : IChatRepository
     public async Task<IEnumerable<Chat?>> GetAllAsync()
     {
         return await _appDbContext.Chats
-            .Include(c => c.Users)
+            .Include(c => c.UserChats)!
+            .ThenInclude(uc => uc.User)
             .Include(c => c.Messages)
             .ToListAsync();
     }

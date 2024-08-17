@@ -8,21 +8,20 @@ namespace MessagingPlatform.Infrastructure.Repositories;
 public class MessageRepository : IMessageRepository
 {
     private readonly AppDbContext _appDbContext;
-    private readonly IChatRepository _chatRepository;
 
-    public MessageRepository(AppDbContext appDbContext, IChatRepository chatRepository)
+    public MessageRepository(AppDbContext appDbContext)
     {
         _appDbContext = appDbContext;
-        _chatRepository = chatRepository;
     }
 
     public async Task<Message> CreateAsync(Guid senderId, Guid chatId, string content)
     {
         var chat = await _appDbContext.Chats
-            .Include(c => c.Users)
+            .Include(c => c.UserChats)!
+                .ThenInclude(uc => uc.User)
             .FirstOrDefaultAsync(c => c.Id == chatId);
 
-        if (chat == null || chat.Users.All(u => u.Id != senderId))
+        if (chat == null || chat.UserChats!.All(uc => uc.UserId != senderId))
         {
             throw new ArgumentException("Invalid sender or chat.");
         }
@@ -53,29 +52,49 @@ public class MessageRepository : IMessageRepository
 
     public async Task<IQueryable<Message>> GetAllAsync()
     {
-        return await Task.FromResult(_appDbContext.Messages
+        var messages = _appDbContext.Messages
             .Include(m => m.Sender)
             .Include(m => m.Chat)
-            .AsQueryable());
+            .AsQueryable();
+
+        return messages;
     }
 
+    public async Task<IQueryable<Message>> GetByUserIdAndChatId(Guid userId, Guid chatId)  //ToDo: check if user has access to the chat(already done) maybe change in the future
+    {
+        var hasAccess = await _appDbContext.UserChats
+            .AnyAsync(uc => uc.UserId == userId && uc.ChatId == chatId);
+        
+        if (!hasAccess)
+        {
+            throw new Exception("you don't have permissions to see it");
+        }
+        var messages = _appDbContext.Messages
+            .Where(m => m.ChatId == chatId)
+            .Include(m => m.Sender)
+            .Include(m => m.Chat)
+            .AsQueryable();
+
+        return messages;
+    }
+    
     public async Task<IQueryable<Message>> GetByUsernameAsync(string senderUsername, string chatTitle)
     {
-        var messages = await Task.FromResult(_appDbContext.Messages
+        var messages = _appDbContext.Messages
             .Include(m => m.Sender)
             .Include(m => m.Chat)
             .Where(m => m.Sender.Username == senderUsername && m.Chat.Title == chatTitle)
-            .AsQueryable());
+            .AsQueryable();
 
         return messages;
     }
 
     public async Task<IQueryable<Message>> GetByContentAsync(string senderUsername, string content)
     {
-        var messages = await Task.FromResult(_appDbContext.Messages
+        var messages = _appDbContext.Messages
             .Include(m => m.Sender)
             .Where(m => m.Sender.Username == senderUsername && m.Content.Contains(content))
-            .AsQueryable());
+            .AsQueryable();
 
         return messages;
     }

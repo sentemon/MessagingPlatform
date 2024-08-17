@@ -19,7 +19,7 @@ public class Chat
     public required Guid CreatorId { get; set; }
     
     [Required]
-    public required User Creator { get; set; }
+    public required User? Creator { get; set; }
 
     [MaxLength(100)]
     public string? Title { get; set; }

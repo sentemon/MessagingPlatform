@@ -23,16 +23,27 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, Chat>
         {
             throw new ArgumentException("One or more users do not exist.");
         }
-
+        
         var chat = new Chat
         {
             Id = Guid.NewGuid(),
             ChatType = request.CreateChat.ChatType,
             CreatorId = request.CreateChat.CreatorId,
-            Title = request.CreateChat.Title,
-            Users = users
+            Creator = await _userRepository.GetByIdAsync(request.CreateChat.CreatorId),
+            Title = request.CreateChat.Title
         };
-
+        
+        var userChats = users.Select(user => new UserChat
+        {
+            UserId = user.Id,
+            ChatId = chat.Id,
+            JoinedAt = DateTime.UtcNow,
+            User = user,
+            Chat = chat
+        }).ToList();
+        
+        chat.UserChats = userChats;
+        
         var createdChat = await _chatRepository.CreateAsync(chat);
         return createdChat;
     }
