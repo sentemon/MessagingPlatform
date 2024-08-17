@@ -22,7 +22,7 @@ public class AccountController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("users")]
+    [HttpGet("getall")]
     public async Task<IActionResult> GetAll() // ToDo: only for admins 
     {
         var users = await _mediator.Send(new GetAllUsersQuery());
@@ -30,7 +30,7 @@ public class AccountController : ControllerBase
         return Ok(users);
     }
     
-    [HttpGet("userbyid")]
+    [HttpGet("getbyid")]
     public async Task<IActionResult> GetById(Guid id) // ToDo: only for admins
     {
         var user = await _mediator.Send(new GetUserByIdQuery(id));
@@ -38,7 +38,7 @@ public class AccountController : ControllerBase
         return Ok(user);
     }
     
-    [HttpGet("userbyusername")]
+    [HttpGet("getbyusername")]
     public async Task<IActionResult> GetByUsername(string username)
     {
         var user = await _mediator.Send(new GetUserByUsenameQuery(username));

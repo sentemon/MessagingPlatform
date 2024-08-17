@@ -1,7 +1,7 @@
 using MediatR;
 using MessagingPlatform.Application.CQRS.Chats.Commands.CreateChat;
-// using MessagingPlatform.Application.CQRS.Chats.Commands.DeleteChat;
-// using MessagingPlatform.Application.CQRS.Chats.Commands.UpdateChat;
+using MessagingPlatform.Application.CQRS.Chats.Commands.DeleteChat;
+using MessagingPlatform.Application.CQRS.Chats.Commands.UpdateChat;
 using MessagingPlatform.Application.CQRS.Chats.Queries.GetChatById;
 using MessagingPlatform.Application.CQRS.Chats.Queries.GetChats;
 using MessagingPlatform.Application.Common.Models.ChatDTOs;
@@ -28,7 +28,7 @@ public class ChatController : ControllerBase
         return CreatedAtAction(nameof(GetChatById), new { id = chat.Id }, chat);
     }
         
-    [HttpGet("getchats")]
+    [HttpGet("getall")]
     public async Task<IActionResult> GetChats()
     {
         var chats = await _mediator.Send(new GetChatsQuery());
@@ -36,7 +36,7 @@ public class ChatController : ControllerBase
         return Ok(chats);
     }
         
-    [HttpGet("getchatbyid/{id}")]
+    [HttpGet("getbyid/{id}")]
     public async Task<IActionResult> GetChatById(Guid id)
     {
         var chat = await _mediator.Send(new GetChatByIdQuery(id));
@@ -47,22 +47,24 @@ public class ChatController : ControllerBase
         return Ok(chat);
     }
         
-    // [HttpPut("update")]
-    // public async Task<IActionResult> UpdateChat([FromBody] UpdateChatDto updateChatDto)
-    // {
-    //     var updatedChat = await _mediator.Send(new UpdateChatCommand(updateChatDto));
-    //
-    //     return Ok(updatedChat);
-    // }
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateChat([FromBody] UpdateChatDto updateChatDto)
+    {
+        var updatedChat = await _mediator.Send(new UpdateChatCommand(updateChatDto));
+    
+        return Ok(updatedChat);
+    }
         
-    // [HttpDelete("delete")]
-    // public async Task<IActionResult> DeleteChat([FromBody] DeleteChatDto deleteChatDto)
-    // {
-    //     var result = await _mediator.Send(new DeleteChatCommand(deleteChatDto));
-    //
-    //     if (result)
-    //         return NoContent();
-    //
-    //     return NotFound();
-    // }
+    [HttpDelete("delete")]
+    public async Task<IActionResult> DeleteChat([FromBody] DeleteChatDto deleteChatDto)
+    {
+        var result = await _mediator.Send(new DeleteChatCommand(deleteChatDto));
+
+        if (result)
+        {
+            return NoContent();
+        }
+
+        return NotFound();
+    }
 }
