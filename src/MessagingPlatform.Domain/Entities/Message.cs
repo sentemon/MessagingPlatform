@@ -4,6 +4,7 @@ namespace MessagingPlatform.Domain.Entities;
 
 public class Message
 {
+    [Key]
     public Guid Id { get; init; }
 
     [Required]
@@ -13,10 +14,10 @@ public class Message
     public required User Sender { get; init; }
 
     [Required]
-    public required Guid ChatId { get; set; }
+    public required Guid ChatId { get; init; }
 
     [Required]
-    public required Chat Chat { get; set; }
+    public required Chat Chat { get; init; }
 
     [Required]
     public required string Content { get; set; }
@@ -26,5 +27,5 @@ public class Message
 
     public DateTime? UpdatedAt { get; set; }
 
-    public bool IsRead { get; set; } = false;
+    public bool? IsRead { get; set; } = false;
 }
