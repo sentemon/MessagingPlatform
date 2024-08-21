@@ -254,7 +254,7 @@ _Pvt_Extensions
 .idea/
 *.sln.iml
 .DS_Store
-.config/
+# .config/
 *.DotSettings.user
 *global.json
 
