@@ -22,7 +22,7 @@ public class UserRepository : IUserRepository
             .ToListAsync();
     }
     
-    public async Task<IQueryable<User>> GetAllAsync()
+    public async Task<IQueryable<User?>> GetAllAsync()
     {
         var users = await Task.FromResult(_context.Users.AsQueryable());
 

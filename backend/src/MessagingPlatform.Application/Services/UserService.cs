@@ -5,12 +5,12 @@ using MessagingPlatform.Domain.Entities;
 
 namespace MessagingPlatform.Application.Services;
 
-public class UserService : IUserService
+public class UserService : IUserService  // ToDo: fix this (перенести всю логику в AccountService)
 {
     private readonly IUserRepository _userRepository;
-    private readonly IPasswordHasherService _passwordHasher;
+    private readonly IPasswordHasher _passwordHasher;
 
-    public UserService(IUserRepository userRepository, IPasswordHasherService passwordHasher)
+    public UserService(IUserRepository userRepository, IPasswordHasher passwordHasher)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
@@ -27,7 +27,7 @@ public class UserService : IUserService
 
         if (existingUser != null)
         {
-            throw new InvalidOperationException("User with this email already exists.");
+            throw new InvalidOperationException("User with this username already exists.");
         }
         
         var hashedPassword = _passwordHasher.Hash(signUpDto.Password);
@@ -50,7 +50,7 @@ public class UserService : IUserService
 
     public async Task<bool> IsExist(SignInDto? signInDto)
     {
-        if (signInDto == null)
+        if (signInDto is null)
         {
             throw new ArgumentNullException(nameof(signInDto));
         }
@@ -74,11 +74,6 @@ public class UserService : IUserService
     
     public async Task<bool> Update(User user)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
-
         var existingUser = await _userRepository.GetByIdAsync(user.Id);
 
         if (existingUser == null)

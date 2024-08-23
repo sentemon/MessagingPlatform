@@ -16,10 +16,12 @@ namespace MessagingPlatform.Api.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private IHttpContextAccessor _httpContextAccessor;
 
-    public AccountController(IMediator mediator)
+    public AccountController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
     {
         _mediator = mediator;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     [HttpGet("getall")]
@@ -47,7 +49,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost("signup")]
-    public async Task<IActionResult> SignUp([FromBody] AddUserDto? signUpDto)
+    public async Task<IActionResult> SignUp([FromBody] AddUserDto? signUpDto) // ToDo: should return token
     {
         if (signUpDto == null)
         {
@@ -78,12 +80,13 @@ public class AccountController : ControllerBase
         {
             return Unauthorized("Invalid username or password.");
         }
-
-        return Ok(new { Token = token });
+        _httpContextAccessor.HttpContext?.Response.Cookies.Append("jwt", token);
+        
+        return Ok("You signed in successfully.");
     }
     
     [HttpPost("signout")]
-    public new async Task<IActionResult> SignOut()
+    public new async Task<IActionResult> SignOut() //Todo: fix
     {
         return Ok("User signed out successfully.");
     }

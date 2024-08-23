@@ -2,7 +2,7 @@ using MessagingPlatform.Application.Common.Interfaces;
 
 namespace MessagingPlatform.Application.Services;
 
-public class PasswordHasherService : IPasswordHasherService
+public class PasswordHasher : IPasswordHasher
 {
     public string Hash(string password)
     {

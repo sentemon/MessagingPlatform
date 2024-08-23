@@ -19,7 +19,7 @@ public static class DependencyInjection
         services.AddValidatorsFromAssembly(assembly);
 
         // Register application services
-        services.AddScoped<IPasswordHasherService, PasswordHasherService>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAccountService, AccountService>();
 

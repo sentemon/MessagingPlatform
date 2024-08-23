@@ -8,11 +8,7 @@ public interface IAccountService
 {
     Task<bool> SignUp(AddUserDto? signUpDto);
 
-    Task<string?> SignIn(SignInDto signInDto);
+    Task<string> SignIn(SignInDto signInDto);
 
     Task SignOut();
-
-    string GetCurrentUsername(HttpContext context);
-
-    Task<User?> GetCurrentUser(HttpContext context);
 }
