@@ -80,14 +80,15 @@ public class AccountController : ControllerBase
         {
             return Unauthorized("Invalid username or password.");
         }
-        _httpContextAccessor.HttpContext?.Response.Cookies.Append("jwt", token);
+        _httpContextAccessor.HttpContext?.Response.Cookies.Append("token", token);
         
         return Ok("You signed in successfully.");
     }
     
     [HttpPost("signout")]
-    public new async Task<IActionResult> SignOut() //Todo: fix
+    public new async Task<IActionResult> SignOut()
     {
+        _httpContextAccessor.HttpContext?.Response.Cookies.Delete("token");
         return Ok("User signed out successfully.");
     }
     
