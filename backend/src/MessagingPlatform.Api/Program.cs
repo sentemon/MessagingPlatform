@@ -26,7 +26,6 @@ builder.Services.AddControllers()
     }); // ToDo: опция чтобы нормально работало с enum (хз почитать)
 
 // Register layers
-builder.Services.AddHttpContextAccessor(); // ToDo: вынести в другое место
 builder.Services
     .AddInfrastructure(builder.Configuration)
     .AddApplication();

@@ -17,11 +17,15 @@ public static class DependencyInjection
 
         // Register FluentValidation validators
         services.AddValidatorsFromAssembly(assembly);
-
+        
+        // Register HttpContextAccessor
+        services.AddHttpContextAccessor();
+        
         // Register application services
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<ICookieService, CookieService>();
 
         return services;
     }

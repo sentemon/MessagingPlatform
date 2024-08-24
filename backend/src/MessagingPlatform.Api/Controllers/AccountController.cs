@@ -1,4 +1,5 @@
 using MediatR;
+using MessagingPlatform.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using MessagingPlatform.Application.Common.Models.UserDTOs;
 using MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
@@ -16,12 +17,12 @@ namespace MessagingPlatform.Api.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private IHttpContextAccessor _httpContextAccessor;
+    private readonly ICookieService _cookieService;
 
-    public AccountController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
+    public AccountController(IMediator mediator, ICookieService cookieService)
     {
         _mediator = mediator;
-        _httpContextAccessor = httpContextAccessor;
+        _cookieService = cookieService;
     }
 
     [HttpGet("getall")]
@@ -63,7 +64,7 @@ public class AccountController : ControllerBase
             return BadRequest("Failed to register user.");
         }
 
-        _httpContextAccessor.HttpContext?.Response.Cookies.Append("token", token);
+        _cookieService.Append("token", token);
         
         return Ok("User signed up successfully.");
     }
@@ -83,7 +84,7 @@ public class AccountController : ControllerBase
             return Unauthorized("Invalid username or password.");
         }
         
-        _httpContextAccessor.HttpContext?.Response.Cookies.Append("token", token);
+        _cookieService.Append("token", token);
         
         return Ok("You signed in successfully.");
     }
@@ -91,7 +92,8 @@ public class AccountController : ControllerBase
     [HttpPost("signout")]
     public new async Task<IActionResult> SignOut()
     {
-        _httpContextAccessor.HttpContext?.Response.Cookies.Delete("token");
+        _cookieService.Delete("token");
+        
         return Ok("User signed out successfully.");
     }
     
