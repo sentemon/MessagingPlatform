@@ -3,7 +3,7 @@ using MessagingPlatform.Application.Common.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
 
-public class AddUserCommandHandler : IRequestHandler<AddUserCommand, bool>
+public class AddUserCommandHandler : IRequestHandler<AddUserCommand, string?>
 {
     private readonly IAccountService _accountService;
 
@@ -12,8 +12,10 @@ public class AddUserCommandHandler : IRequestHandler<AddUserCommand, bool>
         _accountService = accountService;
     }
 
-    public async Task<bool> Handle(AddUserCommand request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
-        return await _accountService.SignUp(request.AddUser);
+        var token = await _accountService.SignUp(request.AddUser);
+        
+        return token;
     }
 }

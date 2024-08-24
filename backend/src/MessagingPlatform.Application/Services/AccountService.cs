@@ -18,19 +18,26 @@ public class AccountService : IAccountService
         _jwtProvider = jwtProvider;
     }
 
-    public async Task<bool> SignUp(AddUserDto? signUpDto)
+    public async Task<string> SignUp(AddUserDto? signUpDto)
     {
         try
         {
             var userId = await _userService.Create(signUpDto);
+
+            var user = await _userRepository.GetByIdAsync(userId);
             
-            return userId != Guid.Empty;
+            if (user == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var token = _jwtProvider.GenerateToken(user);
+
+            return token;
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
-            
-            return false;
+            throw new Exception(e.Message);
         }
     }
 

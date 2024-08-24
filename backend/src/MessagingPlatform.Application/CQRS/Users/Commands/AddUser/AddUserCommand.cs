@@ -3,7 +3,7 @@ using MessagingPlatform.Application.Common.Models.UserDTOs;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
 
-public class AddUserCommand : IRequest<bool>
+public class AddUserCommand : IRequest<string?>
 {
     public AddUserCommand(AddUserDto addUser)
     {

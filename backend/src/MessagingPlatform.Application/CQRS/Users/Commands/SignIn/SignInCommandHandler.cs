@@ -14,6 +14,8 @@ public class SignInCommandHandler : IRequestHandler<SignInCommand, string?>
 
     public async Task<string?> Handle(SignInCommand request, CancellationToken cancellationToken)
     {
-        return await _accountService.SignIn(request.SignInDto);
+        var token = await _accountService.SignIn(request.SignInDto);
+        
+        return token;
     }
 }

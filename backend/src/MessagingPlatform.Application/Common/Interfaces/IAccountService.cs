@@ -6,7 +6,7 @@ namespace MessagingPlatform.Application.Common.Interfaces;
 
 public interface IAccountService
 {
-    Task<bool> SignUp(AddUserDto? signUpDto);
+    Task<string> SignUp(AddUserDto? signUpDto);
 
     Task<string> SignIn(SignInDto signInDto);
 

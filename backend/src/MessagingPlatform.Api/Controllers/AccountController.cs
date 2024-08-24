@@ -56,14 +56,16 @@ public class AccountController : ControllerBase
             return BadRequest("Invalid user data.");
         }
 
-        var result = await _mediator.Send(new AddUserCommand(signUpDto));
+        var token = await _mediator.Send(new AddUserCommand(signUpDto));
 
-        if (!result)
+        if (token == null)
         {
             return BadRequest("Failed to register user.");
         }
 
-        return Ok("User registered successfully.");
+        _httpContextAccessor.HttpContext?.Response.Cookies.Append("token", token);
+        
+        return Ok("User signed up successfully.");
     }
     
     [HttpPost("signin")]
@@ -80,6 +82,7 @@ public class AccountController : ControllerBase
         {
             return Unauthorized("Invalid username or password.");
         }
+        
         _httpContextAccessor.HttpContext?.Response.Cookies.Append("token", token);
         
         return Ok("You signed in successfully.");

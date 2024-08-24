@@ -27,6 +27,8 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, bool>
         user.Email = request.UpdateUser.Email;
         user.Bio = request.UpdateUser.Bio;
 
-        return await _userService.Update(user);
+        var result = await _userService.Update(user);
+        
+        return result;
     }
 }

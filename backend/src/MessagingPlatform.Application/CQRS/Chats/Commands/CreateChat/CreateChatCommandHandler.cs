@@ -45,6 +45,7 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, Chat>
         chat.UserChats = userChats;
         
         var createdChat = await _chatRepository.CreateAsync(chat);
+        
         return createdChat;
     }
 }
