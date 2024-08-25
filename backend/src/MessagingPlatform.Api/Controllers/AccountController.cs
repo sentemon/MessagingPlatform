@@ -36,9 +36,13 @@ public class AccountController : ControllerBase
         return Ok(users);
     }
     
-    [HttpGet("getbyid")]
-    public async Task<IActionResult> GetById(Guid id) // ToDo: only for admins
+    // Get Current User
+    [HttpGet("get")]
+    public async Task<IActionResult> Get()
     {
+        var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;
+        var id = Guid.Parse(currentUserId!);
+        
         var user = await _mediator.Send(new GetUserByIdQuery(id));
 
         return Ok(user);
@@ -46,7 +50,7 @@ public class AccountController : ControllerBase
     
     [AllowAnonymous]
     [HttpGet("getbyusername")]
-    public async Task<IActionResult> GetByUsername(string username) // should return DTO
+    public async Task<IActionResult> GetByUsername(string username)
     {
         var user = await _mediator.Send(new GetUserByUsenameQuery(username));
 
@@ -55,7 +59,9 @@ public class AccountController : ControllerBase
             return NotFound("User not found");
         }
 
-        return Ok(user);
+        var userDto = (user.FirstName, user.LastName, user.Username, user.Bio).ToString();
+        
+        return Ok(userDto);
     }
     
     [AllowAnonymous]
