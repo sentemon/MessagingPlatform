@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using MediatR;
 using MessagingPlatform.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +10,11 @@ using MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetAllUsers;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserById;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserByUsername;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MessagingPlatform.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class AccountController : ControllerBase
@@ -41,16 +44,23 @@ public class AccountController : ControllerBase
         return Ok(user);
     }
     
+    [AllowAnonymous]
     [HttpGet("getbyusername")]
-    public async Task<IActionResult> GetByUsername(string username)
+    public async Task<IActionResult> GetByUsername(string username) // should return DTO
     {
         var user = await _mediator.Send(new GetUserByUsenameQuery(username));
+
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
 
         return Ok(user);
     }
     
+    [AllowAnonymous]
     [HttpPost("signup")]
-    public async Task<IActionResult> SignUp([FromBody] AddUserDto? signUpDto) // ToDo: should return token
+    public async Task<IActionResult> SignUp([FromBody] AddUserDto? signUpDto)
     {
         if (signUpDto == null)
         {
@@ -69,6 +79,7 @@ public class AccountController : ControllerBase
         return Ok("User signed up successfully.");
     }
     
+    [AllowAnonymous]
     [HttpPost("signin")]
     public async Task<IActionResult> SignIn([FromBody] SignInDto? signInDto)
     {
@@ -98,22 +109,24 @@ public class AccountController : ControllerBase
     }
     
     [HttpPut("update")]
-    public async Task<IActionResult> Update([FromBody] UpdateUserDto? updateUserDto) // ToDo: only for the owner of this account
+    public async Task<IActionResult> Update([FromBody] UpdateUserDto? updateUserDto)
     {
-        if (updateUserDto == null)
+        if (updateUserDto == null)  // ToDo: some date can be null
         {
             return BadRequest("Invalid user data.");
         }
 
-        var currentUser = User.Identity?.Name;
-    
-        if (currentUser == null || !currentUser.Equals(updateUserDto.Username, StringComparison.OrdinalIgnoreCase))
-        {
-            return Unauthorized("You can only update your own profile.");
-        }
-
         try
         {
+            var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;
+
+            if (currentUserId == null)
+            {
+                return NotFound("User id not found");
+            }
+            
+            updateUserDto.Id = Guid.Parse(currentUserId);
+            
             var result = await _mediator.Send(new UpdateUserCommand(updateUserDto));
 
             if (!result)
@@ -134,16 +147,15 @@ public class AccountController : ControllerBase
     }
     
     [HttpDelete("delete")]
-    public async Task<IActionResult> Delete([FromBody] Guid? id) // ToDo: only for the owner of this account
+    public async Task<IActionResult> Delete()
     {
-        if (id is null)
-        {
-            return BadRequest("Invalid user data.");
-        }
-
+        var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;
+        
         try
         {
-            var result = await _mediator.Send(new DeleteUserCommand(id));
+            var guidId = Guid.Parse(currentUserId!);
+            
+            var result = await _mediator.Send(new DeleteUserCommand(guidId));
 
             if (!result)
             {

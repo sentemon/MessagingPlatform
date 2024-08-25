@@ -5,10 +5,12 @@ using MessagingPlatform.Application.CQRS.Chats.Commands.UpdateChat;
 using MessagingPlatform.Application.CQRS.Chats.Queries.GetChatById;
 using MessagingPlatform.Application.CQRS.Chats.Queries.GetChats;
 using MessagingPlatform.Application.Common.Models.ChatDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MessagingPlatform.Api.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class ChatController : ControllerBase

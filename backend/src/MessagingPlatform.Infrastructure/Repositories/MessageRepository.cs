@@ -60,7 +60,7 @@ public class MessageRepository : IMessageRepository
         return messages;
     }
 
-    public async Task<IQueryable<Message>> GetByUserIdAndChatId(Guid userId, Guid chatId)  //ToDo: check if user has access to the chat(already done) maybe change in the future
+    public async Task<IQueryable<Message>> GetByUserIdAndChatId(Guid userId, Guid chatId)  // ToDo: check if user has access to the chat(already done) maybe change in the future
     {
         var hasAccess = await _appDbContext.UserChats
             .AnyAsync(uc => uc.UserId == userId && uc.ChatId == chatId);

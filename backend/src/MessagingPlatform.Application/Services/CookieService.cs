@@ -14,6 +14,13 @@ public class CookieService : ICookieService
     
     public void Append(string key, string value)
     {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict
+        };
+            
         _httpContextAccessor.HttpContext?.Response.Cookies.Append(key, value);
     }
 

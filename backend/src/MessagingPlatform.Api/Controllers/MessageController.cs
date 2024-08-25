@@ -6,10 +6,12 @@ using MessagingPlatform.Application.CQRS.Messages.Commands.UpdateMessage;
 using MessagingPlatform.Application.CQRS.Messages.Queries.GetAllMessages;
 using MessagingPlatform.Application.CQRS.Messages.Queries.GetByUsername;
 using MessagingPlatform.Application.CQRS.Messages.Queries.GetMessagesByUserIdAndChatId;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MessagingPlatform.Api.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class MessageController : ControllerBase

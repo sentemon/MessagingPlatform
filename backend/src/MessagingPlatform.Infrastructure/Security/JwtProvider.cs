@@ -21,8 +21,8 @@ public class JwtProvider : IJwtProvider
     {
         var claims = new[]
         {
-            new Claim("userId", user.Id.ToString()),
-            new Claim("username", user.Username),
+            new Claim(ClaimTypes.Sid, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username)
         };
 
         var signingCredentials = new SigningCredentials(
@@ -37,5 +37,51 @@ public class JwtProvider : IJwtProvider
         var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
 
         return tokenValue;
+    }
+
+    public (string Sid, string Name) ExtractClaimsValues(string token)
+    {
+        var principal = GetPrincipalFromToken(token);
+
+        if (principal == null)
+        {
+            return (null, null)!;
+        }
+
+        var sid = principal.Claims.Where(c => c.Type == ClaimTypes.Sid).
+                                        Select(c => c.Value)
+                                        .SingleOrDefault();
+        
+        var name = principal.Claims.Where(c => c.Type == ClaimTypes.Name)
+                                        .Select(c => c.Value)
+                                        .SingleOrDefault();
+
+        return (sid, name)!;
+    }
+
+    private ClaimsPrincipal GetPrincipalFromToken(string token)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.UTF8.GetBytes(_options.SecretKey);
+
+        var validationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
+
+        try
+        {
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
+
+            return principal;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }
