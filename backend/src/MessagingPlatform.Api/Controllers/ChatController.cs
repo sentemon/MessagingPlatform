@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using MessagingPlatform.Application.CQRS.Chats.Commands.CreateChat;
 using MessagingPlatform.Application.CQRS.Chats.Commands.DeleteChat;
@@ -16,10 +17,12 @@ namespace MessagingPlatform.Api.Controllers;
 public class ChatController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
 
-    public ChatController(IMediator mediator)
+    public ChatController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
     }
         
     [HttpPost("create")]

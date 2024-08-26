@@ -25,6 +25,8 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.WriteIndented = true;
     }); // ToDo: опция чтобы нормально работало с enum (хз почитать)
 
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
 // Register layers
 builder.Services
     .AddInfrastructure(builder.Configuration)

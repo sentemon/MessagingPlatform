@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using AutoMapper;
 using MediatR;
 using MessagingPlatform.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using MessagingPlatform.Application.CQRS.Users.Queries.GetAllUsers;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserById;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserByUsername;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MessagingPlatform.Api.Controllers;
 
@@ -21,11 +23,13 @@ public class AccountController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly ICookieService _cookieService;
+    private readonly IMapper _mapper;
 
-    public AccountController(IMediator mediator, ICookieService cookieService)
+    public AccountController(IMediator mediator, ICookieService cookieService, IMapper mapper)
     {
         _mediator = mediator;
         _cookieService = cookieService;
+        _mapper = mapper;
     }
 
     [HttpGet("getall")]
@@ -53,7 +57,7 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> GetByUsername(string username)
     {
         var user = await _mediator.Send(new GetUserByUsenameQuery(username));
-
+        
         if (user == null)
         {
             return NotFound("User not found");
@@ -117,9 +121,9 @@ public class AccountController : ControllerBase
     [HttpPut("update")]
     public async Task<IActionResult> Update([FromBody] UpdateUserDto? updateUserDto)
     {
-        if (updateUserDto == null)  // ToDo: some date can be null
+        if (updateUserDto!.Username.IsNullOrEmpty())  // ToDo: some date can be null
         {
-            return BadRequest("Invalid user data.");
+            return BadRequest("Username cannot be null.");
         }
 
         try

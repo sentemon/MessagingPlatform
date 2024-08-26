@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using MessagingPlatform.Application.Common.Models.MessageDTOs;
 using MessagingPlatform.Application.CQRS.Messages.Commands.AddMessage;
@@ -17,10 +18,12 @@ namespace MessagingPlatform.Api.Controllers;
 public class MessageController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
 
-    public MessageController(IMediator mediator)
+    public MessageController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
     }
     
     [HttpGet("getall")]
