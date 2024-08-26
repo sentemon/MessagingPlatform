@@ -11,6 +11,7 @@ using MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetAllUsers;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserById;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserByUsername;
+using MessagingPlatform.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
@@ -37,7 +38,7 @@ public class AccountController : ControllerBase
     {
         var users = await _mediator.Send(new GetAllUsersQuery());
 
-        return Ok(users);
+        return Ok(users.Select(user => _mapper.Map<UserDto>(user)));
     }
     
     // Get Current User
@@ -49,7 +50,7 @@ public class AccountController : ControllerBase
         
         var user = await _mediator.Send(new GetUserByIdQuery(id));
 
-        return Ok(user);
+        return Ok(_mapper.Map<UserDto>(user));
     }
     
     [AllowAnonymous]
@@ -62,10 +63,8 @@ public class AccountController : ControllerBase
         {
             return NotFound("User not found");
         }
-
-        var userDto = (user.FirstName, user.LastName, user.Username, user.Bio).ToString();
         
-        return Ok(userDto);
+        return Ok(_mapper.Map<UserDto>(user));
     }
     
     [AllowAnonymous]
@@ -121,7 +120,7 @@ public class AccountController : ControllerBase
     [HttpPut("update")]
     public async Task<IActionResult> Update([FromBody] UpdateUserDto? updateUserDto)
     {
-        if (updateUserDto!.Username.IsNullOrEmpty())  // ToDo: some date can be null
+        if (updateUserDto!.Username.IsNullOrEmpty())
         {
             return BadRequest("Username cannot be null.");
         }
@@ -134,10 +133,11 @@ public class AccountController : ControllerBase
             {
                 return NotFound("User id not found");
             }
+
+            var user = _mapper.Map<User>(updateUserDto);
+            user.Id = Guid.Parse(currentUserId);
             
-            updateUserDto.Id = Guid.Parse(currentUserId);
-            
-            var result = await _mediator.Send(new UpdateUserCommand(updateUserDto));
+            var result = await _mediator.Send(new UpdateUserCommand(user));
 
             if (!result)
             {

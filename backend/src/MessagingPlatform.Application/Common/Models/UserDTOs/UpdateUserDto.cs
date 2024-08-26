@@ -2,7 +2,6 @@ namespace MessagingPlatform.Application.Common.Models.UserDTOs;
 
 public class UpdateUserDto
 {
-    public Guid Id { get; set; } = default;
 
     public string FirstName { get; set; }
 

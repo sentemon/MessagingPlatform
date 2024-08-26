@@ -1,14 +1,14 @@
 using MediatR;
-using MessagingPlatform.Application.Common.Models.UserDTOs;
+using MessagingPlatform.Domain.Entities;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
 
 public class UpdateUserCommand : IRequest<bool>
 {
-    public UpdateUserCommand(UpdateUserDto updateUser)
+    public UpdateUserCommand(User updateUser)
     {
         UpdateUser = updateUser;
     }
 
-    public UpdateUserDto UpdateUser { get; set; }
+    public User UpdateUser { get; set; }
 }

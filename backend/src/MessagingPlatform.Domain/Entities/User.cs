@@ -5,7 +5,7 @@ namespace MessagingPlatform.Domain.Entities;
 public class User
 {
     [Key]
-    public Guid Id { get; init; }
+    public Guid Id { get; set; }
 
     [Required]
     [MaxLength(50)]

@@ -14,20 +14,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, bool>
 
     public async Task<bool> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userService.GetUserByIdAsync(request.UpdateUser.Id);
-
-        if (user == null)
-        {
-            throw new InvalidOperationException("User not found.");
-        }
-        
-        user.FirstName = request.UpdateUser.FirstName;
-        user.LastName = request.UpdateUser.LastName;
-        user.Username = request.UpdateUser.Username; 
-        user.Email = request.UpdateUser.Email;
-        user.Bio = request.UpdateUser.Bio;
-
-        var result = await _userService.Update(user);
+        var result = await _userService.Update(request.UpdateUser);
         
         return result;
     }
