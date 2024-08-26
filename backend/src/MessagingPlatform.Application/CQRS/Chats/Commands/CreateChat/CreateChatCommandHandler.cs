@@ -17,20 +17,28 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, Chat>
 
     public async Task<Chat> Handle(CreateChatCommand request, CancellationToken cancellationToken)
     {
-        var users = (await _userRepository.GetUsersByIdsAsync(request.CreateChat.UserIds)).ToList();
-            
-        if (users.Count != request.CreateChat.UserIds.Count)
+        var userIds = new List<Guid>();
+        foreach (var username in request.Usernames)
         {
-            throw new ArgumentException("One or more users do not exist.");
+            var user = await _userRepository.GetByUsernameAsync(username);
+
+            if (user == null)
+            {
+                continue;
+            }
+            
+            userIds.Add(user.Id);
         }
+        
+        var users = (await _userRepository.GetUsersByIdsAsync(userIds)).ToList();
         
         var chat = new Chat
         {
             Id = Guid.NewGuid(),
-            ChatType = request.CreateChat.ChatType,
-            CreatorId = request.CreateChat.CreatorId,
-            Creator = await _userRepository.GetByIdAsync(request.CreateChat.CreatorId),
-            Title = request.CreateChat.Title
+            ChatType = request.Chat.ChatType,
+            CreatorId = request.CreatorId,
+            Creator = await _userRepository.GetByIdAsync(request.CreatorId),
+            Title = request.Chat.Title
         };
         
         var userChats = users.Select(user => new UserChat

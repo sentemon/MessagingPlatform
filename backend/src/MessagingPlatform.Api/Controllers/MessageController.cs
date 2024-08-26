@@ -27,7 +27,7 @@ public class MessageController : ControllerBase
     }
     
     [HttpGet("getall")]
-    public async Task<IActionResult> GetAll() // ToDo: maybe to remove 
+    public async Task<IActionResult> GetAll(Guid chatId)
     {
         var messages = await _mediator.Send(new GetAllMessagesQuery());
 

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AutoMapper;
 using MediatR;
 using MessagingPlatform.Application.CQRS.Chats.Commands.CreateChat;
@@ -6,6 +7,7 @@ using MessagingPlatform.Application.CQRS.Chats.Commands.UpdateChat;
 using MessagingPlatform.Application.CQRS.Chats.Queries.GetChatById;
 using MessagingPlatform.Application.CQRS.Chats.Queries.GetChats;
 using MessagingPlatform.Application.Common.Models.ChatDTOs;
+using MessagingPlatform.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,13 +30,22 @@ public class ChatController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> CreateChat([FromBody] CreateChatDto createChatDto)
     {
-        var chat = await _mediator.Send(new CreateChatCommand(createChatDto));
+        var chatRequest = _mapper.Map<Chat>(createChatDto);
+        
+        var usernames = createChatDto.Users;
+        usernames.Add(User.Claims.First(c => c.Type == ClaimTypes.Name).Value); // "Added creator of the chat"
 
-        return CreatedAtAction(nameof(GetChatById), new { id = chat.Id }, chat);
+        var creatorId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
+        
+        
+        var chatResponse = await _mediator.Send(new CreateChatCommand(chatRequest, usernames, creatorId));
+        
+        return CreatedAtAction(nameof(GetChatById), new { id = chatResponse.Id }, "You created chat successfully!");
+
     }
         
     [HttpGet("getall")]
-    public async Task<IActionResult> GetChats()
+    public async Task<IActionResult> GetChats() // ToDo: only user's chats
     {
         var chats = await _mediator.Send(new GetChatsQuery());
 
