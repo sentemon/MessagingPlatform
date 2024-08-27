@@ -15,7 +15,10 @@
     color: #fff;
     border: none;
     border-radius: 4px;
-  }
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
 
 .user {
     display: flex;
