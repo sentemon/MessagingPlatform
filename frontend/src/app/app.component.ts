@@ -5,17 +5,19 @@ import { AuthService } from "./services/auth.service";
 import { SignUpUser } from "./models/signupuser";
 import { SignInUser } from "./models/signinuser";
 import { FormsModule } from "@angular/forms";
+import { NgIf } from "@angular/common";
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SidebarComponent, FormsModule],
+  imports: [RouterOutlet, SidebarComponent, FormsModule, NgIf],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'Messaging Platform';
+  // ToDo: move to a another component
   signUpUser = new SignUpUser();
 
   constructor(private authService: AuthService) { }

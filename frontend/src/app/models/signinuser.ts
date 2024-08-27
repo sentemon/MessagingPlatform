@@ -1,4 +1,4 @@
 export class SignInUser {
-    email?: string;
-    password?: string;
+  email?: string;
+  password?: string;
 }

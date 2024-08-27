@@ -1,3 +1,44 @@
 <div class="app-container">
   <app-sidebar></app-sidebar>
+  <div class="form-container">
+    <h2>Create an Account</h2>
+    <form #signUpForm="ngForm" (ngSubmit)="signUp(signUpUser)">
+      <div class="form-group">
+        <input [(ngModel)]="signUpUser.firstName" name="firstName" placeholder="First Name" required #firstName="ngModel">
+        <div *ngIf="firstName.invalid && firstName.touched" class="error-message">First Name is required</div>
+      </div>
+
+      <div class="form-group">
+        <input [(ngModel)]="signUpUser.lastName" name="lastName" placeholder="Last Name" required #lastName="ngModel">
+        <div *ngIf="lastName.invalid && lastName.touched" class="error-message">Last Name is required</div>
+      </div>
+
+      <div class="form-group">
+        <input [(ngModel)]="signUpUser.username" name="username" placeholder="Username" required #username="ngModel">
+        <div *ngIf="username.invalid && username.touched" class="error-message">Username is required</div>
+      </div>
+
+      <div class="form-group">
+        <input [(ngModel)]="signUpUser.email" name="email" type="email" placeholder="Email" required #email="ngModel">
+        <div *ngIf="email.invalid && email.touched" class="error-message">Please enter a valid email</div>
+      </div>
+
+      <div class="form-group">
+        <input [(ngModel)]="signUpUser.password" name="password" type="password" placeholder="Password" required #password="ngModel" minlength="6">
+        <div *ngIf="password.invalid && password.touched" class="error-message">
+          Password is required (minimum 6 characters)
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input [(ngModel)]="signUpUser.confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" required #confirmPassword="ngModel" [pattern]="signUpUser.password || ''">
+        <div *ngIf="confirmPassword.invalid && confirmPassword.touched" class="error-message">
+          Passwords must match
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="signUpForm.invalid" class="btn btn-primary">Sign Up</button>
+    </form>
+    <button (click)="signOut()" class="btn btn-secondary">Sign Out</button>
+  </div>
 </div>
