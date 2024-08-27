@@ -1,10 +1,10 @@
 <div class="sidebar">
     <input type="text" placeholder="Search for a user by username..." class="search-bar">
     <div *ngFor="let user of users" class="user">
-      <img [src]="user.avatar" alt="Avatar" class="avatar">
+      <img [src]="user.avatar" alt="{{ user.firstName }}'s Avatar" class="avatar">
       <div class="user-info">
-        <p class="username">{{ user.name }}</p>
-        <p class="last-message">{{ user.lastMessage }}</p>
+        <p class="user-firstname">{{ user.firstName }}</p>
+        <p class="user-lastname">{{ user.lastName }}</p>
       </div>
     </div>
 </div>
