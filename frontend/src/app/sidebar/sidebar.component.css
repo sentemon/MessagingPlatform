@@ -5,6 +5,11 @@
     padding: 10px;
     height: 100vh;
     overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none;
 }
 
 .search-bar {

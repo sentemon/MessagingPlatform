@@ -21,7 +21,7 @@ export class SidebarComponent {
       {firstName: "Roman", lastName: "Roman", avatar: "avatar.svg"},
       {firstName: "Sain", lastName: "Sain", avatar: "avatar.svg"},
       {firstName: "Gol", lastName: "Med", avatar: "avatar.svg"},
-      {firstName: "Eric", lastName: "Eric", avatar: "avatar.svg"},
+      {firstName: "Ericaaaaaaaaaaaaaaaaaaaaaaaaaa", lastName: "Eric", avatar: "avatar.svg"},
       {firstName: "French", lastName: "French", avatar: "avatar.svg"},
       {firstName: "Chico", lastName: "Lachowski", avatar: "avatar.svg"},
       {firstName: "Marek", lastName: "Male", avatar: "avatar.svg"},
