@@ -85,7 +85,7 @@ public class AccountController : ControllerBase
 
         _cookieService.Append("token", token);
         
-        return Ok("User signed up successfully.");
+        return Ok(new { message = "User signed up successfully." });
     }
     
     [AllowAnonymous]
@@ -106,7 +106,7 @@ public class AccountController : ControllerBase
         
         _cookieService.Append("token", token);
         
-        return Ok("You signed in successfully.");
+        return Ok(new { message = "You signed in successfully." });
     }
     
     [HttpPost("signout")]
@@ -114,7 +114,7 @@ public class AccountController : ControllerBase
     {
         _cookieService.Delete("token");
         
-        return Ok("User signed out successfully.");
+        return Ok(new { message = "User signed out successfully." });
     }
     
     [HttpPut("update")]
@@ -144,7 +144,7 @@ public class AccountController : ControllerBase
                 return NotFound("User not found.");
             }
 
-            return Ok("User data updated successfully.");
+            return Ok( new { message = "User data updated successfully." });
         }
         catch (InvalidOperationException ex)
         {
@@ -172,7 +172,7 @@ public class AccountController : ControllerBase
                 return NotFound("User not found.");
             }
 
-            return Ok("User deleted successfully.");
+            return Ok(new { message = "User deleted successfully." });
         }
         catch (Exception e)
         {

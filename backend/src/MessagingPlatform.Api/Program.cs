@@ -25,6 +25,19 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.WriteIndented = true;
     }); // ToDo: опция чтобы нормально работало с enum (хз почитать)
 
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", corsPolicyBuilder =>
+    {
+        corsPolicyBuilder
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 // Register layers
@@ -33,6 +46,8 @@ builder.Services
     .AddApplication();
 
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())

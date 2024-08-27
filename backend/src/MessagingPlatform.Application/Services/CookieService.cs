@@ -17,11 +17,11 @@ public class CookieService : ICookieService
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict
+            Secure = false, // ToDo: Change in production
+            SameSite = SameSiteMode.None
         };
             
-        _httpContextAccessor.HttpContext?.Response.Cookies.Append(key, value);
+        _httpContextAccessor.HttpContext?.Response.Cookies.Append(key, value, cookieOptions);
     }
 
     public void Delete(string key)
