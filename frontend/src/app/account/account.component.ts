@@ -4,6 +4,10 @@ import { AuthService } from "../services/auth.service";
 import { SignInUser } from "../models/signinuser";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgIf } from "@angular/common";
+import {RouterLink, RouterOutlet} from "@angular/router";
+import {SignInComponent} from "./signin/signin.component";
+import {SignUpComponent} from "./signup/signup.component";
+import {SignOutComponent} from "./signout/signout.component";
 
 @Component({
   selector: 'app-account',
@@ -11,7 +15,12 @@ import { NgIf } from "@angular/common";
   imports: [
     FormsModule,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterOutlet,
+    SignInComponent,
+    SignUpComponent,
+    SignOutComponent,
+    RouterLink
   ],
   templateUrl: './account.component.html',
   styleUrl: './account.component.css'
