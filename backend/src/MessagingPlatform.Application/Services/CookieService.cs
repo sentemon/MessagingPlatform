@@ -29,7 +29,10 @@ public class CookieService : ICookieService
     {
         var cookieOptions = new CookieOptions
         {
-            Path = "/"
+            Path = "/",
+            HttpOnly = true,
+            Secure = false,
+            SameSite = SameSiteMode.Lax
         };
         
         _httpContextAccessor.HttpContext?.Response.Cookies.Delete(key, cookieOptions);

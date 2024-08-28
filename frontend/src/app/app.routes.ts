@@ -20,6 +20,7 @@ export const routes: Routes = [
 
   // if user authorized
   { path: '', component: SidebarComponent, canActivate: [AuthGuard] },
+  { path: 'account/signout', component: SignOutComponent, canActivate: [AuthGuard] },
 
   // for invalid route
   { path: '**', redirectTo: '' },

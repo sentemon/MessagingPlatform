@@ -29,7 +29,7 @@ export class AuthService {
       );
   }
 
-  public signOut(): Observable<boolean> { // ToDo: при выходе куки не удаляются
+  public signOut(): Observable<boolean> {
     return this.http.post<string>(`${this.apiUrl}/signout`, null, { withCredentials: true })
       .pipe(
         map(() => true),
