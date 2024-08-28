@@ -47,7 +47,9 @@ public class ChatController : ControllerBase
     [HttpGet("getall")]
     public async Task<IActionResult> GetChats() // ToDo: only user's chats
     {
-        var chats = await _mediator.Send(new GetChatsQuery());
+        var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
+        
+        var chats = await _mediator.Send(new GetChatsQuery(userId));
 
         return Ok(chats);
     }
@@ -58,7 +60,9 @@ public class ChatController : ControllerBase
         var chat = await _mediator.Send(new GetChatByIdQuery(id));
 
         if (chat == null)
+        {
             return NotFound();
+        }
 
         return Ok(chat);
     }

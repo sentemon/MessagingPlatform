@@ -4,7 +4,7 @@ using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Queries.GetChats;
 
-public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<Chat>>
+public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<Chat?>>
 {
     private readonly IChatRepository _chatRepository;
 
@@ -13,9 +13,9 @@ public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<C
         _chatRepository = chatRepository;
     }
 
-    public async Task<IEnumerable<Chat>> Handle(GetChatsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Chat?>> Handle(GetChatsQuery request, CancellationToken cancellationToken)
     {
-        var chats = await _chatRepository.GetAllAsync();
+        var chats = await _chatRepository.GetAllAsync(request.UserId);
         
         return chats;
     }

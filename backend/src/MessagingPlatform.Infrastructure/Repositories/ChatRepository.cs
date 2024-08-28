@@ -30,12 +30,16 @@ public class ChatRepository : IChatRepository
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public async Task<IEnumerable<Chat?>> GetAllAsync()
+    public async Task<IEnumerable<Chat?>> GetAllAsync(Guid userId)
     {
         return await _appDbContext.Chats
             .Include(c => c.UserChats)!
             .ThenInclude(uc => uc.User)
             .Include(c => c.Messages)
+            .Where(c => c.UserChats!
+                .Any(uc => uc.UserId == userId))
             .ToListAsync();
     }
+
+
 }
