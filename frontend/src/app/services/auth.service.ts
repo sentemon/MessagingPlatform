@@ -13,14 +13,14 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   public signUp(user: SignUpUser): Observable<string> {
-    return this.http.post<string>("http://localhost:8080/api/Account/signup", user, {withCredentials: true});
+    return this.http.post<string>("http://localhost:8080/api/Account/signup", user, {withCredentials: true });
   }
 
   public signIn(user: SignInUser): Observable<string> {
-    return this.http.post<string>("http://localhost:8080/api/Account/signin", user, {withCredentials: true});
+    return this.http.post<string>("http://localhost:8080/api/Account/signin", user, { withCredentials: true });
   }
 
   public signOut(): Observable<string> {
-    return this.http.post<string>("http://localhost:8080/api/Account/signout", null, {withCredentials: true});
+    return this.http.post<string>("http://localhost:8080/api/Account/signout", null, {withCredentials: true });
   }
 }

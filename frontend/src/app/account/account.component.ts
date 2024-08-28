@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { SignUpUser } from "../models/signupuser";
 import { AuthService } from "../services/auth.service";
-import { SignInUser } from "../models/signinuser";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgIf } from "@angular/common";
 import {RouterLink, RouterOutlet} from "@angular/router";
@@ -32,12 +31,6 @@ export class AccountComponent {
 
   signUp(user: SignUpUser) {
     this.authService.signUp(user).subscribe((str: string) => {
-      console.log(str);
-    });
-  }
-
-  signIn(user: SignInUser) {
-    this.authService.signIn(user).subscribe((str: string) => {
       console.log(str);
     });
   }

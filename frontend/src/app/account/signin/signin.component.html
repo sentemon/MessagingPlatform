@@ -1,15 +1,38 @@
 <div class="form">
-  <form method="post">
+  <form method="post" (ngSubmit)="signIn(signInUser)">
     <h1>Sign In</h1>
+
     <div class="input-box">
-      <input type="text" placeholder="Username" required />
+      <input
+        [(ngModel)]="signInUser.username"
+        name="username"
+      type="text"
+      placeholder="Username"
+      #username="ngModel"
+      required
+      />
+      <div *ngIf="username.invalid && username.touched" class="error-message">
+        Username is required
+      </div>
       <i class='bx bxs-user'></i>
     </div>
+
     <div class="input-box">
-      <input type="password" placeholder="Password" required />
-      <i class='bx bxs-lock-alt' ></i>
-      <!-- <i class='bx bxs-lock-open-alt' ></i> -->
+      <input
+        [(ngModel)]="signInUser.password"
+        name="password"
+      type="password"
+      placeholder="Password"
+      #password="ngModel"
+      minlength="6"
+      required
+      />
+      <div *ngIf="password.invalid && password.touched" class="error-message">
+        Password must be at least 6 characters long
+      </div>
+      <i class='bx bxs-lock-alt'></i>
     </div>
+
     <div class="remember-forgot">
       <label>
         <input type="checkbox" />
@@ -17,7 +40,9 @@
       </label>
       <a href="#">Forgot Password</a>
     </div>
+
     <button type="submit" class="btn">Sign In</button>
+
     <div class="signup-link">
       <p>Don't have an account? <a href="account/signup">Sign Up</a></p>
     </div>
