@@ -104,3 +104,7 @@ body {
 .form .signup-link p a:hover {
   text-decoration: underline;
 }
+
+.error-message {
+  color: red;
+}
