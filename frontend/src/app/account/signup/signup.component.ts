@@ -21,11 +21,12 @@ export class SignUpComponent {
   constructor(private authService: AuthService, private router: Router) { }
 
   signUp(user: SignUpUser) {
-    this.authService.signUp(user).subscribe((str: string) => {
-      console.log(str);
-      this.router.navigate(['/']);
-    })
+    this.authService.signUp(user).subscribe(success => {
+      if (success) {
+        this.router.navigate(['/']);
+      } else {
+        console.error("Error occurred");
+      }
+    });
   }
-
-  protected readonly SignUpUser = SignUpUser;
 }

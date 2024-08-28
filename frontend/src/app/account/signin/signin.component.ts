@@ -21,9 +21,12 @@ export class SignInComponent {
   constructor(private authService: AuthService, private router: Router) { }
 
   signIn(user: SignInUser) {
-    this.authService.signIn(user).subscribe((str: string) => {
-      console.log(str);
-      this.router.navigate(['/']);
-    })
+    this.authService.signIn(user).subscribe(success => {
+      if (success) {
+        this.router.navigate(['/']);
+      } else {
+        console.error("Error occurred");
+      }
+    });
   }
 }

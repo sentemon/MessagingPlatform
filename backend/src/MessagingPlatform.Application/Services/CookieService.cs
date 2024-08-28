@@ -16,9 +16,10 @@ public class CookieService : ICookieService
     {
         var cookieOptions = new CookieOptions
         {
+            Path = "/",
             HttpOnly = true,
             Secure = false, // ToDo: Change in production
-            SameSite = SameSiteMode.None
+            SameSite = SameSiteMode.Lax,
         };
             
         _httpContextAccessor.HttpContext?.Response.Cookies.Append(key, value, cookieOptions);
@@ -26,7 +27,12 @@ public class CookieService : ICookieService
 
     public void Delete(string key)
     {
-        _httpContextAccessor.HttpContext?.Response.Cookies.Delete(key);
+        var cookieOptions = new CookieOptions
+        {
+            Path = "/"
+        };
+        
+        _httpContextAccessor.HttpContext?.Response.Cookies.Delete(key, cookieOptions);
     }
 }
 

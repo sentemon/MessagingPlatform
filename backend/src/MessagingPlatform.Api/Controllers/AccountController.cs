@@ -110,11 +110,17 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost("signout")]
-    public new async Task<IActionResult> SignOut()
+    public new IActionResult SignOut()
     {
         _cookieService.Delete("token");
         
         return Ok(new { message = "User signed out successfully." });
+    }
+    
+    [HttpGet("isauthenticated")]
+    public IActionResult IsAuthenticated()
+    {
+        return Ok(User.Identity?.IsAuthenticated);
     }
     
     [HttpPut("update")]
