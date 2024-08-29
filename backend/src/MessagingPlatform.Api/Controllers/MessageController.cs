@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AutoMapper;
 using MediatR;
 using MessagingPlatform.Application.Common.Models.MessageDTOs;
@@ -51,11 +52,15 @@ public class MessageController : ControllerBase
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> Add([FromBody] AddMessageDto addMessage)
+    public async Task<IActionResult> Add(AddMessageDto addMessage)
     {
-        var message = await _mediator.Send(new AddMessageCommand(addMessage));
+        var senderId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
+        
+        var message = await _mediator.Send(new AddMessageCommand(addMessage, senderId));
 
-        return Ok(message);
+        var messageDto = _mapper.Map<MessageDto>(message);
+        
+        return Ok(messageDto);
     }
 
     [HttpPut("update")]

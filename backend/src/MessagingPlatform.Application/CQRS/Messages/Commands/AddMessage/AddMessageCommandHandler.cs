@@ -16,9 +16,9 @@ public class AddMessageCommandHandler : IRequestHandler<AddMessageCommand, Messa
     public async Task<Message> Handle(AddMessageCommand request, CancellationToken cancellationToken)
     {
         var message = await _messageRepository.CreateAsync(
-            request.AddMessage.SenderId, 
-            request.AddMessage.ChatId, 
-            request.AddMessage.Content
+            senderId: request.SenderId,
+            chatId: request.AddMessage.ChatId, 
+            content: request.AddMessage.Content
         );
 
         return message;
