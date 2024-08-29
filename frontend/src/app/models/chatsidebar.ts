@@ -1,4 +1,4 @@
-export class Chat {
+export class ChatSidebar {
   constructor(
     public chatId: string,
     public title: string,

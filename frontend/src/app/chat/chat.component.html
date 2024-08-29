@@ -1,0 +1,20 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <h2>{{ chat?.title }}</h2>
+  </div>
+  <div class="messages-container">
+    <div *ngFor="let message of chat.messages" class="message">
+      <div class="message-header">
+        <strong>{{ message.sender }}</strong>
+        <span class="message-time">{{ message.sentAt | date: 'shortTime' }}</span>
+      </div>
+      <div class="message-body">
+        <p>{{ message.content }}</p>
+      </div>
+    </div>
+  </div>
+<!--  <div class="message-input">-->
+<!--    <textarea [(ngModel)]="newMessage" placeholder="Type a message..."></textarea>-->
+<!--    <button (click)="sendMessage()">Send</button>-->
+<!--  </div>-->
+</div>

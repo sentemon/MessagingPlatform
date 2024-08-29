@@ -40,7 +40,7 @@ public class ChatController : ControllerBase
         
         var chatResponse = await _mediator.Send(new CreateChatCommand(chatRequest, usernames, creatorId));
         
-        return CreatedAtAction(nameof(GetChatById), new { id = chatResponse.Id }, "You created chat successfully!");
+        return CreatedAtAction(nameof(GetChat), new { id = chatResponse.Id }, "You created chat successfully!");
 
     }
         
@@ -54,8 +54,8 @@ public class ChatController : ControllerBase
         return Ok(chats);
     }
         
-    [HttpGet("getbyid/{id}")]
-    public async Task<IActionResult> GetChatById(Guid id)
+    [HttpGet("getchat")]
+    public async Task<IActionResult> GetChat(Guid id)
     {
         var chat = await _mediator.Send(new GetChatByIdQuery(id));
 

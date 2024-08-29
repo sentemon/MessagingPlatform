@@ -5,6 +5,7 @@ import { SignUpComponent } from "./account/signup/signup.component";
 import { SignOutComponent } from "./account/signout/signout.component";
 import {AuthGuard} from "./services/authguard/authguard.service";
 import {SidebarComponent} from "./sidebar/sidebar.component";
+import {ChatComponent} from "./chat/chat.component";
 
 export const routes: Routes = [
   { path: 'account',
@@ -19,7 +20,8 @@ export const routes: Routes = [
   // { path: '', redirectTo: '/account/signin', pathMatch: 'full' },
 
   // if user authorized
-  { path: '', component: SidebarComponent, canActivate: [AuthGuard] },
+  // { path: '', component: SidebarComponent, canActivate: [AuthGuard] },
+  // { path: '', component: ChatComponent, canActivate: [AuthGuard] },
   { path: 'account/signout', component: SignOutComponent, canActivate: [AuthGuard] },
 
   // for invalid route
