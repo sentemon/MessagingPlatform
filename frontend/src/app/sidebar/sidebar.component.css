@@ -1,55 +1,72 @@
 .sidebar {
-    width: 250px;
-    background-color: #222;
-    color: #fff;
-    padding: 10px;
-    height: 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
+  width: 250px;
+  background-color: #222;
+  color: #fff;
+  padding: 10px;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sidebar::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .search-bar {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .user {
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-    cursor: pointer;
-    border-bottom: 2px solid gray;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #444;
+}
+
+.user:hover {
+  background-color: #333;
 }
 
 .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
 }
 
 .user-info {
-    display: flex;
-    flex-direction: column;
+  flex: 1;
 }
 
-.user-firstname, .user-lastname {
-    font-weight: bold;
+
+.last-message {
+  font-size: 12px;
+  color: #888;
+  margin: 2px 0;
 }
 
-/*.last-message {*/
-/*    font-size: 12px;*/
-/*    color: #888;*/
-/*}*/
+.message-time {
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+.unread-count {
+  background-color: red;
+  color: white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 12px;
+  margin-left: 8px;
+}

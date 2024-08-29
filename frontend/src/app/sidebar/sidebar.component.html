@@ -1,10 +1,16 @@
 <div class="sidebar">
-    <input type="text" placeholder="Search for a user by username..." class="search-bar">
-    <div *ngFor="let user of users" class="user">
-      <img [src]="user.avatar" alt="{{ user.firstName }}'s Avatar" class="avatar">
-      <div class="user-info">
-        <p class="user-firstname">{{ user.firstName }}</p>
-        <p class="user-lastname">{{ user.lastName }}</p>
-      </div>
+  <input type="text" placeholder="Search for a user by username..." class="search-bar">
+  <div *ngFor="let chat of chats" class="user">
+    <img ngSrc="/avatar.svg" alt="Chat's Avatar" class="avatar" height="800" width="800">
+    <div class="user-info">
+      <p class="user-firstname">{{ chat.title }}</p>
+      <p class="last-message">
+        {{ chat.lastMessageFrom }}: {{ chat.lastMessageContent }}
+      </p>
+      <p class="message-time">{{ chat.lastMessageSentAt | date:'shortTime' }}</p>
+      <span *ngIf="chat.unreadMessagesCount > 0" class="unread-count">
+        {{ chat.unreadMessagesCount }}
+      </span>
     </div>
+  </div>
 </div>

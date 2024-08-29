@@ -45,7 +45,7 @@ public class ChatController : ControllerBase
     }
         
     [HttpGet("getall")]
-    public async Task<IActionResult> GetChats() // ToDo: only user's chats
+    public async Task<IActionResult> GetChats()
     {
         var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
         

@@ -3,7 +3,7 @@ import { AccountComponent } from "./account/account.component";
 import { SignInComponent } from "./account/signin/signin.component";
 import { SignUpComponent } from "./account/signup/signup.component";
 import { SignOutComponent } from "./account/signout/signout.component";
-import {AuthGuard} from "./services/authguard.service";
+import {AuthGuard} from "./services/authguard/authguard.service";
 import {SidebarComponent} from "./sidebar/sidebar.component";
 
 export const routes: Routes = [

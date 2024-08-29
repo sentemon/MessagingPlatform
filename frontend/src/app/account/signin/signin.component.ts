@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from "@angular/forms";
 import { SignInUser } from "../../models/signinuser";
 import {NgIf} from "@angular/common";
-import {AuthService} from "../../services/auth.service";
+import {AuthService} from "../../services/auth/auth.service";
 import {Router} from "@angular/router";
 
 @Component({

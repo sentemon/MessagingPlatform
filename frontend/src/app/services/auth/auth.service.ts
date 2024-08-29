@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { SignUpUser } from '../models/signupuser';
-import { SignInUser } from '../models/signinuser';
+import { SignUpUser } from '../../models/signupuser';
+import { SignInUser } from '../../models/signinuser';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
