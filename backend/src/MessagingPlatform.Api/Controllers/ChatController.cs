@@ -64,7 +64,9 @@ public class ChatController : ControllerBase
             return NotFound();
         }
 
-        return Ok(chat);
+        var chatDto = _mapper.Map<ChatDto>(chat);
+        
+        return Ok(chatDto);
     }
         
     [HttpPut("update")]

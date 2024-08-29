@@ -6,6 +6,7 @@
 }
 
 .chat-header {
+  text-align: center;
   padding: 10px;
   border-bottom: 1px solid #ddd;
   background-color: #f4f4f4;

@@ -7,7 +7,7 @@ export class ChatDto {
     public id?: string,
     public chatType?: number,
     public userChats?: UserChatDto[],
-    public messages?: MessageDto[],
+    public messages?: Iterable<MessageDto> | undefined,
     public creatorId?: string,
     public creator?: UserDto,
     public title?: string

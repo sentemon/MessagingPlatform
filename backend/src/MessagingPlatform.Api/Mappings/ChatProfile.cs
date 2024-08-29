@@ -9,5 +9,13 @@ public class ChatProfile : Profile
     public ChatProfile()
     {
         CreateMap<CreateChatDto, Chat>();
+        
+        CreateMap<Chat, ChatDto>()
+            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title ?? "New Chat"))
+            .ForMember(dest => dest.ChatType, opt => opt.MapFrom(src => (int)src.ChatType))
+            .ForMember(dest => dest.UserChats, opt => opt.MapFrom(src => src.UserChats))
+            .ForMember(dest => dest.Messages, opt => opt.MapFrom(src => src.Messages))
+            .ForMember(dest => dest.CreatorId, opt => opt.MapFrom(src => src.CreatorId))
+            .ForMember(dest => dest.Creator, opt => opt.MapFrom(src => src.Creator));
     }
 }

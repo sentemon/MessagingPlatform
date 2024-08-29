@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from "../services/chat/chat.service";
 import { FormsModule } from "@angular/forms";
-import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import { DatePipe, NgForOf, NgIf } from "@angular/common";
 import { ChatDto } from "../models/chatdto";
+import { MessageDto } from "../models/messagedto";
 
 @Component({
   selector: 'app-chat',
@@ -14,13 +15,14 @@ import { ChatDto } from "../models/chatdto";
     NgIf,
     DatePipe
   ],
-  styleUrl: './chat.component.css'
+  styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit {
   chat: ChatDto = new ChatDto();
-  selectedChatId: string = "1a6c68d2-26b8-48f0-a738-833d4fd4ace3"; // 1a6c68d2-26b8-48f0-a738-833d4fd4ace3
+  messages: MessageDto[] = [];
+  selectedChatId: string = "b123c86f-b777-4431-a749-ffafd1d12b85"; // Пример ID
 
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService) {}
 
   ngOnInit(): void {
     this.loadChat();
@@ -30,11 +32,17 @@ export class ChatComponent implements OnInit {
     this.chatService.getChat(this.selectedChatId).subscribe({
       next: (data: ChatDto) => {
         this.chat = data;
+
+        if (this.chat.messages && (this.chat.messages as any).$values) {
+          const messageRefs = (this.chat.messages as any).$values as MessageDto[];
+          this.messages = messageRefs || [];
+        } else {
+          this.messages = [];
+        }
       },
       error: (error) => {
         console.error('Error loading chat', error);
       }
     });
   }
-
 }
