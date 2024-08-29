@@ -1,6 +1,6 @@
 using MediatR;
-using MessagingPlatform.Domain.Entities;
+using MessagingPlatform.Application.Common.Models.ChatDTOs;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Queries.GetChats;
 
-public record GetChatsQuery(Guid UserId) : IRequest<IEnumerable<Chat?>>;
+public record GetChatsQuery(Guid UserId) : IRequest<IEnumerable<ChatDto>>;
