@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {SignUpUser} from "../../models/signupuser";
 import {AuthService} from "../../services/auth/auth.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 
@@ -10,7 +10,8 @@ import {FormsModule} from "@angular/forms";
   standalone: true,
   imports: [
     NgIf,
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'

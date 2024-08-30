@@ -3,14 +3,15 @@ import { FormsModule } from "@angular/forms";
 import { SignInUser } from "../../models/signinuser";
 import {NgIf} from "@angular/common";
 import {AuthService} from "../../services/auth/auth.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-signin',
   standalone: true,
   imports: [
     FormsModule,
-    NgIf
+    NgIf,
+    RouterLink
   ],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.css'
