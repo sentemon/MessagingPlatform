@@ -11,10 +11,11 @@ export const routes: Routes = [
   { path: 'account',
     component: AccountComponent,
     children: [
-      { path: 'signin', component: SignInComponent },
-      { path: 'signup', component: SignUpComponent },
-      { path: 'signout', component: SignOutComponent }
+      { path: 'signin', component: SignInComponent, canActivate: [AuthGuard] },
+      { path: 'signup', component: SignUpComponent, canActivate: [AuthGuard] },
+      { path: 'signout', component: SignOutComponent },
     ]},
+
 
   // if user unauthorized
   // { path: '', redirectTo: '/account/signin', pathMatch: 'full' },
@@ -22,7 +23,7 @@ export const routes: Routes = [
   // if user authorized
   // { path: '', component: SidebarComponent, canActivate: [AuthGuard] },
   // { path: '', component: ChatComponent, canActivate: [AuthGuard] },
-  { path: 'account/signout', component: SignOutComponent, canActivate: [AuthGuard] },
+
 
   // for invalid route
   { path: '**', redirectTo: '' },

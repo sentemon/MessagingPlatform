@@ -20,7 +20,7 @@ import { MessageDto } from "../models/messagedto";
 export class ChatComponent implements OnInit {
   chat: ChatDto = new ChatDto();
   messages: MessageDto[] = [];
-  selectedChatId: string = "b123c86f-b777-4431-a749-ffafd1d12b85"; // Пример ID
+  selectedChatId: string = "b123c86f-b777-4431-a749-ffafd1d12b85"; // example id
 
   constructor(private chatService: ChatService) {}
 
