@@ -4,8 +4,6 @@ import { SignInComponent } from "./account/signin/signin.component";
 import { SignUpComponent } from "./account/signup/signup.component";
 import { SignOutComponent } from "./account/signout/signout.component";
 import {AuthGuard} from "./services/authguard/authguard.service";
-import {SidebarComponent} from "./main-layout/sidebar/sidebar.component";
-import {ChatComponent} from "./main-layout/chat/chat.component";
 import {NonAuthGuard} from "./services/nonauthguard/nonauthguard.service";
 import {MainLayoutComponent} from "./main-layout/main-layout.component";
 
@@ -16,7 +14,7 @@ export const routes: Routes = [
     children: [
       { path: 'signin', component: SignInComponent, canActivate: [NonAuthGuard] },
       { path: 'signup', component: SignUpComponent, canActivate: [NonAuthGuard] },
-      { path: 'signout', component: SignOutComponent, canActivate: [AuthGuard] }, // fix
+      { path: 'signout', component: SignOutComponent, canActivate: [AuthGuard] },
     ]},
 
 

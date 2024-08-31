@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ChatService } from "../services/chat/chat.service";
+import { ChatService } from "../../services/chat/chat.service";
 import { FormsModule } from "@angular/forms";
 import { DatePipe, NgForOf, NgIf } from "@angular/common";
-import { ChatDto } from "../models/chatdto";
-import { MessageDto } from "../models/messagedto";
+import { ChatDto } from "../../models/chatdto";
+import { MessageDto } from "../../models/messagedto";
 
 @Component({
   selector: 'app-chat',
@@ -15,7 +15,7 @@ import { MessageDto } from "../models/messagedto";
     NgIf,
     DatePipe
   ],
-  styleUrls: ['./chat.component.css']
+  styleUrl: './chat.component.css'
 })
 export class ChatComponent implements OnInit {
   chat: ChatDto = new ChatDto();

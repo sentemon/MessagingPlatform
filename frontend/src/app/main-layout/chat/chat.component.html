@@ -6,7 +6,7 @@
     <div *ngIf="messages.length === 0">No messages</div>
     <div *ngFor="let message of messages" class="message">
       <div class="message-header">
-        <strong>{{ message.sender?.firstName }} {{ message.sender?.lastName }}</strong>
+        <strong>{{ message.sender.firstName }} {{ message.sender.lastName }}</strong>
         <span class="message-time">{{ message.sentAt | date: 'shortTime' }}</span>
       </div>
       <div class="message-body">

@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { ChatService } from '../services/chat/chat.service';
-import { ChatSidebar } from '../models/chatsidebar';
+import { ChatService } from '../../services/chat/chat.service';
+import { ChatSidebar } from '../../models/chatsidebar';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
   imports: [CommonModule, NgOptimizedImage],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+  styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
   chats: ChatSidebar[] = [];

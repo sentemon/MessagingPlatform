@@ -1,8 +1,11 @@
 .chat-container {
+  flex: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
+  width:100%;
   border-left: 1px solid #ddd;
+  overflow: hidden;
 }
 
 .chat-header {
@@ -50,6 +53,7 @@
 .message-input textarea {
   flex: 1;
   height: 50px;
+  width: 1090px; /* ToDo: fix it */
   margin-right: 10px;
 }
 
