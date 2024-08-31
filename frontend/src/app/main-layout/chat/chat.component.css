@@ -2,17 +2,19 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width:100%;
+  height: 100vh;
+  width: 100%;
   border-left: 1px solid #ddd;
-  overflow: hidden;
 }
 
 .chat-header {
   text-align: center;
+  position: sticky;
+  top: 0;
   padding: 10px;
   border-bottom: 1px solid #ddd;
   background-color: #f4f4f4;
+  z-index: 10;
 }
 
 .messages-container {
@@ -48,13 +50,16 @@
   background-color: #f4f4f4;
   display: flex;
   align-items: center;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
 }
 
 .message-input textarea {
   flex: 1;
   height: 50px;
-  width: 1090px; /* ToDo: fix it */
   margin-right: 10px;
+  width: calc(100% - 100px);
 }
 
 .message-input button {
