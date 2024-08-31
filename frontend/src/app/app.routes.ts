@@ -4,16 +4,19 @@ import { SignInComponent } from "./account/signin/signin.component";
 import { SignUpComponent } from "./account/signup/signup.component";
 import { SignOutComponent } from "./account/signout/signout.component";
 import {AuthGuard} from "./services/authguard/authguard.service";
-import {SidebarComponent} from "./sidebar/sidebar.component";
-import {ChatComponent} from "./chat/chat.component";
+import {SidebarComponent} from "./main-layout/sidebar/sidebar.component";
+import {ChatComponent} from "./main-layout/chat/chat.component";
+import {NonAuthGuard} from "./services/nonauthguard/nonauthguard.service";
+import {MainLayoutComponent} from "./main-layout/main-layout.component";
+
 
 export const routes: Routes = [
   { path: 'account',
     component: AccountComponent,
     children: [
-      { path: 'signin', component: SignInComponent, canActivate: [AuthGuard] },
-      { path: 'signup', component: SignUpComponent, canActivate: [AuthGuard] },
-      { path: 'signout', component: SignOutComponent },
+      { path: 'signin', component: SignInComponent, canActivate: [NonAuthGuard] },
+      { path: 'signup', component: SignUpComponent, canActivate: [NonAuthGuard] },
+      { path: 'signout', component: SignOutComponent, canActivate: [AuthGuard] }, // fix
     ]},
 
 
@@ -21,8 +24,7 @@ export const routes: Routes = [
   // { path: '', redirectTo: '/account/signin', pathMatch: 'full' },
 
   // if user authorized
-  // { path: '', component: SidebarComponent, canActivate: [AuthGuard] },
-  // { path: '', component: ChatComponent, canActivate: [AuthGuard] },
+  { path: '', component: MainLayoutComponent, canActivate: [AuthGuard] },
 
 
   // for invalid route

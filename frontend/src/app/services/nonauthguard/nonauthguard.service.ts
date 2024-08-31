@@ -17,7 +17,7 @@ export class NonAuthGuard implements CanActivate {
         if (!isAuthenticated) {
           return true;
         } else {
-          this.router.navigate(['/account/signout']);
+          this.router.navigate(['/']);
           return false;
         }
       })
