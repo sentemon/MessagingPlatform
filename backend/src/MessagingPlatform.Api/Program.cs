@@ -2,6 +2,7 @@ using MessagingPlatform.Application;
 using MessagingPlatform.Infrastructure;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using MessagingPlatform.Api.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddSignalR();
 
 // Register layers
 builder.Services
@@ -66,5 +68,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/chat");
 
 app.Run();
