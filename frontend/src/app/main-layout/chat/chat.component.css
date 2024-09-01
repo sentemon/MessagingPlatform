@@ -3,8 +3,9 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  width: 100%;
-  border-left: 1px solid #ddd;
+  width: 80vw;
+  /*border-left: 3px solid black; !* ToDo: fix *!*/
+  background-color: black;
 }
 
 .chat-header {
@@ -12,8 +13,8 @@
   position: sticky;
   top: 0;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
-  background-color: #f4f4f4;
+  background-color: #444;
+  color: #fff;
   z-index: 10;
 }
 
@@ -21,7 +22,8 @@
   flex: 1;
   padding: 10px;
   overflow-y: auto;
-  background-color: #fff;
+  background-color: #333;
+  scrollbar-width: thin;
 }
 
 .message {
@@ -39,38 +41,47 @@
 }
 
 .message-body {
-  background-color: #f1f1f1;
+  background-color: #222;
+  color: #fff;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 .message-input {
   padding: 10px;
-  border-top: 1px solid #ddd;
-  background-color: #f4f4f4;
+  background-color: #444;
   display: flex;
   align-items: center;
   position: sticky;
   bottom: 0;
-  z-index: 10;
+  z-index: 500;
 }
 
 .message-input textarea {
   flex: 1;
-  height: 50px;
+  min-height: 50px;
+  max-height: 200px;
   margin-right: 10px;
   width: calc(100% - 100px);
+  background-color: transparent;
+  border: none;
+  color: white;
+  white-space: pre-wrap;
+  overflow-y: auto;
+  scrollbar-width: none;
+  resize: none;
+  font-size: 16px;
 }
 
 .message-input button {
   padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
+  background-color: #313131;
+  color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .message-input button:hover {
-  background-color: #0056b3;
+  background-color: #131313;
 }
