@@ -13,5 +13,9 @@ import {ChatComponent} from "./chat/chat.component";
   styleUrl: './main-layout.component.css'
 })
 export class MainLayoutComponent {
+  selectedChatId: string | null = null;
 
+  onChatSelected(chatId: string) {
+    this.selectedChatId = chatId;
+  }
 }

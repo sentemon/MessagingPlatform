@@ -17,7 +17,11 @@ export class ChatService {
     return this.http.get<ChatSidebar[]>(`${this.apiUrl}getall/`, { withCredentials: true });
   }
 
-  getChat(id: string): Observable<ChatDto> {
-    return this.http.get<ChatDto>(`${this.apiUrl}getchat/`, { params: { id }, withCredentials: true });
+  getChat(id: string | null): Observable<ChatDto> {
+    if (id !== null) {
+      return this.http.get<ChatDto>(`${this.apiUrl}getchat/`, {params: {id}, withCredentials: true});
+    } else {
+      return new Observable<ChatDto>();
+    }
   }
 }

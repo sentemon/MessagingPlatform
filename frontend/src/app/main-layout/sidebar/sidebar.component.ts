@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ChatService } from '../../services/chat/chat.service';
 import { ChatSidebar } from '../../models/chatsidebar';
@@ -12,14 +12,19 @@ import { ChatSidebar } from '../../models/chatsidebar';
 })
 export class SidebarComponent {
   chats: ChatSidebar[] = [];
+  @Output() chatSelected = new EventEmitter<string>();
 
   constructor(private chatService: ChatService) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadChats();
   }
 
-  loadChats(): void {
+  public onSelectChat(chatId: string): void {
+    this.chatSelected.emit(chatId);
+  }
+
+  private loadChats(): void {
     this.chatService.getChats().subscribe({
       next: (data: any) => {
         if (data && data.$values && Array.isArray(data.$values)) {

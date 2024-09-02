@@ -1,6 +1,6 @@
 <div class="sidebar">
   <input type="text" placeholder="Search for a user by username..." class="search-bar">
-  <div *ngFor="let chat of chats" class="user">
+  <div *ngFor="let chat of chats" (click)="onSelectChat(chat.chatId)" class="user">
     <img ngSrc="/avatar.svg" alt="Chatsidebar's Avatar" class="avatar" height="800" width="800">
     <div class="user-info">
       <p class="user-firstname">{{ chat.title }}</p>

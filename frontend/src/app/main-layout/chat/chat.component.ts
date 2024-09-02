@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ChatService } from "../../services/chat/chat.service";
-import { FormsModule } from "@angular/forms";
-import { DatePipe, NgForOf, NgIf } from "@angular/common";
-import { ChatDto } from "../../models/chatdto";
-import { MessageDto } from "../../models/messagedto";
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ChatService} from "../../services/chat/chat.service";
+import {FormsModule} from "@angular/forms";
+import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import {ChatDto} from "../../models/chatdto";
+import {MessageDto} from "../../models/messagedto";
 
 @Component({
   selector: 'app-chat',
@@ -17,19 +17,22 @@ import { MessageDto } from "../../models/messagedto";
   ],
   styleUrl: './chat.component.css'
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnChanges {
   chat: ChatDto = new ChatDto();
   messages: MessageDto[] = [];
-  selectedChatId: string = "b123c86f-b777-4431-a749-ffafd1d12b85"; // example id
+  @Input() selectedChatId: string | null = null;
 
-  constructor(private chatService: ChatService) {}
-
-  ngOnInit(): void {
-    this.loadChat();
+  constructor(private chatService: ChatService) {
   }
 
-  loadChat(): void {
-    this.chatService.getChat(this.selectedChatId).subscribe({
+  ngOnChanges(): void {
+    if (this.selectedChatId) {
+      this.loadChat(this.selectedChatId);
+    }
+  }
+
+  loadChat(chatId: string): void {
+    this.chatService.getChat(chatId).subscribe({
       next: (data: ChatDto) => {
         this.chat = data;
 

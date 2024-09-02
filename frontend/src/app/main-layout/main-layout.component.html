@@ -1,4 +1,4 @@
 <div class="main-layout">
-  <app-sidebar></app-sidebar>
-  <app-chat></app-chat>
+  <app-sidebar (chatSelected)="onChatSelected($event)"></app-sidebar>
+  <app-chat [selectedChatId]="selectedChatId"></app-chat>
 </div>
