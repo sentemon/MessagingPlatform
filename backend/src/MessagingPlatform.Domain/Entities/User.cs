@@ -34,4 +34,7 @@ public class User
 
     public List<UserChat>? UserChats { get; set; } = [];
     public List<Message>? Messages { get; set; } = [];
+    
+    // to manage a specific connection via SignalR
+    public string? ConnectionId { get; set; }
 }

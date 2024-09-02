@@ -2,8 +2,10 @@
   <div class="chat-header">
     <h2>{{ chat?.title }}</h2>
   </div>
+
   <div class="messages-container">
-    <div *ngIf="messages.length === 0">No messages</div>
+    <div *ngIf="messages.length === 0" class="no-messages">No messages</div>
+
     <div *ngFor="let message of messages" class="message">
       <div class="message-header">
         <strong>{{ message.sender.firstName }} {{ message.sender.lastName }}</strong>
@@ -14,8 +16,9 @@
       </div>
     </div>
   </div>
+
   <div class="message-input">
-    <textarea placeholder="Type a message..."></textarea>
-    <button>Send</button>
+    <textarea [(ngModel)]="newMessage" placeholder="Type a message..."></textarea>
+    <button (click)="sendMessage()">Send</button>
   </div>
 </div>
