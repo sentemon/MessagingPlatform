@@ -91,6 +91,9 @@ namespace MessagingPlatform.Infrastructure.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("text");
 
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("text");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(320)

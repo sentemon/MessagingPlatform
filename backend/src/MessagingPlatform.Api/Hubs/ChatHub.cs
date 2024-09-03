@@ -14,26 +14,33 @@ public class ChatHub : Hub
         _userRepository = userRepository;
     }
 
-    public async Task SendMessageToChat(string targetUsername, string message)
+    public async Task SendMessageToUser(string targetUsername, string message)
     {
         var targetUser = await _userRepository.GetByUsernameAsync(targetUsername);
 
-        if (targetUser != null)
+        if (targetUser?.ConnectionId != null)
         {
+            Console.WriteLine($"Sending message to {targetUsername} with ConnectionId {targetUser.ConnectionId}");
             await Clients.Client(targetUser.ConnectionId).SendAsync("ReceiveMessage", Context.User?.Identity?.Name, message);
         }
+        else
+        {
+            Console.WriteLine($"Failed to send message: target user or connection ID is null for {targetUsername}");
+        }
     }
+
+
+    public static List<string> ConnectedUsers = [];
 
     public override async Task OnConnectedAsync()
     {
         var username = Context.User?.Identity?.Name;
-        var user = await _userRepository.GetByUsernameAsync(username);
-        
-        if (user == null)
-        {
-            throw new Exception();
-        }
-        user.ConnectionId = Context.ConnectionId;
+        var connectionId = Context.ConnectionId;
+    
+        ConnectedUsers.Add(connectionId);
+        Console.WriteLine($"User {username} connected. Total connected users: {ConnectedUsers.Count}");
+    
         await base.OnConnectedAsync();
     }
+
 }
