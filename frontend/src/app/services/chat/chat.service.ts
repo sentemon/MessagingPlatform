@@ -1,53 +1,46 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ChatDto } from "../../models/chatdto";
 import { ChatSidebar } from "../../models/chatsidebar";
-import * as signalR from "@microsoft/signalr"
+import * as signalR from "@microsoft/signalr";
 import { AddMessageDto } from "../../models/addmessagedto";
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-  private apiUrl = 'http://localhost:8080/api/Chat/';
-  private hubConnection: signalR.HubConnection;
+  private apiUrl = 'http://localhost:8080/api/Chat';
+  private hubConnection: signalR.HubConnection | null = null;
 
-  constructor(private http: HttpClient) {
-    this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(this.apiUrl)
-      .build();
-  }
-
-  public startConnection() {
-    this.hubConnection
-      .start()
-      .catch(err => console.error("Error while starting connection: " + err));
-  }
-
+  constructor(private http: HttpClient) { }
+  
   public sendMessageToUser(username: string, message: string) {
-    this.hubConnection.invoke("SendMessageToUser", username, message)
-      .catch(err => console.error("Error while sending message to user: " + err));
+    if (this.hubConnection) {
+      this.hubConnection.invoke("SendMessageToUser", username, message)
+        .catch(err => console.error("Error while sending message to user: " + err));
+    }
   }
 
   public onReceiveMessage(callback: (user: string, message: string) => void) {
-    this.hubConnection.on('ReceiveMessage', callback);
+    if (this.hubConnection) {
+      this.hubConnection.on('ReceiveMessage', callback);
+    }
   }
 
   public addMessage(addMessageDto: AddMessageDto): Observable<any> {
-    return this.http.post("http://localhost:8080/api/Message/add", addMessageDto, { withCredentials: true }); // ToDo: fix Single Responsibility Principle
+    return this.http.post("http://localhost:8080/api/Message/add", addMessageDto, { withCredentials: true });
   }
 
   getChats(): Observable<ChatSidebar[]> {
-    return this.http.get<ChatSidebar[]>(`${this.apiUrl}getall/`, { withCredentials: true });
+    return this.http.get<ChatSidebar[]>(`${this.apiUrl}/getall/`, { withCredentials: true });
   }
 
   getChat(id: string | null): Observable<ChatDto> {
     if (id !== null) {
-      return this.http.get<ChatDto>(`${this.apiUrl}getchat/`, {params: {id}, withCredentials: true});
+      return this.http.get<ChatDto>(`${this.apiUrl}/getchat/`, { params: { id }, withCredentials: true });
     } else {
-      return new Observable<ChatDto>();
+      return of(new ChatDto());
     }
   }
 }

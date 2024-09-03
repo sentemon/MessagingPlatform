@@ -1,11 +1,11 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ChatService } from '../../services/chat/chat.service';
 import { ChatDto } from '../../models/chatdto';
-import { FormsModule } from '@angular/forms';
 import { MessageDto } from '../../models/messagedto';
-import { UserDto } from '../../models/userdto';
 import { AddMessageDto } from '../../models/addmessagedto';
+import { UserDto } from '../../models/userdto';
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-chat',
@@ -19,7 +19,7 @@ import {DatePipe, NgForOf, NgIf} from "@angular/common";
   ],
   styleUrl: './chat.component.css'
 })
-export class ChatComponent implements OnInit, OnChanges {
+export class ChatComponent implements OnChanges {
   chat: ChatDto = new ChatDto();
   messages: MessageDto[] = [];
   newMessage: string = '';
@@ -28,27 +28,23 @@ export class ChatComponent implements OnInit, OnChanges {
   constructor(private chatService: ChatService) {
     this.chatService.onReceiveMessage((user, message) => {
       const userDto: UserDto = { id: '', firstName: '', lastName: '', username: user, email: '', bio: '', isOnline: null, accountCreatedAt: new Date() };
-      this.messages.push({
-        id: '',
-        senderId: userDto.id,
-        sender: userDto,
-        chatId: this.chat.id!,
-        content: message,
-        sentAt: new Date(),
-        updatedAt: null,
-        isRead: false
-      });
+      if (this.chat.id === this.selectedChatId) {
+        this.messages.push({
+          id: '',
+          senderId: userDto.id,
+          sender: userDto,
+          chatId: this.chat.id || '',
+          content: message,
+          sentAt: new Date(),
+          updatedAt: null,
+          isRead: false
+        });
+      }
     });
   }
 
-  ngOnInit(): void {
-    if (this.selectedChatId) {
-      this.loadChat(this.selectedChatId);
-    }
-  }
-
-  ngOnChanges(): void {
-    if (this.selectedChatId) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedChatId'] && this.selectedChatId) {
       this.loadChat(this.selectedChatId);
     }
   }
@@ -74,7 +70,7 @@ export class ChatComponent implements OnInit, OnChanges {
   sendMessage(): void {
     if (this.chat && this.newMessage) {
       const addMessageDto: AddMessageDto = {
-        chatId: this.chat.id!,
+        chatId: this.chat.id || '',
         content: this.newMessage
       };
 
