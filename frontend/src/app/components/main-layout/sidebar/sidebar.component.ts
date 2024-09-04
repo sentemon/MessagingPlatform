@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { ChatService } from '../../services/chat/chat.service';
-import { ChatSidebar } from '../../models/chatsidebar';
+import { ChatService } from '../../../services/chat/chat.service';
+import { ChatSidebar } from '../../../models/chatsidebar';
 
 @Component({
   selector: 'app-sidebar',

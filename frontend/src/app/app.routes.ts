@@ -1,30 +1,42 @@
 import { Routes } from '@angular/router';
-import { AccountComponent } from "./account/account.component";
-import { SignInComponent } from "./account/signin/signin.component";
-import { SignUpComponent } from "./account/signup/signup.component";
-import { SignOutComponent } from "./account/signout/signout.component";
-import {AuthGuard} from "./services/authguard/authguard.service";
-import {NonAuthGuard} from "./services/nonauthguard/nonauthguard.service";
-import {MainLayoutComponent} from "./main-layout/main-layout.component";
-
+import { AccountComponent } from "./components/account/account.component";
+import { SignInComponent } from "./components/account/signin/signin.component";
+import { SignUpComponent } from "./components/account/signup/signup.component";
+import { SignOutComponent } from "./components/account/signout/signout.component";
+import { AuthGuard } from "./services/authguard/authguard.service";
+import { NonAuthGuard } from "./services/nonauthguard/nonauthguard.service";
+import { MainLayoutComponent } from "./components/main-layout/main-layout.component";
+import { ProfileComponent } from "./components/account/profile/profile.component";
 
 export const routes: Routes = [
-  { path: 'account',
+  {
+    path: 'account',
     component: AccountComponent,
     children: [
       { path: 'signin', component: SignInComponent, canActivate: [NonAuthGuard] },
       { path: 'signup', component: SignUpComponent, canActivate: [NonAuthGuard] },
       { path: 'signout', component: SignOutComponent, canActivate: [AuthGuard] },
-    ]},
+      { path: '', redirectTo: 'signin', pathMatch: 'full' } // Default route for 'account'
+    ]
+  },
 
+  // Route for profile with username parameter
+  {
+    path: 'profile/:username',
+    component: ProfileComponent,
+    canActivate: [AuthGuard]
+  },
 
-  // if user unauthorized
-  // { path: '', redirectTo: '/account/signin', pathMatch: 'full' },
+  // Default route if user is authorized
+  {
+    path: '',
+    component: MainLayoutComponent,
+    canActivate: [AuthGuard]
+  },
 
-  // if user authorized
-  { path: '', component: MainLayoutComponent, canActivate: [AuthGuard] },
-
-
-  // for invalid route
-  { path: '**', redirectTo: '' },
+  // Wildcard route for invalid paths
+  {
+    path: '**',
+    redirectTo: ''
+  }
 ];

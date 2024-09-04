@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ChatService } from '../../services/chat/chat.service';
-import { ChatDto } from '../../models/chatdto';
-import { MessageDto } from '../../models/messagedto';
-import { AddMessageDto } from '../../models/addmessagedto';
-import { UserDto } from '../../models/userdto';
+import { ChatService } from '../../../services/chat/chat.service';
+import { ChatDto } from '../../../models/chatdto';
+import { MessageDto } from '../../../models/messagedto';
+import { AddMessageDto } from '../../../models/addmessagedto';
+import { UserDto } from '../../../models/userdto';
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 

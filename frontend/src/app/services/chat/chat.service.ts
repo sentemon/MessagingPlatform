@@ -13,8 +13,20 @@ export class ChatService {
   private apiUrl = 'http://localhost:8080/api/Chat';
   private hubConnection: signalR.HubConnection | null = null;
 
-  constructor(private http: HttpClient) { }
-  
+  constructor(private http: HttpClient) {
+    this.startConnection();
+  }
+
+  private startConnection() {
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl("http://localhost:8080/chat", { withCredentials: true })
+      .build();
+
+    this.hubConnection
+      .start()
+      .catch(err => console.error("Error while starting connection: " + err));
+  }
+
   public sendMessageToUser(username: string, message: string) {
     if (this.hubConnection) {
       this.hubConnection.invoke("SendMessageToUser", username, message)

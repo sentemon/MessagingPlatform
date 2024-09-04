@@ -1,0 +1,8 @@
+<div class="profile-container" *ngIf="user$ | async as user">
+  <h1>User Profile</h1>
+  <p>First Name: {{ user.firstName }}</p>
+  <p>Last Name: {{ user.lastName }}</p>
+  <p>Username: {{ user.username }}</p>
+  <p>Bio: {{ user.bio }}</p>
+  <p class="online">Online: {{ user.isOnline ? 'Yes' : 'No' }}</p>
+</div>

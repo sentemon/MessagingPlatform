@@ -4,6 +4,7 @@ import { SignUpUser } from '../../models/signupuser';
 import { SignInUser } from '../../models/signinuser';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import {UserDto} from "../../models/userdto";
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +43,13 @@ export class AuthService {
       .pipe(
         catchError(() => of(false))
       );
+  }
+
+  public get(): Observable<UserDto> {
+    return this.http.get<UserDto>(`${this.apiUrl}/get`, {withCredentials: true})
+  }
+
+  public getByUsername(username: string): Observable<UserDto> {
+    return this.http.get<UserDto>(`${this.apiUrl}/getbyusername/${username}`, { withCredentials: true });
   }
 }

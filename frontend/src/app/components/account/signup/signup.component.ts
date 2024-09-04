@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {SignUpUser} from "../../models/signupuser";
-import {AuthService} from "../../services/auth/auth.service";
+import {SignUpUser} from "../../../models/signupuser";
+import {AuthService} from "../../../services/auth/auth.service";
 import {Router, RouterLink} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
