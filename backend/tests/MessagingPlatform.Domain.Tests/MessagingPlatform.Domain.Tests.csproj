@@ -20,4 +20,8 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\MessagingPlatform.Domain\MessagingPlatform.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Domain.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Application.Tests", "tests\MessagingPlatform.Application.Tests\MessagingPlatform.Application.Tests.csproj", "{E5196870-6B8E-407F-8B5D-ACA3E7869EAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1MessagingPlatform.Infrastructure.Tests", "tests\TestProject1MessagingPlatform.Infrastructure.Tests\TestProject1MessagingPlatform.Infrastructure.Tests.csproj", "{6BE2C279-3D94-4579-A2E8-47C0E4F55BD1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Infrastructure.Tests", "tests\MessagingPlatform.Infrastructure.Tests\MessagingPlatform.Infrastructure.Tests.csproj", "{6BE2C279-3D94-4579-A2E8-47C0E4F55BD1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Api.Tests", "tests\MessagingPlatform.Api.Tests\MessagingPlatform.Api.Tests.csproj", "{0FA42F73-DB05-4D0C-A3BE-F42D6D970EE9}"
 EndProject
