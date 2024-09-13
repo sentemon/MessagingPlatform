@@ -15,7 +15,7 @@ public class AccountControllerTests
     private readonly Mock<IMediator> _mediatrMock;
     private readonly Mock<ICookieService> _cookieServiceMock;
     private readonly Mock<IMapper> _mapperMock;
-    private readonly AccountController _accountController;
+    private readonly AccountController _controller;
 
     public AccountControllerTests()
     {
@@ -23,7 +23,7 @@ public class AccountControllerTests
         _cookieServiceMock = new Mock<ICookieService>();
         _mapperMock = new Mock<IMapper>();
         
-        _accountController = new AccountController(_mediatrMock.Object, _cookieServiceMock.Object, _mapperMock.Object);
+        _controller = new AccountController(_mediatrMock.Object, _cookieServiceMock.Object, _mapperMock.Object);
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class AccountControllerTests
             .ReturnsAsync(token);
         
         // Act 
-        var result = await _accountController.SignUp(addUserDto);
+        var result = await _controller.SignUp(addUserDto);
         
         // Assert
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
@@ -55,5 +55,20 @@ public class AccountControllerTests
         okResult.Value.Should().BeEquivalentTo(new { message = "User signed up successfully." });
         
         _cookieServiceMock.Verify(c => c.Append("token", token), Times.Once);
+    }
+
+    [Fact]
+    public async Task SignUp_ShouldReturnBadRequest_WhenDtoIsNull()
+    {
+        // Arrange 
+        AddUserDto? nullAddUserDto = null;
+        
+        // Act
+        var result = await _controller.SignUp(nullAddUserDto);
+        
+        // Assert
+        var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
+        badRequestResult.StatusCode.Should().Be(400);
+        badRequestResult.Value.Should().Be("Invalid user data.");
     }
 }
