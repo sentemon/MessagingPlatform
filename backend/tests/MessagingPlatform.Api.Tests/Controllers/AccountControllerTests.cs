@@ -23,7 +23,7 @@ public class AccountControllerTests
         _mediatrMock = new Mock<IMediator>();
         _cookieServiceMock = new Mock<ICookieService>();
         _mapperMock = new Mock<IMapper>();
-        
+
         _controller = new AccountController(_mediatrMock.Object, _cookieServiceMock.Object, _mapperMock.Object);
     }
 
@@ -40,21 +40,21 @@ public class AccountControllerTests
             Password = "HelloItsFirstTest###123",
             ConfirmPassword = "HelloItsFirstTest###123"
         };
-        
+
         var token = "valid-token";
 
         _mediatrMock
             .Setup(m => m.Send(It.IsAny<AddUserCommand>(), default))
             .ReturnsAsync(token);
-        
+
         // Act 
         var result = await _controller.SignUp(addUserDto);
-        
+
         // Assert
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.StatusCode.Should().Be(200);
         okResult.Value.Should().BeEquivalentTo(new { message = "User signed up successfully." });
-        
+
         _cookieServiceMock.Verify(c => c.Append("token", token), Times.Once);
     }
 
@@ -63,10 +63,10 @@ public class AccountControllerTests
     {
         // Arrange 
         AddUserDto? nullAddUserDto = null;
-        
+
         // Act
         var result = await _controller.SignUp(nullAddUserDto);
-        
+
         // Assert
         var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
         badRequestResult.StatusCode.Should().Be(400);
@@ -96,7 +96,7 @@ public class AccountControllerTests
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.StatusCode.Should().Be(200);
         okResult.Value.Should().BeEquivalentTo(new { message = "You signed in successfully." });
-        
+
         _cookieServiceMock.Verify(c => c.Append("token", token), Times.Once);
     }
 
@@ -114,7 +114,7 @@ public class AccountControllerTests
         badRequestResult.StatusCode.Should().Be(400);
         badRequestResult.Value.Should().Be("Invalid user data.");
     }
-    
+
     [Fact]
     public async Task SignIn_ShouldReturnUnauthorized_WhenSignInFails()
     {
@@ -130,14 +130,63 @@ public class AccountControllerTests
         _mediatrMock
             .Setup(m => m.Send(It.IsAny<SignInCommand>(), default))
             .ReturnsAsync(token);
-        
+
         // Act
         var result = await _controller.SignIn(wrongSignInDto);
-        
+
         // Assert
         var unauthorizedResult = result.Should().BeOfType<UnauthorizedObjectResult>().Subject;
         unauthorizedResult.StatusCode.Should().Be(401);
         unauthorizedResult.Value.Should().Be("Invalid username or password.");
+    }
+
+    [Fact]
+    public void SignOut_ShouldReturnOk_WhenUserSignsOutSuccessfully()
+    {
+        // Act
+        var result = _controller.SignOut();
+
+        // Assert
+        var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be(200);
+        okResult.Value.Should().BeEquivalentTo(new { message = "User signed out successfully." });
+
+        _cookieServiceMock.Verify(c => c.Delete("token"), Times.Once);
+    }
+
+    [Fact]
+    public async Task Update_ShouldReturnBadRequest_WhenUsernameIsNullOrEmpty()
+    {
+        // Arrange
+        var updateUserDto = new UpdateUserDto();
+
+        // Act
+        var result = await _controller.Update(updateUserDto);
+
+        // Assert
+        var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
+        badRequestResult.StatusCode.Should().Be(400);
+        badRequestResult.Value.Should().Be("Username cannot be null.");
+    }
+
+    [Fact]
+    public async Task Update_ShouldReturnOk_WhenUpdateIsSuccessful()
+    {
+        // Arrange
+
+        // Act
+
+        // Assert
+    }
+
+    [Fact]
+    public async Task Update_ShouldReturnNotFound_WhenUserNotFound()
+    {
+        // Arrange
+        
+        // Act
+
+        // Assert
     }
     
 }
