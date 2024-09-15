@@ -205,10 +205,43 @@ public class AccountControllerTests
     public async Task Update_ShouldReturnNotFound_WhenUserNotFound()
     {
         // Arrange
+        var updateUserDto = new UpdateUserDto
+        {
+            FirstName = "Bob",
+            LastName = "Smith",
+            Email = "bob.smith2003@gmail.com",
+            Bio = "I like it!"
+        };
+        
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            FirstName = updateUserDto.FirstName,
+            LastName = updateUserDto.LastName,
+            Email = updateUserDto.Email,
+            Bio = updateUserDto.Bio,
+            Username = "bob.smith2003",
+            PasswordHash = "hashedPassword",
+            AccountCreatedAt = DateTime.MinValue
+        };
+
+        _mapperMock
+            .Setup(m => m.Map<User>(updateUserDto))
+            .Returns(user);
+        
+        _mediatrMock
+            .Setup(m => m.Send(It.Is<UpdateUserCommand>(cmd => cmd.UpdateUser == user), default))
+            .ReturnsAsync(false);
+
+        SetUserClaims(user.Id);
         
         // Act
+        var result = await _controller.Update(updateUserDto);
 
         // Assert
+        var okResult = result.Should().BeOfType<NotFoundObjectResult>().Subject;
+        okResult.StatusCode.Should().Be(404);
+        okResult.Value.Should().Be("User not found.");
     }
     
     private void SetUserClaims(Guid userId)
