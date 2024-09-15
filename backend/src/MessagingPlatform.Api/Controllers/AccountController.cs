@@ -172,7 +172,9 @@ public class AccountController : ControllerBase
             {
                 return NotFound("User not found.");
             }
-
+            
+            _cookieService.Delete("token");
+            
             return Ok(new { message = "User deleted successfully." });
         }
         catch (Exception e)

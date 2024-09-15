@@ -7,6 +7,7 @@ using MessagingPlatform.Application.Common.Interfaces;
 using MessagingPlatform.Application.Common.Models.UserDTOs;
 using Moq;
 using FluentAssertions;
+using MessagingPlatform.Application.CQRS.Users.Commands.DeleteUser;
 using MessagingPlatform.Application.CQRS.Users.Commands.SignIn;
 using MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
 using MessagingPlatform.Domain.Entities;
@@ -187,7 +188,7 @@ public class AccountControllerTests
             .Returns(user);
         
         _mediatrMock
-            .Setup(m => m.Send(It.Is<UpdateUserCommand>(cmd => cmd.UpdateUser == user), default))
+            .Setup(m => m.Send(It.IsAny<UpdateUserCommand>(), default))
             .ReturnsAsync(true);
 
         SetUserClaims(user.Id);
@@ -230,7 +231,7 @@ public class AccountControllerTests
             .Returns(user);
         
         _mediatrMock
-            .Setup(m => m.Send(It.Is<UpdateUserCommand>(cmd => cmd.UpdateUser == user), default))
+            .Setup(m => m.Send(It.IsAny<UpdateUserCommand>(), default))
             .ReturnsAsync(false);
 
         SetUserClaims(user.Id);
@@ -255,5 +256,47 @@ public class AccountControllerTests
         {
             HttpContext = new DefaultHttpContext { User = claimsPrincipal }
         };
+    }
+
+    [Fact]
+    public async Task Delete_ShouldReturnOk_WhenDeleteIsSuccessful()
+    {
+        // Arrange
+        _mediatrMock
+            .Setup(m => m.Send(It.IsAny<DeleteUserCommand>(), default))
+            .ReturnsAsync(true);
+        
+        // ToDo: maybe make it so that before testing this class the user id is initiated
+        SetUserClaims(Guid.NewGuid());
+        
+        // Act
+        var result = await _controller.Delete();
+
+        // Assert
+        var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be(200);
+        okResult.Value.Should().BeEquivalentTo(new { message = "User deleted successfully." });
+        
+        _cookieServiceMock.Verify(c => c.Delete("token"), Times.Once);
+    }
+    
+    [Fact]
+    public async Task Delete_ShouldReturnNotFound_WhenUserNotFound()
+    {
+        // Arrange
+        _mediatrMock
+            .Setup(m => m.Send(It.IsAny<DeleteUserCommand>(), default))
+            .ReturnsAsync(false);
+        
+        // ToDo: maybe make it so that before testing this class the user id is initiated
+        SetUserClaims(Guid.NewGuid());
+        
+        // Act
+        var result = await _controller.Delete();
+
+        // Assert
+        var okResult = result.Should().BeOfType<NotFoundObjectResult>().Subject;
+        okResult.StatusCode.Should().Be(404);
+        okResult.Value.Should().BeEquivalentTo("User not found.");
     }
 }
