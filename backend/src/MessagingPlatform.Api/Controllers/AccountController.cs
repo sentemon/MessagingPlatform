@@ -126,11 +126,6 @@ public class AccountController : ControllerBase
     [HttpPut("update")]
     public async Task<IActionResult> Update([FromBody] UpdateUserDto? updateUserDto)
     {
-        if (updateUserDto!.Username.IsNullOrEmpty())
-        {
-            return BadRequest("Username cannot be null.");
-        }
-
         try
         {
             var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;

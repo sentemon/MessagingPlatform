@@ -72,20 +72,21 @@ public class UserService : IUserService  // ToDo: fix this (перенести �
         return await _userRepository.GetByIdAsync(userId);
     }
     
+    // ToDo: fix logic
     public async Task<bool> Update(User user)
     {
         var existingUser = await _userRepository.GetByIdAsync(user.Id);
 
         if (existingUser == null)
         {
-            throw new InvalidOperationException("User not found.");
+            return false;
         }
 
         existingUser.FirstName = user.FirstName;
         existingUser.LastName = user.LastName;
         existingUser.Email = user.Email;
         existingUser.Bio = user.Bio;
-        existingUser.Username = user.Username;
+        // existingUser.Username = user.Username;
 
         await _userRepository.UpdateAsync(existingUser);
 

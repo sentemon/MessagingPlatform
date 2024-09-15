@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AutoMapper;
 using MediatR;
 using MessagingPlatform.Api.Controllers;
@@ -7,6 +8,9 @@ using MessagingPlatform.Application.Common.Models.UserDTOs;
 using Moq;
 using FluentAssertions;
 using MessagingPlatform.Application.CQRS.Users.Commands.SignIn;
+using MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
+using MessagingPlatform.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MessagingPlatform.Api.Tests.Controllers;
@@ -155,28 +159,46 @@ public class AccountControllerTests
     }
 
     [Fact]
-    public async Task Update_ShouldReturnBadRequest_WhenUsernameIsNullOrEmpty()
+    public async Task Update_ShouldReturnOk_WhenUpdateIsSuccessful()
     {
         // Arrange
-        var updateUserDto = new UpdateUserDto();
+        var updateUserDto = new UpdateUserDto
+        {
+            FirstName = "Bob",
+            LastName = "Smith",
+            Email = "bob.smith2003@gmail.com",
+            Bio = "I like it!"
+        };
+        
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            FirstName = updateUserDto.FirstName,
+            LastName = updateUserDto.LastName,
+            Email = updateUserDto.Email,
+            Bio = updateUserDto.Bio,
+            Username = "bob.smith2003",
+            PasswordHash = "hashedPassword",
+            AccountCreatedAt = DateTime.MinValue
+        };
 
+        _mapperMock
+            .Setup(m => m.Map<User>(updateUserDto))
+            .Returns(user);
+        
+        _mediatrMock
+            .Setup(m => m.Send(It.Is<UpdateUserCommand>(cmd => cmd.UpdateUser == user), default))
+            .ReturnsAsync(true);
+
+        SetUserClaims(user.Id);
+        
         // Act
         var result = await _controller.Update(updateUserDto);
 
         // Assert
-        var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
-        badRequestResult.StatusCode.Should().Be(400);
-        badRequestResult.Value.Should().Be("Username cannot be null.");
-    }
-
-    [Fact]
-    public async Task Update_ShouldReturnOk_WhenUpdateIsSuccessful()
-    {
-        // Arrange
-
-        // Act
-
-        // Assert
+        var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be(200);
+        okResult.Value.Should().BeEquivalentTo(new { message = "User data updated successfully." });
     }
 
     [Fact]
@@ -189,4 +211,16 @@ public class AccountControllerTests
         // Assert
     }
     
+    private void SetUserClaims(Guid userId)
+    {
+        var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new[]
+        {
+            new Claim(ClaimTypes.Sid, userId.ToString())
+        }, "mock"));
+
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = claimsPrincipal }
+        };
+    }
 }
