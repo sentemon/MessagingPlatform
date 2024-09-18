@@ -10,6 +10,7 @@ using FluentAssertions;
 using MessagingPlatform.Application.CQRS.Users.Commands.DeleteUser;
 using MessagingPlatform.Application.CQRS.Users.Commands.SignIn;
 using MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
+using MessagingPlatform.Application.CQRS.Users.Queries.GetUserById;
 using MessagingPlatform.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,55 @@ public class AccountControllerTests
         _mapperMock = new Mock<IMapper>();
 
         _controller = new AccountController(_mediatrMock.Object, _cookieServiceMock.Object, _mapperMock.Object);
+    }
+
+    [Fact]
+    public async Task Get_ShouldReturnOk_WhenUserIsFound()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var user = new User
+        {
+            Id = userId,
+            FirstName = "Test",
+            LastName = "User",
+            Username = "testuser",
+            Email = "testuser@gmail.com",
+            PasswordHash = "hashedPassword",
+            AccountCreatedAt = DateTime.MinValue
+        };
+
+        _mediatrMock
+            .Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(), default))
+            .ReturnsAsync(user);
+
+        _mapperMock
+            .Setup(m => m.Map<UserDto>(user))
+            .Returns(new UserDto
+            {
+                FirstName = "Test",
+                LastName = "User",
+                Username = "testuser",
+                Email = "testuser@gmail.com",
+                AccountCreatedAt = DateTime.MinValue
+            });
+
+        SetUserClaims(userId);
+
+        // Act
+        var result = await _controller.Get();
+
+        // Assert
+        var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be(200);
+        okResult.Value.Should().BeEquivalentTo(new UserDto
+        {
+            FirstName = "Test",
+            LastName = "User",
+            Username = "testuser",
+            Email = "testuser@gmail.com",
+            AccountCreatedAt = DateTime.MinValue
+        });
     }
 
     [Fact]
