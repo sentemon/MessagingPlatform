@@ -1,5 +1,9 @@
+<!-- create-chat.component.html -->
 <div class="sidebar">
-  <input type="text" placeholder="Search for a user by username..." class="search-bar">
+  <div class="top">
+    <input type="text" placeholder="Search for a user by username..." class="search-bar">
+    <img (click)="onNewChat()" ngSrc="/new-message.png" alt="new chat" class="new-chat" height="32" width="32">
+  </div>
   <div *ngFor="let chat of chats" (click)="onSelectChat(chat.chatId)" class="user">
     <img ngSrc="/avatar.svg" alt="Chatsidebar's Avatar" class="avatar" height="800" width="800">
     <div class="user-info">
@@ -11,6 +15,29 @@
       <span *ngIf="chat.unreadMessagesCount > 0" class="unread-count">
         {{ chat.unreadMessagesCount }}
       </span>
+    </div>
+  </div>
+</div>
+
+<!-- Modal window -->
+<div *ngIf="isCreatingChat" class="modal">
+  <div class="modal-content">
+    <h2>Create New Chat</h2>
+    <label for="chat-title">Chat Title:</label>
+    <input type="text" [(ngModel)]="newChat.title" id="chat-title" placeholder="Enter chat title">
+
+    <label for="users">Usernames (comma separated):</label>
+    <input type="text" [(ngModel)]="newChat.usernames" id="users" placeholder="Enter usernames">
+
+    <label for="chat-type">Chat Type:</label>
+    <select [(ngModel)]="newChat.chatType" id="chat-type">
+      <option value="0">Private</option>
+      <option value="1">Group</option>
+    </select>
+
+    <div class="modal-buttons">
+      <button (click)="createNewChat()">Create</button>
+      <button (click)="closeModal()">Cancel</button>
     </div>
   </div>
 </div>

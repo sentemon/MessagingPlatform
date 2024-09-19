@@ -55,4 +55,10 @@ export class ChatService {
       return of(new ChatDto());
     }
   }
+
+  public createChat(createChatDto: { users: string[], title: string, chatType: number }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/create`, createChatDto, { withCredentials: true, responseType: 'text' });
+  }
+
+
 }

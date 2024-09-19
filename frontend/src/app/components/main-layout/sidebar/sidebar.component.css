@@ -12,8 +12,13 @@
   display: none;
 }
 
+.top {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #444;
+}
 .search-bar {
-  width: 100%;
+  width: 85%;
   padding: 8px;
   margin-bottom: 10px;
   background-color: #333;
@@ -23,6 +28,12 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+}
+
+.new-chat {
+  display: flex;
+  /*width: 10px;*/
+  /*height: 10px;*/
 }
 
 .user {
@@ -70,3 +81,71 @@
   font-size: 12px;
   margin-left: 8px;
 }
+
+/* modal */
+.modal {
+  display: flex;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  width: 350px;
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  background-color: #444;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 4px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.modal-buttons button {
+  background-color: #555;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-buttons button:hover {
+  background-color: #777;
+}
+
+.modal-buttons button:first-child {
+  background-color: #4caf50;
+}
+
+.modal-buttons button:first-child:hover {
+  background-color: #45a049;
+}
+
