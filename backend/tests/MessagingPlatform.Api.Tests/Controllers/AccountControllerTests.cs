@@ -11,6 +11,7 @@ using MessagingPlatform.Application.CQRS.Users.Commands.DeleteUser;
 using MessagingPlatform.Application.CQRS.Users.Commands.SignIn;
 using MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserById;
+using MessagingPlatform.Application.CQRS.Users.Queries.GetUserByUsername;
 using MessagingPlatform.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -80,6 +81,88 @@ public class AccountControllerTests
             Email = "testuser@gmail.com",
             AccountCreatedAt = DateTime.MinValue
         });
+    }
+
+    [Fact]
+    public async Task GetByUsername_ShouldReturnOk_WhenUserIsFound()
+    {
+        // Arrange
+        var username = "testuser";
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Test",
+            LastName = "User",
+            Username = "testuser",
+            Email = "testuser@gmail.com",
+            PasswordHash = "hashedPassword",
+            AccountCreatedAt = DateTime.MinValue
+        };
+
+        _mediatrMock
+            .Setup(m => m.Send(It.IsAny<GetUserByUsernameQuery>(), default))
+            .ReturnsAsync(user);
+
+        _mapperMock
+            .Setup(m => m.Map<UserDto>(user))
+            .Returns(new UserDto
+            {
+                FirstName = "Test",
+                LastName = "User",
+                Username = "testuser",
+                Email = "testuser@gmail.com",
+                Bio = "idk",
+                IsOnline = true,
+                AccountCreatedAt = DateTime.MaxValue
+            });
+        
+        // Act
+        var result = await _controller.GetByUsername(username);
+        
+        // Assert
+        var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+        okResult.StatusCode.Should().Be(200);
+        okResult.Value.Should().BeEquivalentTo(new UserDto
+        {
+            FirstName = "Test",
+            LastName = "User",
+            Username = "testuser",
+            Email = "testuser@gmail.com",
+            Bio = "idk",
+            IsOnline = true,
+            AccountCreatedAt = DateTime.MaxValue
+        });
+    }
+    
+    [Fact]
+    public async Task GetByUsername_ShouldReturnBadRequest_WhenUserNotFound()
+    {
+        // Arrange
+        var username = "user_2039";
+        User? user = null;
+
+        _mediatrMock
+            .Setup(m => m.Send(It.IsAny<GetUserByUsernameQuery>(), default))
+            .ReturnsAsync(user);
+
+        _mapperMock
+            .Setup(m => m.Map<UserDto>(user))
+            .Returns(new UserDto
+            {
+                FirstName = null,
+                LastName = null,
+                Username = null,
+                Email = null,
+                AccountCreatedAt = default
+            });
+        
+        // Act
+        var result = await _controller.GetByUsername(username);
+        
+        // Assert
+        var okResult = result.Should().BeOfType<NotFoundObjectResult>().Subject;
+        okResult.StatusCode.Should().Be(404);
+        okResult.Value.Should().Be("User not found");
     }
 
     [Fact]

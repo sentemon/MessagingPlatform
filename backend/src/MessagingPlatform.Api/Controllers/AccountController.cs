@@ -57,7 +57,7 @@ public class AccountController : ControllerBase
     [HttpGet("getbyusername/{username}")]
     public async Task<IActionResult> GetByUsername(string username)
     {
-        var user = await _mediator.Send(new GetUserByUsenameQuery(username));
+        var user = await _mediator.Send(new GetUserByUsernameQuery(username));
         
         if (user == null)
         {
