@@ -27,23 +27,6 @@ public class ChatController : ControllerBase
         _mapper = mapper;
     }
         
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateChat([FromBody] CreateChatDto createChatDto)
-    {
-        var chatRequest = _mapper.Map<Chat>(createChatDto);
-        
-        var usernames = createChatDto.Users;
-        usernames.Add(User.Claims.First(c => c.Type == ClaimTypes.Name).Value); // "Added creator of the chat"
-
-        var creatorId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
-        
-        
-        var chatResponse = await _mediator.Send(new CreateChatCommand(chatRequest, usernames, creatorId));
-        
-        return CreatedAtAction(nameof(GetChat), new { id = chatResponse.Id }, "You created chat successfully!");
-
-    }
-        
     [HttpGet("getall")]
     public async Task<IActionResult> GetChats()
     {
@@ -67,6 +50,23 @@ public class ChatController : ControllerBase
         var chatDto = _mapper.Map<ChatDto>(chat);
         
         return Ok(chatDto);
+    }
+    
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateChat([FromBody] CreateChatDto createChatDto)
+    {
+        var chatRequest = _mapper.Map<Chat>(createChatDto);
+        
+        var usernames = createChatDto.Users;
+        usernames.Add(User.Claims.First(c => c.Type == ClaimTypes.Name).Value); // "Added creator of the chat"
+
+        var creatorId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
+        
+        
+        var chatResponse = await _mediator.Send(new CreateChatCommand(chatRequest, usernames, creatorId));
+        
+        return CreatedAtAction(nameof(GetChat), new { id = chatResponse.Id }, "You created chat successfully!");
+
     }
         
     [HttpPut("update")]
