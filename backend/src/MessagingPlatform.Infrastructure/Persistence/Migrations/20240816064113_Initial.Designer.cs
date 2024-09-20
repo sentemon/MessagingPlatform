@@ -3,17 +3,20 @@ using System;
 using MessagingPlatform.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace MessagingPlatform.Infrastructure.Migrations
+namespace MessagingPlatform.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240816064113_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace MessagingPlatform.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ChatUser", b =>
+                {
+                    b.Property<Guid>("ChatsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ChatsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ChatUser");
+                });
 
             modelBuilder.Entity("MessagingPlatform.Domain.Entities.Chat", b =>
                 {
@@ -58,7 +76,7 @@ namespace MessagingPlatform.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool?>("IsRead")
+                    b.Property<bool>("IsRead")
                         .HasColumnType("boolean");
 
                     b.Property<Guid>("SenderId")
@@ -91,9 +109,6 @@ namespace MessagingPlatform.Infrastructure.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("text");
 
-                    b.Property<string>("ConnectionId")
-                        .HasColumnType("text");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(320)
@@ -116,6 +131,9 @@ namespace MessagingPlatform.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -123,28 +141,24 @@ namespace MessagingPlatform.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Username")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("MessagingPlatform.Domain.Entities.UserChat", b =>
+            modelBuilder.Entity("ChatUser", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.HasOne("MessagingPlatform.Domain.Entities.Chat", null)
+                        .WithMany()
+                        .HasForeignKey("ChatsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<Guid>("ChatId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("JoinedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("UserId", "ChatId");
-
-                    b.HasIndex("ChatId");
-
-                    b.ToTable("UserChats");
+                    b.HasOne("MessagingPlatform.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MessagingPlatform.Domain.Entities.Chat", b =>
@@ -177,37 +191,23 @@ namespace MessagingPlatform.Infrastructure.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("MessagingPlatform.Domain.Entities.UserChat", b =>
+            modelBuilder.Entity("MessagingPlatform.Domain.Entities.User", b =>
                 {
-                    b.HasOne("MessagingPlatform.Domain.Entities.Chat", "Chat")
-                        .WithMany("UserChats")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MessagingPlatform.Domain.Entities.User", "User")
-                        .WithMany("UserChats")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
-
-                    b.Navigation("User");
+                    b.HasOne("MessagingPlatform.Domain.Entities.User", null)
+                        .WithMany("Friends")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("MessagingPlatform.Domain.Entities.Chat", b =>
                 {
                     b.Navigation("Messages");
-
-                    b.Navigation("UserChats");
                 });
 
             modelBuilder.Entity("MessagingPlatform.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Messages");
+                    b.Navigation("Friends");
 
-                    b.Navigation("UserChats");
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

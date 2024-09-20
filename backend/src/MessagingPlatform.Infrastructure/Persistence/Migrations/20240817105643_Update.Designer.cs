@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace MessagingPlatform.Infrastructure.Migrations
+namespace MessagingPlatform.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240903173851_AddFieldConnectionId")]
-    partial class AddFieldConnectionId
+    [Migration("20240817105643_Update")]
+    partial class Update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,9 +92,6 @@ namespace MessagingPlatform.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Bio")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ConnectionId")
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
