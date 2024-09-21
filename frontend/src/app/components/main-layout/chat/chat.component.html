@@ -12,7 +12,9 @@
         <span class="message-time">{{ message.sentAt | date: 'shortTime' }}</span>
       </div>
       <div class="message-body">
-        <p>{{ message.content }}</p>
+        <p>{{ message.content }}
+          <button (click)="deleteMessage(message.sender.id, message.id)" class="delete-message">x</button>
+        </p>
       </div>
     </div>
   </div>

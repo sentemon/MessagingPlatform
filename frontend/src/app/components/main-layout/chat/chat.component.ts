@@ -95,4 +95,17 @@ export class ChatComponent implements OnChanges {
     }
   }
 
+  // ToDo: fix this method
+  deleteMessage(senderId: string, messageId: string): void {
+    console.log('Deleting message', senderId, messageId);
+    this.chatService.deleteMessage(senderId, messageId).subscribe({
+      next: () => {
+        this.messages = this.messages.filter(m => m.id !== messageId);
+      },
+      error: (error) => {
+        console.error('Error deleting message', error);
+      }
+    });
+  }
+
 }

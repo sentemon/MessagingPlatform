@@ -44,6 +44,10 @@ export class ChatService {
     return this.http.post("http://localhost:8080/api/Message/add", addMessageDto, { withCredentials: true });
   }
 
+  public deleteMessage(senderId: string, messageId: string): Observable<any> {
+    return this.http.delete("http://localhost:8080/api/Message/delete", { params: { senderId, messageId }, withCredentials: true });
+  }
+
   getChats(): Observable<ChatSidebar[]> {
     return this.http.get<ChatSidebar[]>(`${this.apiUrl}/getall/`, { withCredentials: true });
   }
