@@ -21,7 +21,7 @@ public class Chat
     [Required]
     public required User? Creator { get; set; }
 
-    [MaxLength(100)]
+    [MaxLength(50)]
     public string? Title { get; set; }
     
     public bool CanAddUser()

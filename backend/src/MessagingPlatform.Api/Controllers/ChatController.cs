@@ -64,9 +64,8 @@ public class ChatController : ControllerBase
         
         
         var chatResponse = await _mediator.Send(new CreateChatCommand(chatRequest, usernames, creatorId));
-        
-        return CreatedAtAction(nameof(GetChat), new { id = chatResponse.Id }, "You created chat successfully!");
 
+        return Ok(chatResponse.Id); // ToDo: maybe return the entity of chat
     }
         
     [HttpPut("update")]

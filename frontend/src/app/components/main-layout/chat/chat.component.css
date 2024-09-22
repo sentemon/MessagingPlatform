@@ -16,6 +16,7 @@
   background-color: #444;
   color: #fff;
   z-index: 10;
+  height: 50px;
 }
 
 .messages-container {

@@ -41,16 +41,22 @@ export class SidebarComponent {
     const createChatDto = {
       title: this.newChat.title,
       users: usernamesArray,
-      chatType: this.newChat.chatType  // Добавляем тип чата
+      chatType: this.newChat.chatType
     };
 
     this.chatService.createChat(createChatDto).subscribe(
       response => {
         console.log('Chat created successfully', response);
+        this.loadChats();
+
+        const newChatId = response.replace(/(^"|"$)/g, ''); // remove quotes
+        console.log('New chat id', newChatId);
+        this.onSelectChat(newChatId);
+
         this.closeModal();
       },
       error => {
-        console.error('Error creating chat', error); // Логирование ошибки
+        console.error('Error creating chat', error);
       }
     );
   }
