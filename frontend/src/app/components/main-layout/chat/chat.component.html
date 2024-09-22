@@ -1,10 +1,11 @@
 <div class="chat-container">
-  <div class="chat-header">
+  <div *ngIf="chat.id !== undefined" class="chat-header">
     <h2>{{ chat?.title }}</h2>
   </div>
 
   <div class="messages-container">
-    <div *ngIf="messages.length === 0" class="no-messages">No messages</div>
+    <div *ngIf="chat.id === undefined" class="select-chat">Select a chat</div>
+    <div *ngIf="chat.id !== undefined && messages.length === 0" class="no-messages">No messages</div>
 
     <div *ngFor="let message of messages" class="message">
       <div class="message-header">
@@ -19,7 +20,8 @@
     </div>
   </div>
 
-  <div class="message-input">
+
+  <div *ngIf="chat.id !== undefined" class="message-input">
     <textarea [(ngModel)]="newMessage" placeholder="Type a message..."></textarea>
     <button (click)="sendMessage()">Send</button>
   </div>
