@@ -11,7 +11,7 @@ import { AddMessageDto } from "../../models/addmessagedto";
 })
 export class ChatService {
   private apiUrl = 'http://localhost:8080/api/Chat';
-  private hubConnection: signalR.HubConnection | null = null;
+  private hubConnection: signalR.HubConnection | null = null; // ToDo: maybe move to separate service
 
   constructor(private http: HttpClient) {
     this.startConnection();
@@ -40,19 +40,11 @@ export class ChatService {
     }
   }
 
-  public addMessage(addMessageDto: AddMessageDto): Observable<any> {
-    return this.http.post("http://localhost:8080/api/Message/add", addMessageDto, { withCredentials: true });
-  }
-
-  public deleteMessage(senderId: string, messageId: string): Observable<any> {
-    return this.http.delete("http://localhost:8080/api/Message/delete", { params: { senderId, messageId }, withCredentials: true });
-  }
-
-  getChats(): Observable<ChatSidebar[]> {
+  public getChats(): Observable<ChatSidebar[]> {
     return this.http.get<ChatSidebar[]>(`${this.apiUrl}/getall/`, { withCredentials: true });
   }
 
-  getChat(id: string | null): Observable<ChatDto> {
+  public getChat(id: string | null): Observable<ChatDto> {
     if (id !== null) {
       return this.http.get<ChatDto>(`${this.apiUrl}/getchat/`, { params: { id }, withCredentials: true });
     } else {
@@ -63,6 +55,15 @@ export class ChatService {
   public createChat(createChatDto: { users: string[], title: string, chatType: number }): Observable<any> {
     return this.http.post(`${this.apiUrl}/create`, createChatDto, { withCredentials: true, responseType: 'text' });
   }
+
+  // ToDo: not implemented on the backend
+  public deleteChat(chatId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete`, {
+      body: { chatId },
+      withCredentials: true
+    });
+  }
+
 
 
 }

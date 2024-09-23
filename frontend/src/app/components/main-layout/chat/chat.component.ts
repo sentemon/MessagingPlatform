@@ -6,6 +6,7 @@ import { AddMessageDto } from '../../../models/addmessagedto';
 import { UserDto } from '../../../models/userdto';
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {MessageService} from "../../../services/message/message.service";
 
 @Component({
   selector: 'app-chat',
@@ -25,7 +26,7 @@ export class ChatComponent implements OnChanges {
   newMessage: string = '';
   @Input() selectedChatId: string | null = null;
 
-  constructor(private chatService: ChatService) {
+  constructor(private chatService: ChatService, private messageService: MessageService) {
     this.chatService.onReceiveMessage((user, message) => {
       const userDto: UserDto = { id: '', firstName: '', lastName: '', username: user, email: '', bio: '', isOnline: null, accountCreatedAt: new Date() };
       if (this.chat.id === this.selectedChatId) {
@@ -74,7 +75,7 @@ export class ChatComponent implements OnChanges {
         content: this.newMessage
       };
 
-      this.chatService.addMessage(addMessageDto).subscribe({
+      this.messageService.addMessage(addMessageDto).subscribe({
         next: (response: MessageDto) => {
           this.messages.push({
             id: response.id,
@@ -98,12 +99,24 @@ export class ChatComponent implements OnChanges {
   // ToDo: fix this method
   deleteMessage(senderId: string, messageId: string): void {
     console.log('Deleting message', senderId, messageId);
-    this.chatService.deleteMessage(senderId, messageId).subscribe({
+    this.messageService.deleteMessage(senderId, messageId).subscribe({
       next: () => {
         this.messages = this.messages.filter(m => m.id !== messageId);
       },
       error: (error) => {
         console.error('Error deleting message', error);
+      }
+    });
+  }
+
+  deleteChat(chatId: string): void {
+    this.chatService.deleteChat(chatId).subscribe({
+      next: () => {
+        this.chat = new ChatDto();
+        this.messages = [];
+      },
+      error: (error) => {
+        console.error('Error deleting chat', error);
       }
     });
   }
