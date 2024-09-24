@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MessagingPlatform.Infrastructure.Repositories;
 
+// ToDo: replace all repositories with this 
 public class Repository<T> : IRepository<T> where T : class
 {
     protected readonly AppDbContext _context;

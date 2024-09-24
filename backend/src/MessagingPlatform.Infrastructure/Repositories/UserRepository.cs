@@ -75,14 +75,14 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            var user = await _context.Users.FirstOrDefaultAsync(n => n.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             
             if (user == null)
             {
                 return false;
             }
 
-            EntityEntry entityEntry = _context.Entry(user);
+            var entityEntry = _context.Entry(user);
             entityEntry.State = EntityState.Deleted;
 
             await _context.SaveChangesAsync();

@@ -14,7 +14,8 @@ public class DeleteChatCommandHandler : IRequestHandler<DeleteChatCommand, bool>
     
     public async Task<bool> Handle(DeleteChatCommand request, CancellationToken cancellationToken)
     {
-        // ToDo
-        throw new NotImplementedException();
+        var result = await _chatRepository.Delete(request.DeleteChat.ChatId);
+
+        return result;
     }
 }

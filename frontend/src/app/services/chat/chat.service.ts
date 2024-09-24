@@ -56,12 +56,8 @@ export class ChatService {
     return this.http.post(`${this.apiUrl}/create`, createChatDto, { withCredentials: true, responseType: 'text' });
   }
 
-  // ToDo: not implemented on the backend
   public deleteChat(chatId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/delete`, {
-      body: { chatId },
-      withCredentials: true
-    });
+    return  this.http.delete(`${this.apiUrl}/delete`, { body: { chatId }, withCredentials: true, responseType: 'text' });
   }
 
 

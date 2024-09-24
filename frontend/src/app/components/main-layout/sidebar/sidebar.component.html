@@ -16,6 +16,10 @@
         {{ chat.unreadMessagesCount }}
       </span>
     </div>
+    <!-- ToDo: user can edit and delete the chat -->
+    <div >
+      <button (click)="onDeleteChat(chat.chatId, $event)" class="delete-chat">Delete chat</button>
+    </div>
   </div>
 </div>
 

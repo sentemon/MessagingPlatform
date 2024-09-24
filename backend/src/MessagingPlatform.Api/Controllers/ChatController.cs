@@ -81,11 +81,11 @@ public class ChatController : ControllerBase
     {
         var result = await _mediator.Send(new DeleteChatCommand(deleteChatDto));
 
-        if (result)
+        if (!result)
         {
-            return NoContent();
+            return NotFound("User not found.");
         }
 
-        return NotFound();
+        return Ok("User deleted successfully.");
     }
 }

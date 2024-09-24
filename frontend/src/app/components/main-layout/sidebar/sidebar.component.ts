@@ -32,6 +32,21 @@ export class SidebarComponent {
     this.isCreatingChat = true;
   }
 
+  onDeleteChat(chatId: string, event: Event): void {
+    event.stopPropagation();
+    if (confirm('Are you sure you want to delete this chat?')) {
+      this.chatService.deleteChat(chatId).subscribe({
+        next: () => {
+          this.chats = this.chats.filter(chat => chat.chatId !== chatId);
+          console.log(`Chat ${chatId} deleted successfully`);
+        },
+        error: (error) => {
+          console.error('Error deleting chat', error);
+        }
+      });
+    }
+  }
+
   closeModal() {
     this.isCreatingChat = false;
   }

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import { ChatService } from '../../../services/chat/chat.service';
 import { ChatDto } from '../../../models/chatdto';
 import { MessageDto } from '../../../models/messagedto';
@@ -25,6 +25,7 @@ export class ChatComponent implements OnChanges {
   messages: MessageDto[] = [];
   newMessage: string = '';
   @Input() selectedChatId: string | null = null;
+  @Output() chatDeleted = new EventEmitter<string>();
 
   constructor(private chatService: ChatService, private messageService: MessageService) {
     this.chatService.onReceiveMessage((user, message) => {
@@ -109,16 +110,20 @@ export class ChatComponent implements OnChanges {
     });
   }
 
+  // ToDo: ma usuwac rcwniez ze sidebaru
   deleteChat(chatId: string): void {
-    this.chatService.deleteChat(chatId).subscribe({
-      next: () => {
-        this.chat = new ChatDto();
-        this.messages = [];
-      },
-      error: (error) => {
-        console.error('Error deleting chat', error);
-      }
-    });
+    if (confirm('Are you sure you want to delete this chat?')) {
+      this.chatService.deleteChat(chatId).subscribe({
+        next: () => {
+          this.chat = new ChatDto();
+          this.messages = [];
+          this.chatDeleted.emit(chatId);
+        },
+        error: (error) => {
+          console.error('Error deleting chat', error);
+        }
+      });
+    }
   }
 
 }
