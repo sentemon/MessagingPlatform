@@ -1,5 +1,6 @@
 # Messaging Platform [Demo]
 
+## Preview
 <img src="https://i.ibb.co/3FfjFxd/example-usage.gif" alt="example-usage">
 
 ## Overview
@@ -51,12 +52,10 @@ This project follows the **Clean Architecture** pattern, which emphasizes separa
 
 ### Prerequisites
 
-- **.NET SDK** (8.0 or later)
-- **Node.js** (for Angular)
 - **Docker**
 - **Git**
 
-### Backend Setup
+### Setup
 
 1. **Clone the repository**:
    ```bash
@@ -64,47 +63,15 @@ This project follows the **Clean Architecture** pattern, which emphasizes separa
    cd MessagingPlatform
    ```
 
-
-2. **Set up the database**:
-
-   Run the following commands to run database:
+2. **Build and run the application**:
+   Use Docker Compose to build and start both the backend and the frontend along with the database:
    ```bash
    docker compose up --build
    ```
-   
-   Run the following commands to apply migrations:
-   ```bash
-   dotnet ef database update
-   ```
 
-3. **Run the application**:
-   Start the backend using the following command:
-   ```bash
-   dotnet run backend/src/MessagingPlatform.Api
-   ```
-
-### Frontend Setup
-
-1. **Navigate to the frontend directory**:
-   ```bash
-   cd MessagingPlatform/frontend
-   ```
-
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-
-3. **Run the Angular development server**:
-   ```bash
-   ng serve
-   ```
-   The frontend will be accessible at `http://localhost:4200`.
-
-
-## Docker (soon)
-
-You can use Docker to containerize both the backend and frontend for easier deployment.
+3. **Access the application**:
+   - **Swagger UI**: [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
+   - **Frontend**: [http://localhost:4200](http://localhost:4200)
 
 ## Key Dependencies
 
