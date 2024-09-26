@@ -21,6 +21,17 @@
       <button (click)="onDeleteChat(chat.chatId, $event)" class="delete-chat">Delete chat</button>
     </div>
   </div>
+  <div class="profile">
+    <img ngSrc="/avatar.svg" alt="Profile Avatar" class="avatar" height="800" width="800">
+    <div class="user-info">
+      <p class="user-fullname">{{ user?.firstName }} {{ user?.lastName }}</p>
+      <p class="user-bio">{{ user?.bio }}</p>
+    </div>
+    <div (click)="onSettings()" class="settings">
+      <img ngSrc="/settings.svg" alt="settings" height="24" width="24">
+    </div>
+  </div>
+
 </div>
 
 <!-- Modal window -->

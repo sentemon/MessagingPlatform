@@ -3,6 +3,9 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ChatService } from '../../../services/chat/chat.service';
 import { ChatSidebar } from '../../../models/chatsidebar';
 import {FormsModule} from "@angular/forms";
+import {AuthService} from "../../../services/auth/auth.service";
+import {UserDto} from "../../../models/userdto";
+import {Observable} from "rxjs";
 
 // ToDo: use SOLID
 @Component({
@@ -17,13 +20,31 @@ export class SidebarComponent {
   @Output() chatSelected = new EventEmitter<string>();
   isCreatingChat = false;
   newChat = { title: '', usernames: '', chatType: 0 };
+  user: UserDto | undefined;
 
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService, private authService: AuthService) {
+    this.authService.get().subscribe({
+      next: (data: UserDto) => {
+        if (data) {
+          this.user = data;
+        } else {
+          console.error("Wrong data", data);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading user', error);
+      }
+    });
+  }
+
 
   public ngOnInit(): void {
     this.loadChats();
   }
 
+  onSettings() {
+    console.log('Settings');
+  }
   public onSelectChat(chatId: string): void {
     this.chatSelected.emit(chatId);
   }
