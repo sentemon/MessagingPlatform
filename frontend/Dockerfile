@@ -8,8 +8,7 @@ RUN npm run build --prod
 FROM nginx:1.21.3-alpine
 COPY --from=build /app/dist/frontend /usr/share/nginx/html
 
-RUN echo\
-'server {\
+RUN echo 'server {\
     listen       80;\
     listen  [::]:80;\
     server_name  localhost;\
@@ -23,4 +22,3 @@ RUN echo\
         root   /usr/share/nginx/html/browser;\
     }\
 }' > /etc/nginx/conf.d/default.conf
-
