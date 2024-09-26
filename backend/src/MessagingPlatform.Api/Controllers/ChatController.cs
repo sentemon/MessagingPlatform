@@ -37,7 +37,7 @@ public class ChatController : ControllerBase
         return Ok(chats);
     }
         
-    [HttpGet("getchat")]
+    [HttpGet("get")]
     public async Task<IActionResult> GetChat(Guid id)
     {
         var chat = await _mediator.Send(new GetChatByIdQuery(id));
@@ -83,9 +83,9 @@ public class ChatController : ControllerBase
 
         if (!result)
         {
-            return NotFound("User not found.");
+            return NotFound("Chat not found.");
         }
 
-        return Ok("User deleted successfully.");
+        return Ok("Chat deleted successfully.");
     }
 }
