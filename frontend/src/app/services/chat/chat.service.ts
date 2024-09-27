@@ -5,12 +5,12 @@ import { ChatDto } from "../../models/chatdto";
 import { ChatSidebar } from "../../models/chatsidebar";
 import * as signalR from "@microsoft/signalr";
 import { AddMessageDto } from "../../models/addmessagedto";
+import {environment} from "../../../environments/environment.development";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-  private apiUrl = 'http://localhost:8080/api/Chat';
   private hubConnection: signalR.HubConnection | null = null; // ToDo: maybe move to separate service
 
   constructor(private http: HttpClient) {
@@ -40,24 +40,24 @@ export class ChatService {
     }
   }
 
-  public getChats(): Observable<ChatSidebar[]> {
-    return this.http.get<ChatSidebar[]>(`${this.apiUrl}/getall/`, { withCredentials: true });
+  public getAll(): Observable<ChatSidebar[]> {
+    return this.http.get<ChatSidebar[]>(`${environment.apiUrl}/Chat/getall/`, { withCredentials: true });
   }
 
-  public getChat(id: string | null): Observable<ChatDto> {
+  public get(id: string | null): Observable<ChatDto> {
     if (id !== null) {
-      return this.http.get<ChatDto>(`${this.apiUrl}/get/`, { params: { id }, withCredentials: true });
+      return this.http.get<ChatDto>(`${environment.apiUrl}/Chat/get/`, { params: { id }, withCredentials: true });
     } else {
       return of(new ChatDto());
     }
   }
 
-  public createChat(createChatDto: { users: string[], title: string, chatType: number }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create`, createChatDto, { withCredentials: true, responseType: 'text' });
+  public create(createChatDto: { users: string[], title: string, chatType: number }): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/Chat/create`, createChatDto, { withCredentials: true, responseType: 'text' });
   }
 
-  public deleteChat(chatId: string): Observable<any> {
-    return  this.http.delete(`${this.apiUrl}/delete`, { body: { chatId }, withCredentials: true, responseType: 'text' });
+  public delete(id: string): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}/Chat/delete`, { params: { id }, withCredentials: true, responseType: 'text' });
   }
 
 

@@ -4,7 +4,7 @@ import { ChatDto } from '../../../models/chatdto';
 import { MessageDto } from '../../../models/messagedto';
 import { AddMessageDto } from '../../../models/addmessagedto';
 import { UserDto } from '../../../models/userdto';
-import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {MessageService} from "../../../services/message/message.service";
 
@@ -16,7 +16,8 @@ import {MessageService} from "../../../services/message/message.service";
     DatePipe,
     FormsModule,
     NgForOf,
-    NgIf
+    NgIf,
+    NgOptimizedImage
   ],
   styleUrl: './chat.component.css'
 })
@@ -52,7 +53,7 @@ export class ChatComponent implements OnChanges {
   }
 
   loadChat(chatId: string): void {
-    this.chatService.getChat(chatId).subscribe({
+    this.chatService.get(chatId).subscribe({
       next: (data: ChatDto) => {
         this.chat = data;
 
@@ -113,7 +114,7 @@ export class ChatComponent implements OnChanges {
   // ToDo: ma usuwac rcwniez ze sidebaru
   deleteChat(chatId: string): void {
     if (confirm('Are you sure you want to delete this chat?')) {
-      this.chatService.deleteChat(chatId).subscribe({
+      this.chatService.delete(chatId).subscribe({
         next: () => {
           this.chat = new ChatDto();
           this.messages = [];

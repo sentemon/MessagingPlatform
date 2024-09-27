@@ -102,7 +102,7 @@ export class SidebarComponent {
       chatType: this.newChat.chatType
     };
 
-    this.chatService.createChat(createChatDto).subscribe(
+    this.chatService.create(createChatDto).subscribe(
       response => {
         console.log('Chat created successfully', response);
         this.loadChats();
@@ -120,7 +120,7 @@ export class SidebarComponent {
   }
 
   private loadChats(): void {
-    this.chatService.getChats().subscribe({
+    this.chatService.getAll().subscribe({
       next: (data: any) => {
         if (data && data.$values && Array.isArray(data.$values)) {
           this.chats = data.$values;
