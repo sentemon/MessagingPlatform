@@ -17,8 +17,16 @@
       </span>
     </div>
     <!-- ToDo: user can edit and delete the chat -->
-    <div >
-      <button (click)="onDeleteChat(chat.chatId, $event)" class="delete-chat">Delete chat</button>
+    <div (click)="toggleMenu(chat.chatId, $event)">
+      <img ngSrc="/more.svg" height="20" width="20" class="more-info-chat"  alt="more-info">
+
+      <div class="menu" *ngIf="activeChatId === chat.chatId">
+        <ul>
+          <li (click)="onEdit(chat.chatId)">Edit</li>
+          <li (click)="onLeave(chat.chatId)">Leave</li>
+          <li (click)="onViewInfo(chat.chatId)">Info</li>
+        </ul>
+      </div>
     </div>
   </div>
   <div class="profile">

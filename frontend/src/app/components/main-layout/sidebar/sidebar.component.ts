@@ -19,6 +19,7 @@ export class SidebarComponent {
   chats: ChatSidebar[] = [];
   @Output() chatSelected = new EventEmitter<string>();
   isCreatingChat = false;
+  activeChatId: string | null = null;
   newChat = { title: '', usernames: '', chatType: 0 };
   user: UserDto | undefined;
 
@@ -53,20 +54,41 @@ export class SidebarComponent {
     this.isCreatingChat = true;
   }
 
-  onDeleteChat(chatId: string, event: Event): void {
+  toggleMenu(chatId: string, event: MouseEvent) {
     event.stopPropagation();
-    if (confirm('Are you sure you want to delete this chat?')) {
-      this.chatService.deleteChat(chatId).subscribe({
-        next: () => {
-          this.chats = this.chats.filter(chat => chat.chatId !== chatId);
-          console.log(`Chat ${chatId} deleted successfully`);
-        },
-        error: (error) => {
-          console.error('Error deleting chat', error);
-        }
-      });
-    }
+    this.activeChatId = this.activeChatId === chatId ? null : chatId;
   }
+
+  onEdit(chatId: string) {
+    console.log('Editing chat:', chatId);
+    this.activeChatId = null;
+  }
+
+  onLeave(chatId: string) {
+    console.log('Leaving chat:', chatId);
+    this.activeChatId = null;
+  }
+
+  onViewInfo(chatId: string) {
+    console.log('Viewing info for chat:', chatId);
+    this.activeChatId = null;
+  }
+
+
+  // onDeleteChat(chatId: string, event: Event): void {
+  //   event.stopPropagation();
+  //   if (confirm('Are you sure you want to delete this chat?')) {
+  //     this.chatService.deleteChat(chatId).subscribe({
+  //       next: () => {
+  //         this.chats = this.chats.filter(chat => chat.chatId !== chatId);
+  //         console.log(`Chat ${chatId} deleted successfully`);
+  //       },
+  //       error: (error) => {
+  //         console.error('Error deleting chat', error);
+  //       }
+  //     });
+  //   }
+  // }
 
   closeModal() {
     this.isCreatingChat = false;

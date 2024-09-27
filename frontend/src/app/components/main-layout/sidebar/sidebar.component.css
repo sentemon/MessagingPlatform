@@ -92,6 +92,10 @@
   background-color: #3a3a3c;
 }
 
+.user.active {
+  background-color: #3a3a3c;
+}
+
 .avatar {
   width: 48px;
   height: 48px;
@@ -126,17 +130,49 @@
   margin-left: 8px;
 }
 
-.delete-chat {
-  background-color: #ff3b30;
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  cursor: pointer;
-  border-radius: 4px;
+/*.delete-chat {*/
+/*  background-color: #ff3b30;*/
+/*  color: white;*/
+/*  border: none;*/
+/*  padding: 4px 8px;*/
+/*  cursor: pointer;*/
+/*  border-radius: 4px;*/
+/*}*/
+
+/*.delete-chat:hover {*/
+/*  background-color: #ff4c41;*/
+/*}*/
+
+.menu {
+  position: absolute;
+  background-color: #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 100;
 }
 
-.delete-chat:hover {
-  background-color: #ff4c41;
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu li {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.menu li:hover {
+  background-color: #444;
+}
+
+
+more-info-chat:hover {
+  background-color: #333;
+  border-radius: 25%;
+  cursor: pointer;
 }
 
 /* modal */
