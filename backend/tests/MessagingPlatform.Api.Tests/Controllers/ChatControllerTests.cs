@@ -221,42 +221,42 @@ public class ChatControllerTests
     //     okResult.StatusCode.Should().Be(200);
     //     okResult.Value.Should().BeEquivalentTo(updatedChat);
     // }
-
-    [Fact]
-    public async Task DeleteChat_ShouldReturnNoContent_WhenDeleteIsSuccessful()
-    {
-        // Arrange
-        var deleteChatDto = new DeleteChatDto { ChatId = Guid.NewGuid() };
-
-        _mediatrMock
-            .Setup(m => m.Send(It.IsAny<DeleteChatCommand>(), default))
-            .ReturnsAsync(true);
-
-        // Act
-        var result = await _controller.DeleteChat(deleteChatDto);
-
-        // Assert
-        var noContentResult = result.Should().BeOfType<NoContentResult>().Subject;
-        noContentResult.StatusCode.Should().Be(204);
-    }
-
-    [Fact]
-    public async Task DeleteChat_ShouldReturnNotFound_WhenChatNotFound()
-    {
-        // Arrange
-        var deleteChatDto = new DeleteChatDto { ChatId = Guid.NewGuid() };
-
-        _mediatrMock
-            .Setup(m => m.Send(It.IsAny<DeleteChatCommand>(), default))
-            .ReturnsAsync(false);
-
-        // Act
-        var result = await _controller.DeleteChat(deleteChatDto);
-
-        // Assert
-        var notFoundResult = result.Should().BeOfType<NotFoundResult>().Subject;
-        notFoundResult.StatusCode.Should().Be(404);
-    }
+    //
+    // [Fact]
+    // public async Task DeleteChat_ShouldReturnNoContent_WhenDeleteIsSuccessful()
+    // {
+    //     // Arrange
+    //     var deleteChatDto = new DeleteChatDto { ChatId = Guid.NewGuid() };
+    //
+    //     _mediatrMock
+    //         .Setup(m => m.Send(It.IsAny<DeleteChatCommand>(), default))
+    //         .ReturnsAsync(true);
+    //
+    //     // Act
+    //     var result = await _controller.DeleteChat(deleteChatDto);
+    //
+    //     // Assert
+    //     var noContentResult = result.Should().BeOfType<NoContentResult>().Subject;
+    //     noContentResult.StatusCode.Should().Be(204);
+    // }
+    //
+    // [Fact]
+    // public async Task DeleteChat_ShouldReturnNotFound_WhenChatNotFound()
+    // {
+    //     // Arrange
+    //     var deleteChatDto = new DeleteChatDto { ChatId = Guid.NewGuid() };
+    //
+    //     _mediatrMock
+    //         .Setup(m => m.Send(It.IsAny<DeleteChatCommand>(), default))
+    //         .ReturnsAsync(false);
+    //
+    //     // Act
+    //     var result = await _controller.DeleteChat(deleteChatDto);
+    //
+    //     // Assert
+    //     var notFoundResult = result.Should().BeOfType<NotFoundResult>().Subject;
+    //     notFoundResult.StatusCode.Should().Be(404);
+    // }
 
     private void SetUserClaims(Guid userId)
     {

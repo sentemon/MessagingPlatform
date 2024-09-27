@@ -14,7 +14,21 @@ public class DeleteChatCommandHandler : IRequestHandler<DeleteChatCommand, bool>
     
     public async Task<bool> Handle(DeleteChatCommand request, CancellationToken cancellationToken)
     {
-        var result = await _chatRepository.Delete(request.DeleteChat.ChatId);
+        var chat = await _chatRepository.GetByIdAsync(request.ChatId);
+        
+        if (chat == null)
+        {
+            return false;
+        }
+        
+        var isUserInChat = chat.UserChats != null && chat.UserChats.Any(uc => uc.UserId == request.UserId);
+
+        if (!isUserInChat)
+        {
+            return false;
+        }
+        
+        var result = await _chatRepository.DeleteAsync(request.ChatId);
 
         return result;
     }

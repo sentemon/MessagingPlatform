@@ -3,7 +3,7 @@ using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Commands.UpdateChat;
 
-public class UpdateChatCommandHandler : IRequestHandler<UpdateChatCommand, string>
+public class UpdateChatCommandHandler : IRequestHandler<UpdateChatCommand, bool>
 {
     private readonly IChatRepository _chatRepository;
 
@@ -12,8 +12,25 @@ public class UpdateChatCommandHandler : IRequestHandler<UpdateChatCommand, strin
         _chatRepository = chatRepository;
     }
     
-    public async Task<string> Handle(UpdateChatCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(UpdateChatCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var chat = await _chatRepository.GetByIdAsync(request.UpdateChat.ChatId);
+
+        if (chat == null)
+        {
+            return false;
+        }
+        
+        var isUserInChat = chat.UserChats != null && chat.UserChats.Any(uc => uc.UserId == request.UserId);
+        
+        if (!isUserInChat)
+        {
+            return false;
+        }
+
+        chat.Title = request.UpdateChat.Title;
+        var result = await _chatRepository.UpdateAsync(chat);
+
+        return result;
     }
 }

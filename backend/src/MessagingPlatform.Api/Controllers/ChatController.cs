@@ -73,15 +73,24 @@ public class ChatController : ControllerBase
     [HttpPut("update")]
     public async Task<IActionResult> UpdateChat([FromBody] UpdateChatDto updateChatDto)
     {
-        var updatedChat = await _mediator.Send(new UpdateChatCommand(updateChatDto));
+        var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
+        
+        var updatedChat = await _mediator.Send(new UpdateChatCommand(updateChatDto, userId));
+
+        if (!updatedChat)
+        {
+            NotFound("Chat not found");
+        }
     
-        return Ok(updatedChat);
+        return Ok("Chat updated successfully.");
     }
         
     [HttpDelete("delete")]
-    public async Task<IActionResult> DeleteChat([FromBody] DeleteChatDto deleteChatDto)
+    public async Task<IActionResult> DeleteChat(Guid id)
     {
-        var result = await _mediator.Send(new DeleteChatCommand(deleteChatDto));
+        var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
+        
+        var result = await _mediator.Send(new DeleteChatCommand(id, userId));
 
         if (!result)
         {

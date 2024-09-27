@@ -2,6 +2,7 @@ using MessagingPlatform.Domain.Entities;
 using MessagingPlatform.Domain.Interfaces;
 using MessagingPlatform.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace MessagingPlatform.Infrastructure.Repositories;
 
@@ -41,11 +42,28 @@ public class ChatRepository : IChatRepository
             .ToListAsync();
     }
 
-    public async Task<bool> Delete(Guid? chatId)
+    public async Task<bool> UpdateAsync(Chat entity)
     {
         try
         {
-            var chat = await _appDbContext.Chats.FirstOrDefaultAsync(c => c.Id == chatId);
+            var entityEntry = _appDbContext.Entry(entity);
+            entityEntry.State = EntityState.Modified;
+
+            await _appDbContext.SaveChangesAsync();
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public async Task<bool> DeleteAsync(Guid? id)
+    {
+        try
+        {
+            var chat = await _appDbContext.Chats.FirstOrDefaultAsync(c => c.Id == id);
 
             if (chat == null)
             {

@@ -60,7 +60,7 @@ public class UserRepository : IUserRepository
     {
         try
         {
-            EntityEntry entityEntry = _context.Entry(user);
+            var entityEntry = _context.Entry(user);
             entityEntry.State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
