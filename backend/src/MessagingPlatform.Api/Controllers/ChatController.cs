@@ -40,7 +40,9 @@ public class ChatController : ControllerBase
     [HttpGet("get")]
     public async Task<IActionResult> GetChat(Guid id)
     {
-        var chat = await _mediator.Send(new GetChatByIdQuery(id));
+        var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
+        
+        var chat = await _mediator.Send(new GetChatByIdQuery(id, userId));
 
         if (chat == null)
         {

@@ -15,8 +15,16 @@ public class GetChatByIdQueryHandler : IRequestHandler<GetChatByIdQuery, Chat?>
 
     public async Task<Chat?> Handle(GetChatByIdQuery request, CancellationToken cancellationToken)
     {
-        var chat = await _chatRepository.GetByIdAsync(request.Id);
+        
+        var chat = await _chatRepository.GetByIdAsync(request.ChatId);
 
-        return chat ?? null;
+        if (chat == null)
+        {
+            return null;
+        }
+        
+        var isUserInChat = chat.UserChats != null && chat.UserChats.Any(uc => uc.UserId == request.UserId);
+
+        return isUserInChat ? chat : null;
     }
 }

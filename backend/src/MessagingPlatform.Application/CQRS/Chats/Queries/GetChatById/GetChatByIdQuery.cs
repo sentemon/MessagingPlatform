@@ -3,4 +3,4 @@ using MessagingPlatform.Domain.Entities;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Queries.GetChatById;
 
-public record GetChatByIdQuery(Guid Id) : IRequest<Chat?>;
+public record GetChatByIdQuery(Guid ChatId, Guid UserId) : IRequest<Chat?>;
