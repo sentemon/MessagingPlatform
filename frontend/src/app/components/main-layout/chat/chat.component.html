@@ -23,6 +23,7 @@
 
 
   <div *ngIf="chat.id !== undefined" class="message-input">
+    <img ngSrc="/attach.svg" height="24" width="24" alt="attach">
     <textarea [(ngModel)]="newMessage" placeholder="Type a message..."></textarea>
     <button (click)="sendMessage()">Send</button>
   </div>
