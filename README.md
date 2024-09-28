@@ -1,7 +1,7 @@
 # Messaging Platform [Demo]
 
 ## Preview
-<img src="https://i.ibb.co/3FfjFxd/example-usage.gif" alt="example-usage">
+![SAYOY.gif](https://s11.gifyu.com/images/SAYOY.gif)
 
 ## Overview
 **Messaging Platform** is a real-time messaging application that allows users to create accounts, send messages, and engage in live communication. It is built using a range of modern technologies with a focus on scalability, maintainability, and adherence to **Clean Architecture** principles and **Domain-Driven Design (DDD)**. This document provides an overview of the system, its architecture, and instructions on how to set up and run the project.
