@@ -1,13 +1,11 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ChatService } from '../../../services/chat/chat.service';
 import { ChatDto } from '../../../models/chatdto';
 import { MessageDto } from '../../../models/messagedto';
-import { AddMessageDto } from '../../../models/addmessagedto';
 import { UserDto } from '../../../models/userdto';
-import {DatePipe, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
-import {FormsModule} from "@angular/forms";
-import {MessageService} from "../../../services/message/message.service";
-import {HubService} from "../../../services/hub/hub.service";
+import { DatePipe, NgForOf, NgIf, NgOptimizedImage } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { SignalrService } from "../../../services/signalr/signalr.service";
 
 @Component({
   selector: 'app-chat',
@@ -26,19 +24,20 @@ export class ChatComponent implements OnChanges {
   chat: ChatDto = new ChatDto();
   messages: MessageDto[] = [];
   newMessage: string = '';
+
   @Input() selectedChatId: string | null = null;
   @Output() chatDeleted = new EventEmitter<string>();
 
-  constructor(private chatService: ChatService, private messageService: MessageService, private hubService: HubService) {
-    this.hubService.onReceiveMessage((user, message) => {
-      const userDto: UserDto = { id: '', firstName: '', lastName: '', username: user, email: '', bio: '', isOnline: null, accountCreatedAt: new Date() };
+  constructor(private chatService: ChatService, private signalrService: SignalrService) {
+    this.signalrService.messageReceived.subscribe(({ sender, content }) => {
+      const userDto: UserDto = { id: '', firstName: '', lastName: '', username: sender, email: '', bio: '', isOnline: null, accountCreatedAt: new Date() };
       if (this.chat.id === this.selectedChatId) {
         this.messages.push({
           id: '',
           senderId: userDto.id,
           sender: userDto,
           chatId: this.chat.id || '',
-          content: message,
+          content: content,
           sentAt: new Date(),
           updatedAt: null,
           isRead: false
@@ -73,22 +72,17 @@ export class ChatComponent implements OnChanges {
 
   sendMessage(): void {
     if (this.chat && this.newMessage) {
-      const addMessageDto: AddMessageDto = {
-        chatId: this.chat.id || '',
-        content: this.newMessage
-      };
-
-      this.messageService.addMessage(addMessageDto).subscribe({
-        next: (response: MessageDto) => {
+      this.signalrService.sendMessage(this.chat.id || '', this.newMessage).subscribe({
+        next: () => {
           this.messages.push({
-            id: response.id,
-            senderId: response.senderId,
-            sender: response.sender,
-            chatId: response.chatId,
+            id: '',
+            senderId: '',
+            sender: { id: '', firstName: '', lastName: '' },
+            chatId: this.chat.id || '',
             content: this.newMessage,
-            sentAt: new Date(response.sentAt),
-            updatedAt: response.updatedAt ? new Date(response.updatedAt) : null,
-            isRead: response.isRead
+            sentAt: new Date(),
+            updatedAt: null,
+            isRead: false
           });
           this.newMessage = '';
         },
@@ -99,20 +93,6 @@ export class ChatComponent implements OnChanges {
     }
   }
 
-  // ToDo: fix this method
-  deleteMessage(senderId: string, messageId: string): void {
-    console.log('Deleting message', senderId, messageId);
-    this.messageService.deleteMessage(senderId, messageId).subscribe({
-      next: () => {
-        this.messages = this.messages.filter(m => m.id !== messageId);
-      },
-      error: (error) => {
-        console.error('Error deleting message', error);
-      }
-    });
-  }
-
-  // ToDo: ma usuwac rcwniez ze sidebaru
   deleteChat(chatId: string): void {
     if (confirm('Are you sure you want to delete this chat?')) {
       this.chatService.delete(chatId).subscribe({
@@ -127,5 +107,4 @@ export class ChatComponent implements OnChanges {
       });
     }
   }
-
 }

@@ -1,7 +1,7 @@
 <div class="chat-container">
   <div *ngIf="chat.id !== undefined" class="chat-header">
     <h2>{{ chat?.title }}</h2>
-    <button (click)="deleteChat(chat.id)" class="delete-chat">Delete chat</button>
+    <button (click)="deleteChat(chat.id)" class="delete-chat">Delete Chat</button>
   </div>
 
   <div class="messages-container">
@@ -10,21 +10,19 @@
 
     <div *ngFor="let message of messages" class="message">
       <div class="message-header">
-        <strong>{{ message.sender.firstName }} {{ message.sender.lastName }}</strong>
+        <strong>{{ message.sender?.firstName }} {{ message.sender?.lastName }}</strong>
         <span class="message-time">{{ message.sentAt | date: 'shortTime' }}</span>
       </div>
       <div class="message-body">
-        <p>{{ message.content }}
-          <button (click)="deleteMessage(message.sender.id, message.id)" class="delete-message">x</button>
-        </p>
+        <p>{{ message.content }}</p>
+        <!-- <button (click)="deleteMessage(message.sender.id, message.id)" class="delete-message">x</button> -->
       </div>
     </div>
   </div>
 
-
   <div *ngIf="chat.id !== undefined" class="message-input">
-    <img ngSrc="/attach.svg" height="24" width="24" alt="attach">
-    <textarea [(ngModel)]="newMessage" placeholder="Type a message..."></textarea>
-    <button (click)="sendMessage()">Send</button>
+    <img ngSrc="/attach.svg" height="24" width="24" alt="Attach" class="attach-icon">
+    <textarea [(ngModel)]="newMessage" placeholder="Type a message..." rows="3"></textarea>
+    <button (click)="sendMessage()" class="send-button">Send</button>
   </div>
 </div>

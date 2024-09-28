@@ -3,7 +3,7 @@ import { UserDto } from "./userdto";
 export interface MessageDto {
   id: string;
   senderId: string;
-  sender: UserDto;
+  sender: UserDto | null;
   chatId: string;
   content: string;
   sentAt: Date;

@@ -1,6 +1,6 @@
 export class AddMessageDto {
   constructor(
-  chatId: string,
-  messageContent: string
+  public chatId: string,
+  public messageContent: string
   ) {}
 }

@@ -4,8 +4,7 @@
   flex-direction: column;
   height: 100vh;
   width: 80vw;
-  /*border-left: 3px solid black; !* ToDo: fix *!*/
-  background-color: black;
+  background-color: #181818;
 }
 
 .chat-header {
@@ -13,26 +12,32 @@
   position: sticky;
   top: 0;
   padding: 10px;
-  background-color: #444;
+  background-color: #282828;
   color: #fff;
   z-index: 10;
-  height: 50px;
+  height: 60px;
 }
 
 .delete-chat {
   width: 50px;
   height: 50px;
   float: right;
-  background-color: #333;
+  background-color: #444;
   color: red;
   cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+.delete-chat:hover {
+  background-color: #666;
 }
 
 .messages-container {
   flex: 1;
   padding: 10px;
   overflow-y: auto;
-  background-color: #333;
+  background-color: #2a2a2a;
   scrollbar-width: thin;
 }
 
@@ -41,7 +46,7 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  color: #212121;
+  color: #ffffff;
   font-size: 64px;
   font-weight: 600;
 }
@@ -61,33 +66,37 @@
 .message-header {
   font-size: 0.9em;
   margin-bottom: 5px;
+  color: #d3d3d3;
 }
 
 .message-time {
   float: right;
-  color: #999;
-  padding: 15px;
+  color: #aaa;
+  padding: 5px;
 }
 
 .message-body {
-  background-color: #222;
+  background-color: #333;
   color: #fff;
   padding: 10px;
   border-radius: 10px;
+  border: 1px solid #444;
 }
 
 .delete-message {
   width: 20px;
   height: 20px;
   float: right;
-  background-color: #333;
+  background-color: #444;
   color: red;
   cursor: pointer;
+  border: none;
+  border-radius: 5px;
 }
 
 .message-input {
   padding: 10px;
-  background-color: #444;
+  background-color: #282828;
   display: flex;
   align-items: center;
   position: sticky;
@@ -101,25 +110,29 @@
   max-height: 200px;
   margin-right: 10px;
   width: calc(100% - 100px);
-  background-color: transparent;
+  background-color: #222;
   border: none;
-  color: white;
-  white-space: pre-wrap;
-  overflow-y: auto;
-  scrollbar-width: none;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
   resize: none;
   font-size: 16px;
 }
 
+.message-input textarea::placeholder {
+  color: #aaa;
+}
+
 .message-input button {
   padding: 10px 20px;
-  background-color: #313131;
+  background-color: #444;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .message-input button:hover {
-  background-color: #131313;
+  background-color: #666;
 }
