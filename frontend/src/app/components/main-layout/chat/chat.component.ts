@@ -7,6 +7,7 @@ import { UserDto } from '../../../models/userdto';
 import {DatePipe, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {MessageService} from "../../../services/message/message.service";
+import {HubService} from "../../../services/hub/hub.service";
 
 @Component({
   selector: 'app-chat',
@@ -28,8 +29,8 @@ export class ChatComponent implements OnChanges {
   @Input() selectedChatId: string | null = null;
   @Output() chatDeleted = new EventEmitter<string>();
 
-  constructor(private chatService: ChatService, private messageService: MessageService) {
-    this.chatService.onReceiveMessage((user, message) => {
+  constructor(private chatService: ChatService, private messageService: MessageService, private hubService: HubService) {
+    this.hubService.onReceiveMessage((user, message) => {
       const userDto: UserDto = { id: '', firstName: '', lastName: '', username: user, email: '', bio: '', isOnline: null, accountCreatedAt: new Date() };
       if (this.chat.id === this.selectedChatId) {
         this.messages.push({

@@ -8,12 +8,13 @@ namespace MessagingPlatform.Api.Hubs;
 public class ChatHub : Hub
 {
     private readonly IUserRepository _userRepository;
+    public static readonly List<string> ConnectedUsers = [];
 
     public ChatHub(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }
-
+    
     public async Task SendMessageToUser(string targetUsername, string message)
     {
         var targetUser = await _userRepository.GetByUsernameAsync(targetUsername);
@@ -28,9 +29,6 @@ public class ChatHub : Hub
             Console.WriteLine($"Failed to send message: target user or connection ID is null for {targetUsername}");
         }
     }
-
-
-    public static List<string> ConnectedUsers = [];
 
     public override async Task OnConnectedAsync()
     {
