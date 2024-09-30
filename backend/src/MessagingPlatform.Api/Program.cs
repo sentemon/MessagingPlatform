@@ -3,6 +3,8 @@ using MessagingPlatform.Infrastructure;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using MessagingPlatform.Api.Hubs;
+using MessagingPlatform.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +50,12 @@ builder.Services
     .AddApplication();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
+}
 
 app.UseCors("AllowAll");
 
