@@ -18,7 +18,7 @@ public class CookieService : ICookieService
         {
             Path = "/",
             HttpOnly = true,
-            Secure = false, // ToDo: Change in production
+            Secure = false, // Change in production
             SameSite = SameSiteMode.Lax,
         };
             

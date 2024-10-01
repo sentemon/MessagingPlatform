@@ -26,7 +26,8 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
         options.JsonSerializerOptions.WriteIndented = true;
-    }); // ToDo: опция чтобы нормально работало с enum (хз почитать)
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 // Add CORS
 builder.Services.AddCors(options =>

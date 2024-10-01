@@ -9,5 +9,4 @@ public interface IUserService
     Task<bool> IsExist(SignInDto? signInDto);
     Task<User?> GetUserByIdAsync(Guid userId);
     Task<bool> Update(User user);
-
 }

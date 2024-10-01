@@ -10,7 +10,6 @@ public class AccountService : IAccountService
     private readonly IUserRepository _userRepository;
     private readonly IJwtProvider _jwtProvider;
     
-
     public AccountService(IUserService userService, IUserRepository userRepository, IJwtProvider jwtProvider)
     {
         _userService = userService;
@@ -60,10 +59,5 @@ public class AccountService : IAccountService
         var token = _jwtProvider.GenerateToken(user);
         
         return token;
-    }
-
-    public async Task SignOut() // ToDo: fix
-    {
-        await Task.CompletedTask;
     }
 }

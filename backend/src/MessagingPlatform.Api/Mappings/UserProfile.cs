@@ -8,7 +8,11 @@ public class UserProfile : Profile
 {
     public UserProfile()
     {
-        CreateMap<User, UserDto>();
-        CreateMap<UpdateUserDto, User>();
+        CreateMap<User, UserDto>().ReverseMap()
+            .ForMember(dest => dest.Username, opt => opt.Ignore())
+            .ForMember(dest => dest.AccountCreatedAt, opt => opt.Ignore());
+
+        CreateMap<UpdateUserDto, User>()
+            .ForMember(dest => dest.Username, opt => opt.Ignore());
     }
 }
