@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { AccountComponent } from "./components/account/account.component";
 import { SignInComponent } from "./components/account/signin/signin.component";
 import { SignUpComponent } from "./components/account/signup/signup.component";
-import { SignOutComponent } from "./components/account/signout/signout.component";
 import { AuthGuard } from "./services/authguard/authguard.service";
 import { NonAuthGuard } from "./services/nonauthguard/nonauthguard.service";
 import { MainLayoutComponent } from "./components/main-layout/main-layout.component";
@@ -16,7 +15,6 @@ export const routes: Routes = [
     children: [
       { path: 'signin', component: SignInComponent, canActivate: [NonAuthGuard] },
       { path: 'signup', component: SignUpComponent, canActivate: [NonAuthGuard] },
-      { path: 'signout', component: SignOutComponent, canActivate: [AuthGuard] },
       { path: '', redirectTo: 'signin', pathMatch: 'full' } // Default route for 'account'
     ]
   },
