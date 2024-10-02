@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Output, HostListener } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ChatService } from '../../../services/chat/chat.service';
 import { ChatSidebar } from '../../../models/chatsidebar';
@@ -57,6 +57,14 @@ export class SidebarComponent {
   toggleMenu(chatId: string, event: MouseEvent) {
     event.stopPropagation();
     this.activeChatId = this.activeChatId === chatId ? null : chatId;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.menu') && !target.closest('.more-info-chat')) {
+      this.activeChatId = null;
+    }
   }
 
   onEdit(chatId: string) {
