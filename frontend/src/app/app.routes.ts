@@ -7,6 +7,7 @@ import { AuthGuard } from "./services/authguard/authguard.service";
 import { NonAuthGuard } from "./services/nonauthguard/nonauthguard.service";
 import { MainLayoutComponent } from "./components/main-layout/main-layout.component";
 import { ProfileComponent } from "./components/account/profile/profile.component";
+import {SettingsComponent} from "./components/settings/settings.component";
 
 export const routes: Routes = [
   {
@@ -22,8 +23,15 @@ export const routes: Routes = [
 
   // Route for profile with username parameter
   {
+    // ToDo: make profile component
     path: 'profile/:username',
     component: ProfileComponent,
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'settings',
+    component: SettingsComponent,
     canActivate: [AuthGuard]
   },
 

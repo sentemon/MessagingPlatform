@@ -5,7 +5,7 @@ import { ChatSidebar } from '../../../models/chatsidebar';
 import {FormsModule} from "@angular/forms";
 import {AuthService} from "../../../services/auth/auth.service";
 import {UserDto} from "../../../models/userdto";
-import {Observable} from "rxjs";
+import {Router} from "@angular/router";
 
 // ToDo: use SOLID
 @Component({
@@ -23,7 +23,7 @@ export class SidebarComponent {
   newChat = { title: '', usernames: '', chatType: 0 };
   user: UserDto | undefined;
 
-  constructor(private chatService: ChatService, private authService: AuthService) {
+  constructor(private chatService: ChatService, private authService: AuthService, private router: Router) {
     this.authService.get().subscribe({
       next: (data: UserDto) => {
         if (data) {
@@ -44,8 +44,9 @@ export class SidebarComponent {
   }
 
   onSettings() {
-    console.log('Settings');
+    this.router.navigate(['settings']).then(r => console.log('Navigated to settings', r));
   }
+
   public onSelectChat(chatId: string): void {
     this.chatSelected.emit(chatId);
   }

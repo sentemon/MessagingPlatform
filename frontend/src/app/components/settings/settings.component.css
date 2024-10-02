@@ -1,0 +1,27 @@
+.flex-div {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px;
+}
+
+.back-home {
+  background-color: #555;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sign-out {
+  background-color: #f44336;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
