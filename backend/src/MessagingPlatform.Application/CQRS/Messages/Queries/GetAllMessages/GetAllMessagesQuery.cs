@@ -3,4 +3,4 @@ using MessagingPlatform.Domain.Entities;
 
 namespace MessagingPlatform.Application.CQRS.Messages.Queries.GetAllMessages;
 
-public class GetAllMessagesQuery : IRequest<IQueryable<Message>>;
+public record GetAllMessagesQuery(Guid ChatId) : IRequest<IQueryable<Message>>;

@@ -27,7 +27,7 @@ public class ChatRepository : IChatRepository
         return await _appDbContext.Chats
             .Include(c => c.UserChats)!
             .ThenInclude(uc => uc.User)
-            .Include(c => c.Messages)
+            .Include(c => c.Messages.OrderBy(m => m.SentAt))
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 

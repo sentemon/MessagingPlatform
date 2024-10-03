@@ -15,7 +15,7 @@ public class GetAllMessagesQueryHandler : IRequestHandler<GetAllMessagesQuery, I
     
     public async Task<IQueryable<Message>> Handle(GetAllMessagesQuery request, CancellationToken cancellationToken)
     {
-        var messages = await _messageRepository.GetAllAsync(); // ToDo: change the params
+        var messages = await _messageRepository.GetAllAsync(request.ChatId);
 
         return messages; 
     }

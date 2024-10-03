@@ -6,8 +6,6 @@ using MessagingPlatform.Application.CQRS.Messages.Commands.AddMessage;
 using MessagingPlatform.Application.CQRS.Messages.Commands.DeleteMessage;
 using MessagingPlatform.Application.CQRS.Messages.Commands.UpdateMessage;
 using MessagingPlatform.Application.CQRS.Messages.Queries.GetAllMessages;
-using MessagingPlatform.Application.CQRS.Messages.Queries.GetByUsername;
-using MessagingPlatform.Application.CQRS.Messages.Queries.GetMessagesByUserIdAndChatId;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,26 +25,11 @@ public class MessageController : ControllerBase
         _mapper = mapper;
     }
     
+    // ToDo: use instead of navigation property "Messages" in Chat entity for better productivity
     [HttpGet("getall")]
     public async Task<IActionResult> GetAll(Guid chatId)
     {
-        var messages = await _mediator.Send(new GetAllMessagesQuery());
-
-        return Ok(messages);
-    }
-    
-    [HttpGet("getbyusername")]
-    public async Task<IActionResult> GetByUsername([FromBody] string senderId, string receiverId)  // ToDo: doesn't work correctly
-    {
-        var messages = await _mediator.Send(new GetMessageByUsernameQuery(senderId, receiverId));
-
-        return Ok(messages);
-    }
-
-    [HttpGet("getbyuseridandchatid")]
-    public async Task<IActionResult> GetByUserIdAndChatId(Guid userId, Guid chatId)
-    {
-        var messages = await _mediator.Send(new GetMessagesByUserIdAndChatIdQuery(userId, chatId));
+        var messages = await _mediator.Send(new GetAllMessagesQuery(chatId));
 
         return Ok(messages);
     }

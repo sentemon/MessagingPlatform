@@ -13,6 +13,17 @@ public class MessageRepository : IMessageRepository
     {
         _appDbContext = appDbContext;
     }
+    
+    public async Task<IQueryable<Message>> GetAllAsync(Guid chatId)
+    {
+        var messages = _appDbContext.Messages
+            .Include(m => m.Sender)
+            .Include(m => m.Chat)
+            .Where(m => m.ChatId == chatId)
+            .AsQueryable();
+
+        return messages;
+    }
 
     public async Task<Message> CreateAsync(Guid senderId, Guid chatId, string content)
     {
@@ -21,9 +32,9 @@ public class MessageRepository : IMessageRepository
                 .ThenInclude(uc => uc.User)
             .FirstOrDefaultAsync(c => c.Id == chatId);
 
-        if (chat == null || chat.UserChats!.All(uc => uc.UserId != senderId))
+        if (chat == null)
         {
-            throw new ArgumentException("Invalid sender or chat.");
+            throw new ArgumentException("Invalid chat.");
         }
 
         var sender = await _appDbContext.Users.FindAsync(senderId);
@@ -50,45 +61,6 @@ public class MessageRepository : IMessageRepository
         return message;
     }
 
-    public async Task<IQueryable<Message>> GetAllAsync()
-    {
-        var messages = _appDbContext.Messages
-            .Include(m => m.Sender)
-            .Include(m => m.Chat)
-            .AsQueryable();
-
-        return messages;
-    }
-
-    public async Task<IQueryable<Message>> GetByUserIdAndChatId(Guid userId, Guid chatId)  // ToDo: check if user has access to the chat(already done) maybe change in the future
-    {
-        var hasAccess = await _appDbContext.UserChats
-            .AnyAsync(uc => uc.UserId == userId && uc.ChatId == chatId);
-        
-        if (!hasAccess)
-        {
-            throw new Exception("you don't have permissions to see it");
-        }
-        var messages = _appDbContext.Messages
-            .Where(m => m.ChatId == chatId)
-            .Include(m => m.Sender)
-            .Include(m => m.Chat)
-            .AsQueryable();
-
-        return messages;
-    }
-    
-    public async Task<IQueryable<Message>> GetByUsernameAsync(string senderUsername, string chatTitle)
-    {
-        var messages = _appDbContext.Messages
-            .Include(m => m.Sender)
-            .Include(m => m.Chat)
-            .Where(m => m.Sender.Username == senderUsername && m.Chat.Title == chatTitle)
-            .AsQueryable();
-
-        return messages;
-    }
-
     public async Task<IQueryable<Message>> GetByContentAsync(string senderUsername, string content)
     {
         var messages = _appDbContext.Messages
@@ -106,7 +78,7 @@ public class MessageRepository : IMessageRepository
 
         if (message == null)
         {
-            throw new KeyNotFoundException("Message not found or user does not have permission to update this message.");
+            throw new KeyNotFoundException("Message not found");
         }
 
         message.Content = updatedMessage.Content;

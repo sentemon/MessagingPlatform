@@ -8,7 +8,7 @@
     <img ngSrc="/avatar.svg" alt="Chatsidebar's Avatar" class="avatar" height="800" width="800">
     <div class="user-info">
       <p class="user-firstname">{{ chat.title }}</p>
-      <p class="last-message">
+      <p class="last-message" *ngIf="chat.lastMessageFrom">
         {{ chat.lastMessageFrom }}: {{ chat.lastMessageContent }}
       </p>
       <p class="message-time">{{ chat.lastMessageSentAt | date:'shortTime' }}</p>
