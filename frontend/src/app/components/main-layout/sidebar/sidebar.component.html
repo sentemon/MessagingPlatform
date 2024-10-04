@@ -35,8 +35,8 @@
       <p class="user-fullname">{{ user?.firstName }} {{ user?.lastName }}</p>
       <p class="user-bio">{{ user?.bio }}</p>
     </div>
-    <div (click)="onSettings()" class="settings">
-      <img ngSrc="/settings.svg" alt="settings" height="24" width="24">
+    <div class="settings">
+      <a routerLink="settings/"><img ngSrc="/settings.svg" alt="settings" height="24" width="24"></a>
     </div>
   </div>
 

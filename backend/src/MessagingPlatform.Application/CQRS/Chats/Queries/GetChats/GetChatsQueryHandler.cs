@@ -36,9 +36,9 @@ public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<C
             var chatDto = new ChatSidebarDto
             {
                 ChatId = chat.Id,
-                Title = chat.Title!,
+                Title = chat.Title ?? "New Chat",
                 LastMessageFrom = lastMessage?.Sender.Username,
-                LastMessageContent = lastMessage?.Content!,
+                LastMessageContent = lastMessage?.Content ?? "Start The Conversation",
                 LastMessageSentAt = lastMessage?.SentAt,
                 UnreadMessagesCount = unreadMessagesCount
             };

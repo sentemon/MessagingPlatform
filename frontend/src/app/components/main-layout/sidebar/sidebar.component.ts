@@ -5,13 +5,13 @@ import { ChatSidebar } from '../../../models/chatsidebar';
 import {FormsModule} from "@angular/forms";
 import {AuthService} from "../../../services/auth/auth.service";
 import {UserDto} from "../../../models/userdto";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 
 // ToDo: use SOLID
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage, FormsModule],
+  imports: [CommonModule, NgOptimizedImage, FormsModule, RouterLink],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
@@ -43,9 +43,7 @@ export class SidebarComponent {
     this.loadChats();
   }
 
-  onSettings() {
-    this.router.navigate(['settings']).then(r => console.log('Navigated to settings', r));
-  }
+
 
   public onSelectChat(chatId: string): void {
     this.chatSelected.emit(chatId);

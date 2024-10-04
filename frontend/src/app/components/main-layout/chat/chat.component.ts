@@ -93,18 +93,18 @@ export class ChatComponent implements OnChanges {
     }
   }
 
-  deleteChat(chatId: string): void {
-    if (confirm('Are you sure you want to delete this chat?')) {
-      this.chatService.delete(chatId).subscribe({
-        next: () => {
-          this.chat = new ChatDto();
-          this.messages = [];
-          this.chatDeleted.emit(chatId);
-        },
-        error: (error) => {
-          console.error('Error deleting chat', error);
-        }
-      });
-    }
-  }
+  // deleteChat(chatId: string): void {
+  //   if (confirm('Are you sure you want to delete this chat?')) {
+  //     this.chatService.delete(chatId).subscribe({
+  //       next: () => {
+  //         this.chat = new ChatDto();
+  //         this.messages = [];
+  //         this.chatDeleted.emit(chatId);
+  //       },
+  //       error: (error) => {
+  //         console.error('Error deleting chat', error);
+  //       }
+  //     });
+  //   }
+  // }
 }

@@ -27,8 +27,8 @@ export class ChatService {
     return this.http.post(`${environment.apiUrl}/Chat/create`, createChatDto, { withCredentials: true, responseType: 'text' });
   }
 
-  public delete(id: string): Observable<any> {
-    return this.http.delete(`${environment.apiUrl}/Chat/delete`, { params: { id }, withCredentials: true, responseType: 'text' });
-  }
+  // ToDo: unexpected error like the chats are not loaded after the chat is deleted
+  // public delete(id: string): Observable<any> {
+  //   return this.http.delete(`${environment.apiUrl}/Chat/delete`, { params: { id }, withCredentials: true, responseType: 'text' });
+  // }
 }
- 
