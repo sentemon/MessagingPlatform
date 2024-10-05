@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Output, HostListener } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ChatService } from '../../../services/chat/chat.service';
-import { ChatSidebar } from '../../../models/chatsidebar';
+import { ChatSidebar } from '../../../models/responses/chatsidebar';
 import {FormsModule} from "@angular/forms";
 import {AuthService} from "../../../services/auth/auth.service";
-import {UserDto} from "../../../models/userdto";
+import {UserDto} from "../../../models/responses/userdto";
 import {Router, RouterLink} from "@angular/router";
 
 // ToDo: use SOLID

@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ChatService } from '../../../services/chat/chat.service';
-import { ChatDto } from '../../../models/chatdto';
-import { MessageDto } from '../../../models/messagedto';
-import { UserDto } from '../../../models/userdto';
+import { ChatDto } from '../../../models/responses/chatdto';
+import { MessageDto } from '../../../models/responses/messagedto';
+import { UserDto } from '../../../models/responses/userdto';
 import { DatePipe, NgForOf, NgIf, NgOptimizedImage } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { SignalrService } from "../../../services/signalr/signalr.service";

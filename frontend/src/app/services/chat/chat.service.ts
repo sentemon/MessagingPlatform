@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { ChatDto } from "../../models/chatdto";
-import { ChatSidebar } from "../../models/chatsidebar";
+import { ChatDto } from "../../models/responses/chatdto";
+import { ChatSidebar } from "../../models/responses/chatsidebar";
 import {environment} from "../../../environments/environment.development";
 
 @Injectable({

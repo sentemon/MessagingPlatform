@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { SignUpUser } from '../../models/signupuser';
-import { SignInUser } from '../../models/signinuser';
+import { SignUpUser } from '../../models/requests/signupuser';
+import { SignInUser } from '../../models/requests/signinuser';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import {UserDto} from "../../models/userdto";
+import {UserDto} from "../../models/responses/userdto";
 import { environment } from "../../../environments/environment.development";
 
 @Injectable({
