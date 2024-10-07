@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using MessagingPlatform.Domain.Enums;
 
 namespace MessagingPlatform.Domain.Entities;
 
@@ -17,4 +18,6 @@ public class UserChat
     public required Chat Chat { get; set; }
 
     public DateTime? JoinedAt { get; set; } = DateTime.UtcNow;
+
+    public ChatRights Rights { get; set; } = ChatRights.None;
 }

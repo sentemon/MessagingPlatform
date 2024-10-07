@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using MessagingPlatform.Domain.Enums;
+using MessagingPlatform.Domain.Extensions;
 
 namespace MessagingPlatform.Domain.Entities;
 
 public class Chat
 {
-    [Key]
     public Guid Id { get; set; }
 
     [Required]
@@ -23,6 +23,39 @@ public class Chat
 
     [MaxLength(50)]
     public string? Title { get; set; }
+    
+    private UserChat? GetUserChat(Guid userId)
+    {
+        return UserChats?.FirstOrDefault(uc => uc.UserId == userId);
+    }
+
+    public bool CanReadMessage(Guid userId)
+    {
+        var userChats = GetUserChat(userId);
+
+        return userChats != null && userChats.Rights.HasRight(ChatRights.Read);
+    }
+
+    public bool CanSendMessage(Guid userId)
+    {
+        var userChats = GetUserChat(userId);
+
+        return userChats != null && userChats.Rights.HasRight(ChatRights.Read | ChatRights.Write);
+    }
+    
+    public bool CanUpdateMessage(Guid userId)
+    {
+        var userChats = GetUserChat(userId);
+
+        return userChats != null && userChats.Rights.HasRight(ChatRights.Read | ChatRights.Write | ChatRights.Update);
+    }
+    
+    public bool CanDeleteMessage(Guid userId)
+    {
+        var userChats = GetUserChat(userId);
+
+        return userChats != null && userChats.Rights.HasRight(ChatRights.Read | ChatRights.Write | ChatRights.Update | ChatRights.Delete);
+    }
     
     public bool CanAddUser()
     {

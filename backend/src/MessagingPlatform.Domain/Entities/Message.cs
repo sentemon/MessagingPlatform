@@ -4,7 +4,6 @@ namespace MessagingPlatform.Domain.Entities;
 
 public class Message
 {
-    [Key]
     public Guid Id { get; init; }
 
     [Required]

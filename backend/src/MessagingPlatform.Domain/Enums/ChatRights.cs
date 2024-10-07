@@ -1,6 +1,5 @@
 namespace MessagingPlatform.Domain.Enums;
 
-// ToDo
 [Flags]
 public enum ChatRights
 {
