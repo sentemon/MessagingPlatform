@@ -1,9 +1,7 @@
 # Messaging Platform
 
 ## Preview
-<video autoplay muted>
-  <source src="https://github.com/user-attachments/assets/b8399ee2-8090-4d76-ac59-c9de88b18cf8" type="video/mp4">
-</video>
+![example-usage](https://github.com/user-attachments/assets/5c1f8684-d5b8-4cdd-a2e1-ffe0e5cf5c63)
 
 ## Overview
 **Messaging Platform** is a real-time messaging application that allows users to create accounts, send messages, and engage in live communication. It is built using a range of modern technologies with a focus on scalability, maintainability, and adherence to **Clean Architecture** principles and **Domain-Driven Design (DDD)**. This document provides an overview of the system, its architecture, and instructions on how to set up and run the project.
