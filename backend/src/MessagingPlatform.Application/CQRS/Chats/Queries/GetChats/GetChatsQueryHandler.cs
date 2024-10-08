@@ -30,13 +30,13 @@ public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<C
             var lastMessage = chat.Messages?.MaxBy(m => m.SentAt);
             
             var unreadMessagesCount = chat.Messages?
-                .Count(m => !m.IsRead.HasValue || m.IsRead == false && m.SenderId != request.UserId) ?? 0;
+                .Count(m => m.IsRead == false && m.SenderId != request.UserId) ?? 0;
 
 
             var chatDto = new ChatSidebarDto
             {
                 ChatId = chat.Id,
-                Title = chat.Title ?? "New Chat",
+                Title = chat.Title,
                 LastMessageFrom = lastMessage?.Sender.Username,
                 LastMessageContent = lastMessage?.Content ?? "Start The Conversation",
                 LastMessageSentAt = lastMessage?.SentAt,

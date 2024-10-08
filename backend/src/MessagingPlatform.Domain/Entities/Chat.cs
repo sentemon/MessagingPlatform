@@ -19,10 +19,10 @@ public class Chat
     public required Guid CreatorId { get; set; }
     
     [Required]
-    public required User? Creator { get; set; }
+    public required User Creator { get; set; }
 
     [MaxLength(50)]
-    public string? Title { get; set; }
+    public string Title { get; set; } = "New Chat";
     
     private UserChat? GetUserChat(Guid userId)
     {

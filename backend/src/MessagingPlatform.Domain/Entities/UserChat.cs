@@ -17,7 +17,9 @@ public class UserChat
     [Required]
     public required Chat Chat { get; set; }
 
-    public DateTime? JoinedAt { get; set; } = DateTime.UtcNow;
+    public DateTime JoinedAt { get; init; }
 
     public ChatRights Rights { get; set; } = ChatRights.None;
+
+    public ChatRole Role { get; set; }
 }
