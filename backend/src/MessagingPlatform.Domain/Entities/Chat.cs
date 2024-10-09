@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using MessagingPlatform.Domain.Enums;
 using MessagingPlatform.Domain.Extensions;
 
@@ -7,21 +6,17 @@ namespace MessagingPlatform.Domain.Entities;
 public class Chat
 {
     public Guid Id { get; set; }
-
-    [Required]
+    
     public required ChatType ChatType { get; set; }
 
     public List<UserChat>? UserChats { get; set; } = [];
 
     public List<Message>? Messages { get; set; } = [];
     
-    [Required]
     public required Guid CreatorId { get; set; }
     
-    [Required]
     public required User Creator { get; set; }
-
-    [MaxLength(50)]
+    
     public string Title { get; set; } = "New Chat";
     
     private UserChat? GetUserChat(Guid userId)
