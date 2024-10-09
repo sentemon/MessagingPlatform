@@ -8,6 +8,35 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
 {
     public void Configure(EntityTypeBuilder<Message> builder)
     {
+        builder.HasKey(m => m.Id);
+
+        builder.Property(m => m.Id)
+            .ValueGeneratedOnAdd();
+
+        builder.Property(m => m.SenderId)
+            .ValueGeneratedOnAdd();
+        
+        builder.Property(m => m.Sender)
+            .IsRequired();
+
+        builder.Property(m => m.ChatId)
+            .IsRequired();
+
+        builder.Property(m => m.Chat)
+            .IsRequired();
+
+        builder.Property(m => m.Content)
+            .HasMaxLength(2048)
+            .IsRequired();
+
+        builder.Property(m => m.SentAt)
+            .ValueGeneratedOnAdd();
+
+        builder.Property(m => m.UpdatedAt)
+            .ValueGeneratedOnUpdate()
+            .IsRequired(false);
+        
+        // Navigation Properties
         builder
             .HasOne(m => m.Sender)
             .WithMany(u => u.Messages)
