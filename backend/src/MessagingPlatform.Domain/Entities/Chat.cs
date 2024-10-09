@@ -9,9 +9,9 @@ public class Chat
     
     public required ChatType ChatType { get; set; }
 
-    public List<UserChat>? UserChats { get; set; } = [];
+    public ICollection<UserChat>? UserChats { get; set; } = [];
 
-    public List<Message>? Messages { get; set; } = [];
+    public ICollection<Message>? Messages { get; set; } = [];
     
     public required Guid CreatorId { get; set; }
     
