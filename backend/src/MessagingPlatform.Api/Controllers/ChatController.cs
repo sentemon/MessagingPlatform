@@ -59,7 +59,7 @@ public class ChatController : ControllerBase
     {
         var chatRequest = _mapper.Map<Chat>(createChatDto);
         
-        var usernames = createChatDto.UserUsernames;
+        var usernames = createChatDto.Usernames;
         usernames.Add(User.Claims.First(c => c.Type == ClaimTypes.Name).Value); // "Added creator of the chat"
 
         var creatorId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);

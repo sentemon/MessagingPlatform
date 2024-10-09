@@ -29,24 +29,28 @@ public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<C
 
             var lastMessage = chat.Messages?.MaxBy(m => m.SentAt);
             
+            var lastMessageFrom = lastMessage?.Sender.Username ?? string.Empty;
+            var lastMessageContent = lastMessage?.Content ?? "Start The Conversation";
+            var lastMessageSentAt = lastMessage?.SentAt;
+            
             var unreadMessagesCount = chat.Messages?
                 .Count(m => m.IsRead == false && m.SenderId != request.UserId) ?? 0;
-
 
             var chatDto = new ChatSidebarDto
             {
                 ChatId = chat.Id,
                 Title = chat.Title,
-                LastMessageFrom = lastMessage?.Sender.Username,
-                LastMessageContent = lastMessage?.Content ?? "Start The Conversation",
-                LastMessageSentAt = lastMessage?.SentAt,
+                LastMessageFrom = lastMessageFrom,
+                LastMessageContent = lastMessageContent,
+                LastMessageSentAt = lastMessageSentAt,
                 UnreadMessagesCount = unreadMessagesCount
             };
 
             chatsDto.Add(chatDto);
         }
-    
+        
         return chatsDto;
     }
+
 
 }

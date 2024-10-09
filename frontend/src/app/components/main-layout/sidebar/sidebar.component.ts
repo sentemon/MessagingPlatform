@@ -105,7 +105,7 @@ export class SidebarComponent {
     const usernamesArray = this.newChat.usernames.split(',').map(user => user.trim());
     const createChatDto = {
       title: this.newChat.title,
-      users: usernamesArray,
+      usernames: usernamesArray,
       chatType: this.newChat.chatType
     };
 

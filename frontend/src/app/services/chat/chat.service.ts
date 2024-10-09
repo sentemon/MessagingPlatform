@@ -23,7 +23,7 @@ export class ChatService {
     }
   }
 
-  public create(createChatDto: { users: string[], title: string, chatType: number }): Observable<any> {
+  public create(createChatDto: { title: string; usernames: string[]; chatType: number }): Observable<any> {
     return this.http.post(`${environment.apiUrl}/Chat/create`, createChatDto, { withCredentials: true, responseType: 'text' });
   }
 
