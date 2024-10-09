@@ -16,18 +16,6 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
         builder.Property(c => c.ChatType)
             .IsRequired();
 
-        builder.Property(c => c.UserChats)
-            .IsRequired(false);
-        
-        builder.Property(c => c.Messages)
-            .IsRequired(false);
-
-        builder.Property(c => c.CreatorId)
-            .IsRequired();
-        
-        builder.Property(c => c.Creator)
-            .IsRequired();
-
         builder.Property(c => c.Title)
             .HasMaxLength(50)
             .IsRequired();

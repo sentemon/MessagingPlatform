@@ -13,18 +13,6 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
         builder.Property(m => m.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(m => m.SenderId)
-            .ValueGeneratedOnAdd();
-        
-        builder.Property(m => m.Sender)
-            .IsRequired();
-
-        builder.Property(m => m.ChatId)
-            .IsRequired();
-
-        builder.Property(m => m.Chat)
-            .IsRequired();
-
         builder.Property(m => m.Content)
             .HasMaxLength(2048)
             .IsRequired();
