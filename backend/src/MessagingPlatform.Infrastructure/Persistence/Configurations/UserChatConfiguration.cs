@@ -10,10 +10,20 @@ public class UserChatConfiguration : IEntityTypeConfiguration<UserChat>
     {
         builder.HasKey(uc => new
         {
-            uc.UserId, 
+            uc.UserId,
             uc.ChatId
         });
 
+        builder.Property(uc => uc.JoinedAt)
+            .ValueGeneratedOnAdd();
+
+        builder.Property(uc => uc.Rights)
+            .IsRequired();
+
+        builder.Property(uc => uc.Role)
+            .IsRequired();
+        
+        // Navigation Properties
         builder
             .HasOne(uc => uc.User)
             .WithMany(u => u.UserChats)
