@@ -4,5 +4,6 @@ public enum ChatRole
 {
     Viewer,
     Member,
-    Admin
+    Admin,
+    Owner
 }

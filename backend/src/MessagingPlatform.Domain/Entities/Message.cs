@@ -18,5 +18,5 @@ public class Message
     
     public DateTime? UpdatedAt { get; set; }
 
-    public bool IsRead { get; set; } = false;
+    public bool IsRead { get; set; }
 }

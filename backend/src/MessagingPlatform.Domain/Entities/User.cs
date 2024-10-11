@@ -22,6 +22,6 @@ public class User
 
     public required DateTime AccountCreatedAt { get; init; }
     
-    public ICollection<UserChat>? UserChats { get; set; } = [];
-    public ICollection<Message>? Messages { get; set; } = [];
+    public ICollection<UserChat>? UserChats { get; set; }
+    public ICollection<Message>? Messages { get; set; }
 }

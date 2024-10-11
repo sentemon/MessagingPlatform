@@ -23,37 +23,26 @@ public class Chat
     {
         return UserChats?.FirstOrDefault(uc => uc.UserId == userId);
     }
-
-    public bool CanReadMessage(Guid userId)
-    {
-        var userChats = GetUserChat(userId);
-
-        return userChats != null && userChats.Rights.HasRight(ChatRights.Read);
-    }
-
-    public bool CanSendMessage(Guid userId)
-    {
-        var userChats = GetUserChat(userId);
-
-        return userChats != null && userChats.Rights.HasRight(ChatRights.Read | ChatRights.Write);
-    }
     
-    public bool CanUpdateMessage(Guid userId)
+    private bool HasUserRights(Guid userId, ChatRights requiredRights)
     {
-        var userChats = GetUserChat(userId);
-
-        return userChats != null && userChats.Rights.HasRight(ChatRights.Read | ChatRights.Write | ChatRights.Update);
+        var userChat = GetUserChat(userId);
+        return userChat != null && userChat.Rights.HasRight(requiredRights);
     }
-    
-    public bool CanDeleteMessage(Guid userId)
-    {
-        var userChats = GetUserChat(userId);
 
-        return userChats != null && userChats.Rights.HasRight(ChatRights.Read | ChatRights.Write | ChatRights.Update | ChatRights.Delete);
-    }
-    
+    public bool CanReadMessage(Guid userId) => HasUserRights(userId, ChatRights.Read);
+    public bool CanSendMessage(Guid userId) => HasUserRights(userId, ChatRights.Read | ChatRights.Write);
+    public bool CanUpdateMessage(Guid userId) => HasUserRights(userId, ChatRights.Read | ChatRights.Write | ChatRights.Update);
+    public bool CanDeleteMessage(Guid userId) => HasUserRights(userId, ChatRights.Read | ChatRights.Write | ChatRights.Update | ChatRights.Delete);
+
     public bool CanAddUser()
     {
-        return ChatType != ChatType.Private || (UserChats?.Count ?? 0) < 2;
+        return ChatType switch
+        {
+            ChatType.Private => (UserChats?.Count ?? 0) < 2,
+            ChatType.Group => true,
+            ChatType.Channel => false,
+            _ => false
+        };
     }
 }
