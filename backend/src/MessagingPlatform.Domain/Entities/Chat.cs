@@ -9,9 +9,9 @@ public class Chat
     
     public required ChatType ChatType { get; set; }
 
-    public ICollection<UserChat>? UserChats { get; set; } = [];
+    public ICollection<UserChat>? UserChats { get; set; }
 
-    public ICollection<Message>? Messages { get; set; } = [];
+    public ICollection<Message>? Messages { get; set; }
     
     public required Guid CreatorId { get; set; }
     
@@ -42,6 +42,17 @@ public class Chat
             ChatType.Private => (UserChats?.Count ?? 0) < 2,
             ChatType.Group => true,
             ChatType.Channel => false,
+            _ => false
+        };
+    }
+
+    public bool CanDeleteUser()
+    {
+        return ChatType switch
+        {
+            ChatType.Private => false,
+            ChatType.Group => true,
+            ChatType.Channel => true,
             _ => false
         };
     }
