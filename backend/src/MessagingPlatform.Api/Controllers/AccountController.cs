@@ -57,7 +57,7 @@ public class AccountController : ControllerBase
     [HttpGet("getbyusername/{username}")]
     public async Task<IActionResult> GetByUsername(string username)
     {
-        var user = await _mediator.Send(new GetUserByUsernameQuery(username));
+        var user = await _mediator.Send(new GetUserByUsernameQuery(username.ToLowerInvariant()));
         
         if (user == null)
         {
@@ -76,6 +76,7 @@ public class AccountController : ControllerBase
             return BadRequest("Invalid user data.");
         }
 
+        signUpDto.Username = signUpDto.Username.ToLowerInvariant();
         var token = await _mediator.Send(new AddUserCommand(signUpDto));
 
         if (token == null)
@@ -97,6 +98,7 @@ public class AccountController : ControllerBase
             return BadRequest("Invalid user data.");
         }
 
+        signInDto.Username = signInDto.Username.ToLowerInvariant();
         var token = await _mediator.Send(new SignInCommand(signInDto));
 
         if (token == null)
