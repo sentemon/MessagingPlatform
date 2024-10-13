@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MessagingPlatform.Application.Common.Models.UserDTOs;
 
-public class AddUserDto
+public class CreateUserDto
 {
     [Required]
     [MaxLength(50)]

@@ -17,7 +17,7 @@ public class AccountService : IAccountService
         _jwtProvider = jwtProvider;
     }
 
-    public async Task<string> SignUp(AddUserDto? signUpDto)
+    public async Task<string> SignUp(CreateUserDto? signUpDto)
     {
         try
         {

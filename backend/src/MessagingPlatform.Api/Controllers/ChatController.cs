@@ -49,7 +49,7 @@ public class ChatController : ControllerBase
             return NotFound();
         }
 
-        var chatDto = _mapper.Map<ChatDto>(chat);
+        var chatDto = _mapper.Map<GetChatDto>(chat);
         
         return Ok(chatDto);
     }

@@ -1,6 +1,6 @@
 namespace MessagingPlatform.Application.Common.Models.UserDTOs;
 
-public class UserDto
+public class GetUserDto
 {
     public required string FirstName { get; set; }
     public required string LastName { get; set; }

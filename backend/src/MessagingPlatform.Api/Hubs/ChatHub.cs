@@ -21,7 +21,7 @@ public class ChatHub : Hub
         _mapper = mapper;
     }
 
-    public async Task SendMessageToChat([FromBody] AddMessageDto addMessage)
+    public async Task SendMessageToChat([FromBody] CreateMessageDto createMessage)
     {
         try
         {
@@ -32,8 +32,8 @@ public class ChatHub : Hub
             }
 
             var senderId = Guid.Parse(userIdClaim.Value);
-            var message = await _mediator.Send(new AddMessageCommand(addMessage, senderId));
-            var messageDto = _mapper.Map<MessageDto>(message);
+            var message = await _mediator.Send(new AddMessageCommand(createMessage, senderId));
+            var messageDto = _mapper.Map<GetMessageDto>(message);
 
             await Clients.Others.SendAsync("ReceiveMessage", Context.User?.Identity?.Name, messageDto);
         }

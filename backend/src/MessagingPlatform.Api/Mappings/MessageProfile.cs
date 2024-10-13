@@ -8,7 +8,7 @@ public class MessageProfile : Profile
 {
     public MessageProfile()
     {
-        CreateMap<Message, MessageDto>()
+        CreateMap<Message, GetMessageDto>()
             .ForMember(dest => dest.SenderFullName, opt => opt.MapFrom(src => $"{src.Sender.FirstName} {src.Sender.LastName}"));
     }
 }

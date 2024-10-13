@@ -5,10 +5,10 @@ namespace MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
 
 public class AddUserCommand : IRequest<string?>
 {
-    public AddUserCommand(AddUserDto addUser)
+    public AddUserCommand(CreateUserDto createUser)
     {
-        AddUser = addUser;
+        CreateUser = createUser;
     }
 
-    public AddUserDto AddUser { get; set; }
+    public CreateUserDto CreateUser { get; set; }
 }

@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace MessagingPlatform.Domain.Entities;
 
 public class User

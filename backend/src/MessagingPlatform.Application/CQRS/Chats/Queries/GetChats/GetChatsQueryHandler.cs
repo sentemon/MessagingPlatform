@@ -5,7 +5,7 @@ using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Queries.GetChats;
 
-public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<ChatSidebarDto>>
+public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<GetChatSidebarDto>>
 {
     private readonly IChatRepository _chatRepository;
 
@@ -14,11 +14,11 @@ public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<C
         _chatRepository = chatRepository;
     }
 
-    public async Task<IEnumerable<ChatSidebarDto>> Handle(GetChatsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<GetChatSidebarDto>> Handle(GetChatsQuery request, CancellationToken cancellationToken)
     {
         var chats = await _chatRepository.GetAllAsync(request.UserId);
 
-        var chatsDto = new List<ChatSidebarDto>();
+        var chatsDto = new List<GetChatSidebarDto>();
 
         foreach (var chat in chats)
         {
@@ -36,7 +36,7 @@ public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<C
             var unreadMessagesCount = chat.Messages?
                 .Count(m => m.IsRead == false && m.SenderId != request.UserId) ?? 0;
 
-            var chatDto = new ChatSidebarDto
+            var chatDto = new GetChatSidebarDto
             {
                 ChatId = chat.Id,
                 Title = chat.Title,

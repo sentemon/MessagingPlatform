@@ -14,7 +14,7 @@ public class AddUserCommandHandler : IRequestHandler<AddUserCommand, string?>
 
     public async Task<string?> Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
-        var token = await _accountService.SignUp(request.AddUser);
+        var token = await _accountService.SignUp(request.CreateUser);
         
         return token;
     }

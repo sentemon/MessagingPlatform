@@ -36,9 +36,9 @@ public class ChatControllerTests
     {
         // Arrange
         var userId = Guid.NewGuid();
-        var chats = new List<ChatSidebarDto>
+        var chats = new List<GetChatSidebarDto>
         {
-            new ChatSidebarDto
+            new GetChatSidebarDto
             {
                 ChatId = default,
                 Title = null,
@@ -47,7 +47,7 @@ public class ChatControllerTests
                 LastMessageSentAt = null,
                 UnreadMessagesCount = 0
             },
-            new ChatSidebarDto
+            new GetChatSidebarDto
             {
                 ChatId = default,
                 Title = null,
@@ -63,8 +63,8 @@ public class ChatControllerTests
             .ReturnsAsync(chats);
 
         _mapperMock
-            .Setup(m => m.Map<ChatSidebarDto>(chats))
-            .Returns(new ChatSidebarDto
+            .Setup(m => m.Map<GetChatSidebarDto>(chats))
+            .Returns(new GetChatSidebarDto
             {
                 ChatId = Guid.NewGuid(),
                 Title = "I dont know",
@@ -101,13 +101,13 @@ public class ChatControllerTests
             .Setup(m => m.Send(It.IsAny<GetChatByIdQuery>(), default))
             .ReturnsAsync(chat);
 
-        var chatDto = new ChatDto
+        var chatDto = new GetChatDto
         {
             Id = chatId,
             Title = "Test Chat",
         };
         _mapperMock
-            .Setup(m => m.Map<ChatDto>(chat))
+            .Setup(m => m.Map<GetChatDto>(chat))
             .Returns(chatDto);
 
         // Act

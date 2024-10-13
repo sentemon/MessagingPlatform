@@ -35,13 +35,13 @@ public class MessageController : ControllerBase
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> Add(AddMessageDto addMessage)
+    public async Task<IActionResult> Add(CreateMessageDto createMessage)
     {
         var senderId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
         
-        var message = await _mediator.Send(new AddMessageCommand(addMessage, senderId));
+        var message = await _mediator.Send(new AddMessageCommand(createMessage, senderId));
 
-        var messageDto = _mapper.Map<MessageDto>(message);
+        var messageDto = _mapper.Map<GetMessageDto>(message);
         
         return Ok(messageDto);
     }

@@ -10,7 +10,7 @@ public class ChatProfile : Profile
     {
         CreateMap<CreateChatDto, Chat>();
 
-        CreateMap<Chat, ChatDto>()
+        CreateMap<Chat, GetChatDto>()
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title ?? "New Chat"))
             .ForMember(dest => dest.ChatType, opt => opt.MapFrom(src => (int)src.ChatType))
             .ForMember(dest => dest.UserChats, opt => opt.MapFrom(src => src.UserChats))

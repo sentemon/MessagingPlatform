@@ -43,7 +43,7 @@ public class AccountControllerTests
         {
             Id = userId,
             FirstName = "Test",
-            LastName = "User",
+            LastName = "GetUser",
             Username = "testuser",
             Email = "testuser@gmail.com",
             PasswordHash = "hashedPassword",
@@ -55,11 +55,11 @@ public class AccountControllerTests
             .ReturnsAsync(user);
 
         _mapperMock
-            .Setup(m => m.Map<UserDto>(user))
-            .Returns(new UserDto
+            .Setup(m => m.Map<GetUserDto>(user))
+            .Returns(new GetUserDto
             {
                 FirstName = "Test",
-                LastName = "User",
+                LastName = "GetUser",
                 Username = "testuser",
                 Email = "testuser@gmail.com",
                 AccountCreatedAt = DateTime.MinValue
@@ -73,10 +73,10 @@ public class AccountControllerTests
         // Assert
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.StatusCode.Should().Be(200);
-        okResult.Value.Should().BeEquivalentTo(new UserDto
+        okResult.Value.Should().BeEquivalentTo(new GetUserDto
         {
             FirstName = "Test",
-            LastName = "User",
+            LastName = "GetUser",
             Username = "testuser",
             Email = "testuser@gmail.com",
             AccountCreatedAt = DateTime.MinValue
@@ -92,7 +92,7 @@ public class AccountControllerTests
         {
             Id = Guid.NewGuid(),
             FirstName = "Test",
-            LastName = "User",
+            LastName = "GetUser",
             Username = "testuser",
             Email = "testuser@gmail.com",
             PasswordHash = "hashedPassword",
@@ -104,11 +104,11 @@ public class AccountControllerTests
             .ReturnsAsync(user);
 
         _mapperMock
-            .Setup(m => m.Map<UserDto>(user))
-            .Returns(new UserDto
+            .Setup(m => m.Map<GetUserDto>(user))
+            .Returns(new GetUserDto
             {
                 FirstName = "Test",
-                LastName = "User",
+                LastName = "GetUser",
                 Username = "testuser",
                 Email = "testuser@gmail.com",
                 Bio = "idk",
@@ -122,10 +122,10 @@ public class AccountControllerTests
         // Assert
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.StatusCode.Should().Be(200);
-        okResult.Value.Should().BeEquivalentTo(new UserDto
+        okResult.Value.Should().BeEquivalentTo(new GetUserDto
         {
             FirstName = "Test",
-            LastName = "User",
+            LastName = "GetUser",
             Username = "testuser",
             Email = "testuser@gmail.com",
             Bio = "idk",
@@ -146,8 +146,8 @@ public class AccountControllerTests
             .ReturnsAsync(user);
 
         _mapperMock
-            .Setup(m => m.Map<UserDto>(user))
-            .Returns(new UserDto
+            .Setup(m => m.Map<GetUserDto>(user))
+            .Returns(new GetUserDto
             {
                 FirstName = null,
                 LastName = null,
@@ -162,14 +162,14 @@ public class AccountControllerTests
         // Assert
         var okResult = result.Should().BeOfType<NotFoundObjectResult>().Subject;
         okResult.StatusCode.Should().Be(404);
-        okResult.Value.Should().Be("User not found");
+        okResult.Value.Should().Be("GetUser not found");
     }
 
     [Fact]
     public async Task SignUp_ShouldReturnOk_WhenUserIsAddedSuccessfully()
     {
         // Arrange 
-        var addUserDto = new AddUserDto
+        var addUserDto = new CreateUserDto
         {
             FirstName = "Ivan",
             LastName = "Sentemon",
@@ -191,7 +191,7 @@ public class AccountControllerTests
         // Assert
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.StatusCode.Should().Be(200);
-        okResult.Value.Should().BeEquivalentTo(new { message = "User signed up successfully." });
+        okResult.Value.Should().BeEquivalentTo(new { message = "GetUser signed up successfully." });
 
         _cookieServiceMock.Verify(c => c.Append("token", token), Times.Once);
     }
@@ -200,7 +200,7 @@ public class AccountControllerTests
     public async Task SignUp_ShouldReturnBadRequest_WhenDtoIsNull()
     {
         // Arrange 
-        AddUserDto? nullAddUserDto = null;
+        CreateUserDto? nullAddUserDto = null;
 
         // Act
         var result = await _controller.SignUp(nullAddUserDto);
@@ -287,7 +287,7 @@ public class AccountControllerTests
         // Assert
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.StatusCode.Should().Be(200);
-        okResult.Value.Should().BeEquivalentTo(new { message = "User signed out successfully." });
+        okResult.Value.Should().BeEquivalentTo(new { message = "GetUser signed out successfully." });
 
         _cookieServiceMock.Verify(c => c.Delete("token"), Times.Once);
     }
@@ -332,7 +332,7 @@ public class AccountControllerTests
         // Assert
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.StatusCode.Should().Be(200);
-        okResult.Value.Should().BeEquivalentTo(new { message = "User data updated successfully." });
+        okResult.Value.Should().BeEquivalentTo(new { message = "GetUser data updated successfully." });
     }
 
     [Fact]
@@ -375,7 +375,7 @@ public class AccountControllerTests
         // Assert
         var okResult = result.Should().BeOfType<NotFoundObjectResult>().Subject;
         okResult.StatusCode.Should().Be(404);
-        okResult.Value.Should().Be("User not found.");
+        okResult.Value.Should().Be("GetUser not found.");
     }
     
     private void SetUserClaims(Guid userId)
@@ -408,7 +408,7 @@ public class AccountControllerTests
         // Assert
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.StatusCode.Should().Be(200);
-        okResult.Value.Should().BeEquivalentTo(new { message = "User deleted successfully." });
+        okResult.Value.Should().BeEquivalentTo(new { message = "GetUser deleted successfully." });
         
         _cookieServiceMock.Verify(c => c.Delete("token"), Times.Once);
     }
@@ -430,6 +430,6 @@ public class AccountControllerTests
         // Assert
         var okResult = result.Should().BeOfType<NotFoundObjectResult>().Subject;
         okResult.StatusCode.Should().Be(404);
-        okResult.Value.Should().BeEquivalentTo("User not found.");
+        okResult.Value.Should().BeEquivalentTo("GetUser not found.");
     }
 }

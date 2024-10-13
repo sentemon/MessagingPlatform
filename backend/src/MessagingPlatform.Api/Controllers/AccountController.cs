@@ -38,10 +38,10 @@ public class AccountController : ControllerBase
     {
         var users = await _mediator.Send(new GetAllUsersQuery());
 
-        return Ok(users.Select(user => _mapper.Map<UserDto>(user)));
+        return Ok(users.Select(user => _mapper.Map<GetUserDto>(user)));
     }
     
-    // Get Current User
+    // Get Current GetUser
     [HttpGet("get")]
     public async Task<IActionResult> Get()
     {
@@ -50,7 +50,7 @@ public class AccountController : ControllerBase
         
         var user = await _mediator.Send(new GetUserByIdQuery(id));
 
-        return Ok(_mapper.Map<UserDto>(user));
+        return Ok(_mapper.Map<GetUserDto>(user));
     }
     
     [AllowAnonymous]
@@ -61,15 +61,15 @@ public class AccountController : ControllerBase
         
         if (user == null)
         {
-            return NotFound("User not found");
+            return NotFound("GetUser not found");
         }
         
-        return Ok(_mapper.Map<UserDto>(user));
+        return Ok(_mapper.Map<GetUserDto>(user));
     }
     
     [AllowAnonymous]
     [HttpPost("signup")]
-    public async Task<IActionResult> SignUp([FromBody] AddUserDto? signUpDto)
+    public async Task<IActionResult> SignUp([FromBody] CreateUserDto? signUpDto)
     {
         if (signUpDto == null)
         {
@@ -86,7 +86,7 @@ public class AccountController : ControllerBase
 
         _cookieService.Append("token", token);
         
-        return Ok(new { message = "User signed up successfully." });
+        return Ok(new { message = "GetUser signed up successfully." });
     }
     
     [AllowAnonymous]
@@ -116,7 +116,7 @@ public class AccountController : ControllerBase
     {
         _cookieService.Delete("token");
         
-        return Ok(new { message = "User signed out successfully." });
+        return Ok(new { message = "GetUser signed out successfully." });
     }
     
     [HttpGet("isauthenticated")]
@@ -134,7 +134,7 @@ public class AccountController : ControllerBase
 
             if (currentUserId == null)
             {
-                return NotFound("User id not found");
+                return NotFound("GetUser id not found");
             }
 
             var user = _mapper.Map<User>(updateUserDto);
@@ -144,10 +144,10 @@ public class AccountController : ControllerBase
 
             if (!result)
             {
-                return NotFound("User not found.");
+                return NotFound("GetUser not found.");
             }
 
-            return Ok( new { message = "User data updated successfully." });
+            return Ok( new { message = "GetUser data updated successfully." });
         }
         catch (InvalidOperationException ex)
         {
@@ -172,12 +172,12 @@ public class AccountController : ControllerBase
 
             if (!result)
             {
-                return NotFound("User not found.");
+                return NotFound("GetUser not found.");
             }
             
             _cookieService.Delete("token");
             
-            return Ok(new { message = "User deleted successfully." });
+            return Ok(new { message = "GetUser deleted successfully." });
         }
         catch (Exception e)
         {

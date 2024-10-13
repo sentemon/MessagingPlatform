@@ -9,9 +9,9 @@ public class UserChatMappingProfile : Profile
 {
     public UserChatMappingProfile()
     {
-        CreateMap<UserChat, UserChatDto>()
+        CreateMap<UserChat, GetUserChatDto>()
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
+            .ForMember(dest => dest.GetUser, opt => opt.MapFrom(src => src.User))
             .ForMember(dest => dest.ChatId, opt => opt.MapFrom(src => src.ChatId))
             .ForMember(dest => dest.JoinedAt, opt => opt.MapFrom(src => src.JoinedAt));
     }

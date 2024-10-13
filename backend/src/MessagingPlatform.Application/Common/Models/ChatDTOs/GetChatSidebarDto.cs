@@ -1,6 +1,6 @@
 namespace MessagingPlatform.Application.Common.Models.ChatDTOs;
 
-public class ChatSidebarDto
+public class GetChatSidebarDto
 {
     public Guid ChatId { get; set; }
     public string? Title { get; set; }

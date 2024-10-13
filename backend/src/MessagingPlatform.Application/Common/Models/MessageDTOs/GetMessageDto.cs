@@ -1,8 +1,6 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace MessagingPlatform.Application.Common.Models.MessageDTOs;
 
-public class MessageDto
+public class GetMessageDto
 {
     public required string SenderFullName { get; init; }
     public required string Content { get; set; }

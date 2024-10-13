@@ -16,7 +16,7 @@ public class UserService : IUserService  // ToDo: fix this (перенести �
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<Guid> Create(AddUserDto? signUpDto)
+    public async Task<Guid> Create(CreateUserDto? signUpDto)
     {
         if (signUpDto == null)
         {
@@ -27,7 +27,7 @@ public class UserService : IUserService  // ToDo: fix this (перенести �
 
         if (existingUser != null)
         {
-            throw new InvalidOperationException("User with this username already exists.");
+            throw new InvalidOperationException("GetUser with this username already exists.");
         }
         
         var hashedPassword = _passwordHasher.Hash(signUpDto.Password);
