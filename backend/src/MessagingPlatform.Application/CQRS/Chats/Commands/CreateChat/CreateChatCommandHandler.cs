@@ -1,5 +1,7 @@
 using MediatR;
+using MessagingPlatform.Application.Common.Interfaces;
 using MessagingPlatform.Domain.Entities;
+using MessagingPlatform.Domain.Enums;
 using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Commands.CreateChat;
@@ -8,11 +10,13 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, Chat>
 {
     private readonly IChatRepository _chatRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IChatService _chatService;
 
-    public CreateChatCommandHandler(IChatRepository chatRepository, IUserRepository userRepository)
+    public CreateChatCommandHandler(IChatRepository chatRepository, IUserRepository userRepository, IChatService chatService)
     {
         _chatRepository = chatRepository;
         _userRepository = userRepository;
+        _chatService = chatService;
     }
 
     public async Task<Chat> Handle(CreateChatCommand request, CancellationToken cancellationToken)
@@ -21,37 +25,18 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, Chat>
         foreach (var username in request.Usernames)
         {
             var user = await _userRepository.GetByUsernameAsync(username);
-
-            if (user == null)
+            if (user != null)
             {
-                continue;
+                userIds.Add(user.Id);
             }
-            
-            userIds.Add(user.Id);
         }
-        
-        var users = (await _userRepository.GetUsersByIdsAsync(userIds)).ToList();
-        
-        var chat = new Chat
+
+        return request.Chat.ChatType switch
         {
-            Id = Guid.NewGuid(),
-            ChatType = request.Chat.ChatType,
-            Title = request.Chat.Title
+            ChatType.Private => await _chatService.CreatePrivateChatAsync(request.CreatorId, userIds[0]), // хз или правильно
+            ChatType.Group => await _chatService.CreateGroupChatAsync(request.CreatorId, userIds),
+            ChatType.Channel => await _chatService.CreateChannelChatAsync(request.CreatorId, userIds),
+            _ => throw new ArgumentException("Unknown chat type")
         };
-        
-        var userChats = users.Select(user => new UserChat
-        {
-            UserId = user.Id,
-            ChatId = chat.Id,
-            JoinedAt = DateTime.UtcNow,
-            User = user,
-            Chat = chat
-        }).ToList();
-        
-        chat.UserChats = userChats;
-        
-        var createdChat = await _chatRepository.CreateAsync(chat);
-        
-        return createdChat;
     }
 }

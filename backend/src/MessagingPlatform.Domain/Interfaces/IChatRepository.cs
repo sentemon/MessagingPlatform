@@ -9,4 +9,5 @@ public interface IChatRepository
     Task<IEnumerable<Chat?>> GetAllAsync(Guid userId);
     Task<bool> UpdateAsync(Chat entity);
     Task<bool> DeleteAsync(Guid? chatId);
+    Task SaveChangesAsync();
 }

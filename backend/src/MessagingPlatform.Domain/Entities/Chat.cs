@@ -9,9 +9,9 @@ public class Chat
     
     public required ChatType ChatType { get; set; }
 
-    public ICollection<UserChat>? UserChats { get; set; }
+    public ICollection<UserChat>? UserChats { get; set; } = [];
 
-    public ICollection<Message>? Messages { get; set; }
+    public ICollection<Message>? Messages { get; set; } = [];
     
     public string Title { get; set; } = "New Chat";
     

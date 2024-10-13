@@ -37,7 +37,7 @@ public class ChatRepository : IChatRepository
     public async Task<Chat> CreateAsync(Chat chat)
     {
         _appDbContext.Chats.Add(chat);
-        await _appDbContext.SaveChangesAsync();
+        await SaveChangesAsync();
 
         return chat;
     }
@@ -47,7 +47,7 @@ public class ChatRepository : IChatRepository
         var entityEntry = _appDbContext.Entry(entity);
         entityEntry.State = EntityState.Modified;
 
-        await _appDbContext.SaveChangesAsync();
+        await SaveChangesAsync();
 
         return true;
     }
@@ -64,8 +64,13 @@ public class ChatRepository : IChatRepository
         var entityEntry = _appDbContext.Entry(chat);
         entityEntry.State = EntityState.Deleted;
 
-        await _appDbContext.SaveChangesAsync();
+        await SaveChangesAsync();
 
         return true;
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _appDbContext.SaveChangesAsync();
     }
 }
