@@ -45,52 +45,31 @@ public class UserRepository : IUserRepository
 
     public async Task AddAsync(User user)
     {
-        try
-        {
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(User user)
     {
-        try
-        {
-            var entityEntry = _context.Entry(user);
-            entityEntry.State = EntityState.Modified;
+        var entityEntry = _context.Entry(user); 
+        entityEntry.State = EntityState.Modified;
 
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
+        await _context.SaveChangesAsync();
     }
 
     public async Task<bool> DeleteAsync(Guid? id)
     {
-        try
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             
-            if (user == null)
-            {
-                return false;
-            }
-
-            var entityEntry = _context.Entry(user);
-            entityEntry.State = EntityState.Deleted;
-
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        catch (Exception e)
+        if (user == null)
         {
-            throw new Exception(e.Message);
+            return false;
         }
+
+        var entityEntry = _context.Entry(user);
+        entityEntry.State = EntityState.Deleted;
+
+        await _context.SaveChangesAsync();
+        return true;
     }
 }
