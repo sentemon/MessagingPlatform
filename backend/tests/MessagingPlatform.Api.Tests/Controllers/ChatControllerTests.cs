@@ -105,7 +105,6 @@ public class ChatControllerTests
         {
             Id = chatId,
             Title = "Test Chat",
-            Creator = null
         };
         _mapperMock
             .Setup(m => m.Map<ChatDto>(chat))
