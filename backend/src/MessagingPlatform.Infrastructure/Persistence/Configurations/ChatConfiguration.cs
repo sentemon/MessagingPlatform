@@ -22,12 +22,6 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
 
         // Navigation Properties
         builder
-            .HasOne(c => c.Creator)
-            .WithMany()
-            .HasForeignKey(c => c.CreatorId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasMany(c => c.Messages)
             .WithOne(m => m.Chat)
             .HasForeignKey(m => m.ChatId)

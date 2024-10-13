@@ -13,10 +13,6 @@ public class Chat
 
     public ICollection<Message>? Messages { get; set; }
     
-    public required Guid CreatorId { get; set; }
-    
-    public required User Creator { get; set; }
-    
     public string Title { get; set; } = "New Chat";
     
     private UserChat? GetUserChat(Guid userId)

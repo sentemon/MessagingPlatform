@@ -31,17 +31,12 @@ namespace MessagingPlatform.Infrastructure.Persistence.Migrations
                     b.Property<int>("ChatType")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("CreatorId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatorId");
 
                     b.ToTable("Chats");
                 });
@@ -155,17 +150,6 @@ namespace MessagingPlatform.Infrastructure.Persistence.Migrations
                     b.HasIndex("ChatId");
 
                     b.ToTable("UserChats");
-                });
-
-            modelBuilder.Entity("MessagingPlatform.Domain.Entities.Chat", b =>
-                {
-                    b.HasOne("MessagingPlatform.Domain.Entities.User", "Creator")
-                        .WithMany()
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("MessagingPlatform.Domain.Entities.Message", b =>

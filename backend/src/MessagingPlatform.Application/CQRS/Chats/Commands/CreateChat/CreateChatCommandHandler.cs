@@ -36,8 +36,6 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, Chat>
         {
             Id = Guid.NewGuid(),
             ChatType = request.Chat.ChatType,
-            CreatorId = request.CreatorId,
-            Creator = await _userRepository.GetByIdAsync(request.CreatorId),
             Title = request.Chat.Title
         };
         

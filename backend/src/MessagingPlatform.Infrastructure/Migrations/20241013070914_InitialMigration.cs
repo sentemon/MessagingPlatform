@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace MessagingPlatform.Infrastructure.Persistence.Migrations
+namespace MessagingPlatform.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class InitialMigration : Migration

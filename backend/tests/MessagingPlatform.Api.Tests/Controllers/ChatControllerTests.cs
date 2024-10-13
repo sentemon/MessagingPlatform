@@ -95,8 +95,6 @@ public class ChatControllerTests
             Id = chatId,
             Title = "Test Chat",
             ChatType = ChatType.Private,
-            CreatorId = default,
-            Creator = null
         };
 
         _mediatrMock
