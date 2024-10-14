@@ -61,7 +61,7 @@ public class AccountController : ControllerBase
         
         if (user == null)
         {
-            return NotFound("GetUser not found");
+            return NotFound("User not found");
         }
         
         return Ok(_mapper.Map<GetUserDto>(user));
@@ -86,7 +86,7 @@ public class AccountController : ControllerBase
 
         _cookieService.Append("token", token);
         
-        return Ok(new { message = "GetUser signed up successfully." });
+        return Ok(new { message = "User signed up successfully." });
     }
     
     [AllowAnonymous]
@@ -116,7 +116,7 @@ public class AccountController : ControllerBase
     {
         _cookieService.Delete("token");
         
-        return Ok(new { message = "GetUser signed out successfully." });
+        return Ok(new { message = "User signed out successfully." });
     }
     
     [HttpGet("isauthenticated")]
@@ -134,7 +134,7 @@ public class AccountController : ControllerBase
 
             if (currentUserId == null)
             {
-                return NotFound("GetUser id not found");
+                return NotFound("User id not found");
             }
 
             var user = _mapper.Map<User>(updateUserDto);
@@ -144,10 +144,10 @@ public class AccountController : ControllerBase
 
             if (!result)
             {
-                return NotFound("GetUser not found.");
+                return NotFound("User not found.");
             }
 
-            return Ok( new { message = "GetUser data updated successfully." });
+            return Ok( new { message = "User data updated successfully." });
         }
         catch (InvalidOperationException ex)
         {
@@ -172,12 +172,12 @@ public class AccountController : ControllerBase
 
             if (!result)
             {
-                return NotFound("GetUser not found.");
+                return NotFound("User not found.");
             }
             
             _cookieService.Delete("token");
             
-            return Ok(new { message = "GetUser deleted successfully." });
+            return Ok(new { message = "User deleted successfully." });
         }
         catch (Exception e)
         {
