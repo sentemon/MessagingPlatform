@@ -52,14 +52,9 @@ public class ChatRepository : IChatRepository
         return true;
     }
 
-    public async Task<bool> DeleteAsync(Guid? id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
-        var chat = await _appDbContext.Chats.FirstOrDefaultAsync(c => c.Id == id);
-
-        if (chat == null)
-        {
-            return false;
-        }
+        var chat = await _appDbContext.Chats.FirstAsync(c => c.Id == id);
 
         var entityEntry = _appDbContext.Entry(chat);
         entityEntry.State = EntityState.Deleted;

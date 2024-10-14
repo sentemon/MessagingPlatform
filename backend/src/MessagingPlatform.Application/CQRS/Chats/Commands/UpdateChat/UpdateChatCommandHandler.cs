@@ -1,4 +1,5 @@
 using MediatR;
+using MessagingPlatform.Domain.Enums;
 using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Commands.UpdateChat;
@@ -21,9 +22,11 @@ public class UpdateChatCommandHandler : IRequestHandler<UpdateChatCommand, bool>
             return false;
         }
         
-        var isUserInChat = chat.UserChats != null && chat.UserChats.Any(uc => uc.UserId == request.UserId);
+        var canUserChangeChat = chat.UserChats != null 
+                                     && chat.UserChats.Any(uc => uc.UserId == request.UserId 
+                                     && uc.Role is ChatRole.Admin or ChatRole.Owner);
         
-        if (!isUserInChat)
+        if (!canUserChangeChat)
         {
             return false;
         }

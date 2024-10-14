@@ -8,6 +8,6 @@ public interface IChatRepository
     Task<Chat?> GetByIdAsync(Guid id);
     Task<IEnumerable<Chat?>> GetAllAsync(Guid userId);
     Task<bool> UpdateAsync(Chat entity);
-    Task<bool> DeleteAsync(Guid? chatId);
+    Task<bool> DeleteAsync(Guid chatId);
     Task SaveChangesAsync();
 }

@@ -1,4 +1,5 @@
 using MediatR;
+using MessagingPlatform.Domain.Enums;
 using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Commands.DeleteChat;
@@ -21,9 +22,11 @@ public class DeleteChatCommandHandler : IRequestHandler<DeleteChatCommand, bool>
             return false;
         }
         
-        var isUserInChat = chat.UserChats != null && chat.UserChats.Any(uc => uc.UserId == request.UserId);
-
-        if (!isUserInChat)
+        var isUserOwnerInChat = chat.UserChats != null 
+                                && chat.UserChats.Any(uc => uc.UserId == request.UserId 
+                                && uc.Role == ChatRole.Owner);
+        
+        if (!isUserOwnerInChat)
         {
             return false;
         }

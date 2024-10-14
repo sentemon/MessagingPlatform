@@ -65,7 +65,7 @@ public class ChatController : ControllerBase
         
         var chatResponse = await _mediator.Send(new CreateChatCommand(chatRequest, usernames, creatorId));
 
-        return Ok(chatResponse.Id); // ToDo: maybe return the entity of chat
+        return Ok(chatResponse.Id); // maybe return the entity of chat
     }
         
     [HttpPut("update")]
@@ -92,7 +92,8 @@ public class ChatController : ControllerBase
 
         if (!result)
         {
-            return NotFound("Chat not found.");
+            // ToDo: another response
+            return NotFound("Chat not found or you do not have permissions to delete it.");
         }
 
         return Ok("Chat deleted successfully.");
