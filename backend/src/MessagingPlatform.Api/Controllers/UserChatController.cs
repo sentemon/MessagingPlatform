@@ -28,7 +28,7 @@ public class UserChatController : ControllerBase
     }
     
     [HttpGet("{chatId:guid}/users")]
-    public async Task<IActionResult> GetUsersInChat(Guid chatId)
+    public async Task<IActionResult> GetUserChat(Guid chatId)
     {
         var users = await _mediator.Send(new GetUsersInChatQuery(chatId));
         
@@ -36,7 +36,7 @@ public class UserChatController : ControllerBase
     }
 
     [HttpGet("{chatId:guid}/{username}")]
-    public async Task<IActionResult> GetUserInChat(Guid chatId, string username)
+    public async Task<IActionResult> GetUserChats(Guid chatId, string username)
     {
         var user = await _mediator.Send(new GetUserInChatQuery(chatId));
 
@@ -44,7 +44,7 @@ public class UserChatController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> AddUserToChat([FromBody] AddUserToChatCommand command)
+    public async Task<IActionResult> AddUserChat([FromBody] AddUserToChatCommand command)
     {
         var result = await _mediator.Send(command);
 
@@ -60,7 +60,7 @@ public class UserChatController : ControllerBase
     }
     
     [HttpDelete("{chatId:guid}/users/{userId:guid}")]
-    public async Task<IActionResult> RemoveUserFromChat(Guid chatId, Guid userId)
+    public async Task<IActionResult> RemoveUserChat(Guid chatId, Guid userId)
     {
         var result = await _mediator.Send(new RemoveUserFromChatCommand(chatId, userId));
         
