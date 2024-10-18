@@ -49,7 +49,9 @@ public class MessageController : ControllerBase
     [HttpPut("update")]
     public async Task<IActionResult> Update([FromBody] UpdateMessageDto updateMessage)
     {
-        var updatedMessage = await _mediator.Send(new UpdateMessageCommand(updateMessage));
+        var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
+        
+        var updatedMessage = await _mediator.Send(new UpdateMessageCommand(updateMessage, userId));
 
         return Ok(updatedMessage);
     }

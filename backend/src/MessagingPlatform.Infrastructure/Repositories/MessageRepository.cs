@@ -25,6 +25,13 @@ public class MessageRepository : IMessageRepository
         return messages;
     }
 
+    public async Task<Message> GetById(Guid id)
+    {
+        var message = await _appDbContext.Messages.FirstAsync(m => m.Id == id);
+
+        return message;
+    }
+
     public async Task<Message> CreateAsync(Guid senderId, Guid chatId, string content)
     {
         var chat = await _appDbContext.Chats
@@ -71,23 +78,12 @@ public class MessageRepository : IMessageRepository
         return messages;
     }
 
-    public async Task<Message> UpdateAsync(Guid senderId, Guid messageId, Message updatedMessage)
+    public async Task<Message> UpdateAsync(Message updatedMessage)
     {
-        var message = await _appDbContext.Messages
-            .FirstOrDefaultAsync(m => m.Id == messageId && m.SenderId == senderId);
-
-        if (message == null)
-        {
-            throw new KeyNotFoundException("Message not found");
-        }
-
-        message.Content = updatedMessage.Content;
-        message.UpdatedAt = DateTime.UtcNow;
-
-        _appDbContext.Messages.Update(message);
+        _appDbContext.Messages.Update(updatedMessage);
         await _appDbContext.SaveChangesAsync();
 
-        return message;
+        return updatedMessage;
     }
 
     public async Task<bool> DeleteMessage(Guid senderId, Guid messageId)

@@ -4,4 +4,4 @@ using MessagingPlatform.Domain.Entities;
 
 namespace MessagingPlatform.Application.CQRS.Messages.Commands.UpdateMessage;
 
-public record UpdateMessageCommand(UpdateMessageDto UpdateMessage) : IRequest<Message>;
+public record UpdateMessageCommand(UpdateMessageDto UpdateMessage, Guid UserId) : IRequest<Message>;
