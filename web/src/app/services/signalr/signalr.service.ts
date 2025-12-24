@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { LogLevel } from '@microsoft/signalr';
-import {Observable, Subject} from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class SignalrService {
 
   private startConnection() {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('http://localhost:8080/chat', { withCredentials: true })
+      .withUrl(environment.hubUrl, { withCredentials: true })
       .configureLogging(LogLevel.Information)
       .build();
 
