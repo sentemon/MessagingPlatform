@@ -23,9 +23,13 @@ public class GetChatByIdQueryHandler : IQueryHandler<GetChatByIdQuery, Chat?>
             return Result<Chat?>.Failure(new Error("Chat not found"));
         }
         
-        var isUserInChat = chat.UserChats != null && chat.UserChats.Any(uc => uc.UserId == query.UserId);
-        var result = isUserInChat ? chat : null;
-        
-        return Result<Chat?>.Success(result);
+        var participant = chat.GetParticipant(query.UserId);
+
+        if (participant == null)
+        {
+            return Result<Chat?>.Failure(new Error("User is not a member of the chat"));
+        }
+
+        return Result<Chat?>.Success(chat);
     }
 }

@@ -2,6 +2,7 @@ using MessagingPlatform.Application.Abstractions;
 using MessagingPlatform.Application.Common;
 using MessagingPlatform.Domain.Enums;
 using MessagingPlatform.Domain.Interfaces;
+using MessagingPlatform.Domain.Primitives;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Commands.DeleteChat;
 
@@ -22,18 +23,21 @@ public class DeleteChatCommandHandler : ICommandHandler<DeleteChatCommand, bool>
         {
             return Result<bool>.Failure(new Error("Chat not found"));
         }
-        
-        var isUserOwnerInChat = chat.UserChats != null 
-                                && chat.UserChats.Any(uc => uc.UserId == command.UserId 
-                                                            && uc.Role == ChatRole.Owner);
-        
-        if (!isUserOwnerInChat)
+
+        var participant = chat.GetParticipant(command.UserId);
+        if (participant == null || participant.Role != ChatRole.Owner)
         {
             return Result<bool>.Failure(new Error("User is not the owner of the chat"));
         }
-        
-        var result = await _chatRepository.DeleteAsync(command.ChatId);
 
-        return Result<bool>.Success(result);
+        try
+        {
+            var result = await _chatRepository.DeleteAsync(command.ChatId);
+            return Result<bool>.Success(result);
+        }
+        catch (DomainException ex)
+        {
+            return Result<bool>.Failure(new Error(ex.Message));
+        }
     }
 }

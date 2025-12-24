@@ -48,7 +48,7 @@ public class UserChatController : ControllerBase
     [HttpGet("{chatId:guid}/{username}")]
     public async Task<IActionResult> GetUserChats(Guid chatId, string username)
     {
-        var query = new GetUserInChatQuery(chatId);
+        var query = new GetUserInChatQuery(chatId, username);
         var result = await _getUserInChatQueryHandler.Handle(query);
 
         if (!result.IsSuccess)

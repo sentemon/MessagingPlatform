@@ -1,6 +1,7 @@
 using MessagingPlatform.Application.Abstractions;
 using MessagingPlatform.Application.Common;
 using MessagingPlatform.Infrastructure.Interfaces;
+using MessagingPlatform.Domain.Primitives;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
 
@@ -15,8 +16,14 @@ public class AddUserCommandHandler : ICommandHandler<AddUserCommand, string>
 
     public async Task<IResult<string, Error>> Handle(AddUserCommand command)
     {
-        var token = await _accountService.SignUp(command.FirstName, command.LastName, command.Username, command.Email, command.Password, command.ConfirmPassword);
-        
-        return Result<string>.Success(token);
+        try
+        {
+            var token = await _accountService.SignUp(command.FirstName, command.LastName, command.Username, command.Email, command.Password, command.ConfirmPassword);
+            return Result<string>.Success(token);
+        }
+        catch (DomainException ex)
+        {
+            return Result<string>.Failure(new Error(ex.Message));
+        }
     }
 }
