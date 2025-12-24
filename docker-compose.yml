@@ -26,6 +26,11 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__DefaultConnection: "Host=postgres;Database=postgres;Username=postgres;Password=mysecretpassword"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://backend:9000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     depends_on:
       postgres:
         condition: service_healthy

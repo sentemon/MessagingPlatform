@@ -73,4 +73,6 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<ChatHub>("/chat");
 
+app.MapGet("/health", () => Results.Ok("Healthy"));
+
 app.Run();
