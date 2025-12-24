@@ -1,0 +1,69 @@
+name: Build and Test .NET Project
+description: Build, test, and publish a .NET project with configurable paths and settings.
+
+inputs:
+  backendCsprojPath:
+    description: Path to the .csproj file for the backend project.
+    required: true
+
+  unitTestsProjectPath:
+    description: Path to the unit tests project (optional).
+    required: false
+    default: ''
+
+  integrationTestsProjectPath:
+    description: Path to the integration tests project (optional).
+    required: false
+    default: ''
+
+  buildConfiguration:
+    description: Build configuration (Debug or Release).
+    required: true
+
+  serviceName:
+    description: Name of the service being built.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup .NET 10.0 SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Restore NuGet Packages
+      run: dotnet restore ./MessagingPlatform.sln
+      shell: bash
+
+    - name: Build .NET Solution
+      run: |
+        dotnet build ./MessagingPlatform.sln \
+          --no-restore \
+          --configuration "${{ inputs.buildConfiguration }}"
+      shell: bash
+
+    - name: Run Unit Tests
+      if: ${{ inputs.unitTestsProjectPath != '' }}
+      run: |
+        dotnet test "${{ inputs.unitTestsProjectPath }}" \
+          --configuration "${{ inputs.buildConfiguration }}" \
+          --no-build \
+          --verbosity normal
+      shell: bash
+
+    - name: Run Integration Tests
+      if: ${{ inputs.integrationTestsProjectPath != '' }}
+      run: |
+        dotnet test "${{ inputs.integrationTestsProjectPath }}" \
+          --configuration "${{ inputs.buildConfiguration }}" \
+          --no-build \
+          --verbosity normal
+      shell: bash
+
+    - name: Publish .NET Project
+      run: |
+        dotnet publish "${{ inputs.backendCsprojPath }}" \
+          --configuration "${{ inputs.buildConfiguration }}" \
+          --output "publish"
+      shell: bash

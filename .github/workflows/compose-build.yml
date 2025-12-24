@@ -1,0 +1,31 @@
+name: Docker Compose Build
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  docker-compose:
+      runs-on: ubuntu-latest
+      
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          
+        - name: Build Docker Compose
+          run: docker compose build --no-cache
+            
+        - name: Start Docker Compose
+          run: docker compose up -d
+          
+        - name: Health Check Gateway
+          run: |
+            echo "Checking health..."
+            for i in {1..10}; do
+              curl --fail http://0.0.0.0:8000/health && break || sleep 5
+            done
+            curl --fail http://0.0.0.0:8000/health || exit 1

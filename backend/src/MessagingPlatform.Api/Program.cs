@@ -1,10 +1,10 @@
 using MessagingPlatform.Application;
 using MessagingPlatform.Infrastructure;
-using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using MessagingPlatform.Api.Hubs;
 using MessagingPlatform.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
