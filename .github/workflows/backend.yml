@@ -54,7 +54,7 @@ jobs:
           docker buildx build \
             -t ${{ env.DOCKER_HUB_USERNAME }}/messagingplatform:${IMAGE_VERSION} \
             -t ${{ env.DOCKER_HUB_USERNAME }}/messagingplatform:latest \
-            -f ./backend/Dockerfile \
+            -f ./backend/src/Dockerfile \
             ./backend/src
           
       - name: Push latest Docker image to Docker Hub
