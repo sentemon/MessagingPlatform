@@ -1,10 +1,10 @@
-name: CI Pipeline
+name: Backend CI Pipeline
 
 on:
   push: 
     paths:
       - backend/src/**
-      - .github/workflows/ci.yml
+      - .github/workflows/backend.yml
     branches:
       - master
       - develop
@@ -26,6 +26,7 @@ jobs:
         with:
           backendCsprojPath: ./backend/src/MessagingPlatform.Api/MessagingPlatform.Api.csproj
           unitTestsProjectPath: ./backend/tests/MessagingPlatform.Domain.Tests/MessagingPlatform.Domain.Tests.csproj
+          integrationTestsProjectPath: ./backend/tests/MessagingPlatform.Application.Tests/MessagingPlatform.Application.Tests.csproj
           buildConfiguration: Release
           serviceName: MessagingPlatform
           
