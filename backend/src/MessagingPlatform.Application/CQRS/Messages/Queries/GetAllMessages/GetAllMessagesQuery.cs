@@ -1,6 +1,5 @@
-using MediatR;
-using MessagingPlatform.Domain.Entities;
+using MessagingPlatform.Application.Abstractions;
 
 namespace MessagingPlatform.Application.CQRS.Messages.Queries.GetAllMessages;
 
-public record GetAllMessagesQuery(Guid ChatId) : IRequest<IQueryable<Message>>;
+public record GetAllMessagesQuery(Guid ChatId) : IQuery;

@@ -1,6 +1,4 @@
 using System.Security.Claims;
-using AutoMapper;
-using MediatR;
 using MessagingPlatform.Application.Common.Models.MessageDTOs;
 using MessagingPlatform.Application.CQRS.Messages.Commands.AddMessage;
 using MessagingPlatform.Application.CQRS.Messages.Commands.DeleteMessage;
@@ -16,34 +14,51 @@ namespace MessagingPlatform.Api.Controllers;
 [ApiController]
 public class MessageController : ControllerBase
 {
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
 
-    public MessageController(IMediator mediator, IMapper mapper)
+    private readonly GetAllMessagesQueryHandler _getAllMessagesQueryHandler;
+    private readonly AddMessageCommandHandler _addMessageCommandHandler;
+    private readonly UpdateMessageCommandHandler _updateMessageCommandHandler;
+    private readonly DeleteMessageCommandHandler _deleteMessageCommandHandler;
+    
+    public MessageController(GetAllMessagesQueryHandler getAllMessagesQueryHandler, AddMessageCommandHandler addMessageCommandHandler, UpdateMessageCommandHandler updateMessageCommandHandler, DeleteMessageCommandHandler deleteMessageCommandHandler)
     {
-        _mediator = mediator;
-        _mapper = mapper;
+        _getAllMessagesQueryHandler = getAllMessagesQueryHandler;
+        _addMessageCommandHandler = addMessageCommandHandler;
+        _updateMessageCommandHandler = updateMessageCommandHandler;
+        _deleteMessageCommandHandler = deleteMessageCommandHandler;
     }
     
     // ToDo: use instead of navigation property "Messages" in Chat entity for better productivity
     [HttpGet("getall")]
     public async Task<IActionResult> GetAll(Guid chatId)
     {
-        var messages = await _mediator.Send(new GetAllMessagesQuery(chatId));
+        var query = new GetAllMessagesQuery(chatId);
+        var result = await _getAllMessagesQueryHandler.Handle(query);
+        
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error.Message);
+        }
 
-        return Ok(messages);
+        return Ok(result.Response);
     }
 
     [HttpPost("add")]
     public async Task<IActionResult> Add(CreateMessageDto createMessage)
     {
         var senderId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
-        
-        var message = await _mediator.Send(new AddMessageCommand(createMessage, senderId));
 
-        var messageDto = _mapper.Map<GetMessageDto>(message);
+        var command = new AddMessageCommand(createMessage, senderId);
+        var result =  await _addMessageCommandHandler.Handle(command);
+
+        // var messageDto = _mapper.Map<GetMessageDto>(message);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error.Message);
+        }
         
-        return Ok(messageDto);
+        return Ok(result.Response);
     }
 
     [HttpPut("update")]
@@ -51,16 +66,28 @@ public class MessageController : ControllerBase
     {
         var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
         
-        var updatedMessage = await _mediator.Send(new UpdateMessageCommand(updateMessage, userId));
+        var command = new UpdateMessageCommand(updateMessage, userId);
+        var result = await _updateMessageCommandHandler.Handle(command);
 
-        return Ok(updatedMessage);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error.Message);
+        }
+        
+        return Ok(result.Response);
     }
 
     [HttpDelete("delete")]
     public async Task<IActionResult> Delete([FromBody] DeleteMessageDto deleteMessage)
     {
-        var result = await _mediator.Send(new DeleteMessageCommand(deleteMessage));
+        var command = new DeleteMessageCommand(deleteMessage);
+        var result = await _deleteMessageCommandHandler.Handle(command);
+        
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error.Message);
+        }
 
-        return Ok(result);
+        return Ok(result.Response);
     }
 }

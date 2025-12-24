@@ -1,11 +1,12 @@
-using MediatR;
+using MessagingPlatform.Application.Abstractions;
+using MessagingPlatform.Application.Common;
 using MessagingPlatform.Domain.Entities;
 
 namespace MessagingPlatform.Application.CQRS.UserChats.Commands.RemoveUserFromChat;
 
-public class RemoveUserFromChatCommandHandler : IRequestHandler<RemoveUserFromChatCommand, UserChat>
+public class RemoveUserFromChatCommandHandler : ICommandHandler<RemoveUserFromChatCommand, UserChat>
 {
-    public async Task<UserChat> Handle(RemoveUserFromChatCommand request, CancellationToken cancellationToken)
+    public async Task<IResult<UserChat, Error>> Handle(RemoveUserFromChatCommand command)
     {
         throw new NotImplementedException();
     }

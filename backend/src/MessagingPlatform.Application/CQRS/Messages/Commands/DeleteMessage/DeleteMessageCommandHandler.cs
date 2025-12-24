@@ -1,9 +1,10 @@
-using MediatR;
+using MessagingPlatform.Application.Abstractions;
+using MessagingPlatform.Application.Common;
 using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Messages.Commands.DeleteMessage;
 
-public class DeleteMessageCommandHandler : IRequestHandler<DeleteMessageCommand, bool>
+public class DeleteMessageCommandHandler : ICommandHandler<DeleteMessageCommand, bool>
 {
     private readonly IMessageRepository _messageRepository;
 
@@ -11,11 +12,11 @@ public class DeleteMessageCommandHandler : IRequestHandler<DeleteMessageCommand,
     {
         _messageRepository = messageRepository;
     }
-    
-    public async Task<bool> Handle(DeleteMessageCommand request, CancellationToken cancellationToken)
-    {
-        var result = await _messageRepository.DeleteMessage(request.DeleteMessage.SenderId, request.DeleteMessage.MessageId);
 
-        return result;
+    public async Task<IResult<bool, Error>> Handle(DeleteMessageCommand command)
+    {
+        var result = await _messageRepository.DeleteMessage(command.DeleteMessage.SenderId, command.DeleteMessage.MessageId);
+
+        return Result<bool>.Success(result);
     }
 }

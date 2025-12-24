@@ -1,7 +1,7 @@
-using MessagingPlatform.Application.Common.Interfaces;
+using MessagingPlatform.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 
-namespace MessagingPlatform.Application.Services;
+namespace MessagingPlatform.Infrastructure.Services;
 
 public class CookieService : ICookieService
 {

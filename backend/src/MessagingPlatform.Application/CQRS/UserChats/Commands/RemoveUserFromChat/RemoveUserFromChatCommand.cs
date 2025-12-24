@@ -1,6 +1,5 @@
-using MediatR;
-using MessagingPlatform.Domain.Entities;
+using MessagingPlatform.Application.Abstractions;
 
 namespace MessagingPlatform.Application.CQRS.UserChats.Commands.RemoveUserFromChat;
 
-public record RemoveUserFromChatCommand(Guid ChatId, Guid UserId) : IRequest<UserChat>;
+public record RemoveUserFromChatCommand(Guid ChatId, Guid UserId) : ICommand;

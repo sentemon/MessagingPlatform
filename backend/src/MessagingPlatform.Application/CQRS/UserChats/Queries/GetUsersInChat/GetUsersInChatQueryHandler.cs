@@ -1,11 +1,12 @@
-using MediatR;
+using MessagingPlatform.Application.Abstractions;
+using MessagingPlatform.Application.Common;
 using MessagingPlatform.Domain.Entities;
 
 namespace MessagingPlatform.Application.CQRS.UserChats.Queries.GetUsersInChat;
 
-public class GetUsersInChatQueryHandler : IRequestHandler<GetUsersInChatQuery, ICollection<UserChat>>
+public class GetUsersInChatQueryHandler : IQueryHandler<GetUsersInChatQuery, ICollection<UserChat>>
 {
-    public async Task<ICollection<UserChat>> Handle(GetUsersInChatQuery request, CancellationToken cancellationToken)
+    public async Task<IResult<ICollection<UserChat>, Error>> Handle(GetUsersInChatQuery command)
     {
         throw new NotImplementedException();
     }

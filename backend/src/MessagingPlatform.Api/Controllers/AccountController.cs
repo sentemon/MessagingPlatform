@@ -1,7 +1,4 @@
 using System.Security.Claims;
-using AutoMapper;
-using MediatR;
-using MessagingPlatform.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using MessagingPlatform.Application.Common.Models.UserDTOs;
 using MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
@@ -12,8 +9,8 @@ using MessagingPlatform.Application.CQRS.Users.Queries.GetAllUsers;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserById;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserByUsername;
 using MessagingPlatform.Domain.Entities;
+using MessagingPlatform.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
 
 namespace MessagingPlatform.Api.Controllers;
 
@@ -22,23 +19,40 @@ namespace MessagingPlatform.Api.Controllers;
 [Route("api/[controller]")]
 public class AccountController : ControllerBase
 {
-    private readonly IMediator _mediator;
     private readonly ICookieService _cookieService;
-    private readonly IMapper _mapper;
+    private readonly GetAllUsersQueryHandler _getAllUsersQueryHandler;
+    private readonly GetUserByIdQueryHandler _getUserByIdQueryHandler;
+    private readonly GetUserByUsernameQueryHandler _getUserByUsernameQueryHandler;
+    private readonly AddUserCommandHandler _addUserCommandHandler;
+    private readonly UpdateUserCommandHandler _updateUserCommandHandler;
+    private readonly SignInCommandHandler _signInCommandHandler;
+    private readonly DeleteUserCommandHandler _deleteUserCommandHandler;
+    
 
-    public AccountController(IMediator mediator, ICookieService cookieService, IMapper mapper)
+    public AccountController(ICookieService cookieService, GetAllUsersQueryHandler getAllUsersQueryHandler, GetUserByIdQueryHandler getUserByIdQueryHandler, GetUserByUsernameQueryHandler getUserByUsernameQueryHandler, AddUserCommandHandler addUserCommandHandler, UpdateUserCommandHandler updateUserCommandHandler, SignInCommandHandler signInCommandHandler, DeleteUserCommandHandler deleteUserCommandHandler)
     {
-        _mediator = mediator;
         _cookieService = cookieService;
-        _mapper = mapper;
+        _getAllUsersQueryHandler = getAllUsersQueryHandler;
+        _getUserByIdQueryHandler = getUserByIdQueryHandler;
+        _getUserByUsernameQueryHandler = getUserByUsernameQueryHandler;
+        _addUserCommandHandler = addUserCommandHandler;
+        _updateUserCommandHandler = updateUserCommandHandler;
+        _signInCommandHandler = signInCommandHandler;
+        _deleteUserCommandHandler = deleteUserCommandHandler;
     }
 
     [HttpGet("getall")]
     public async Task<IActionResult> GetAll() // ToDo: only for admins 
     {
-        var users = await _mediator.Send(new GetAllUsersQuery());
-
-        return Ok(users.Select(user => _mapper.Map<GetUserDto>(user)));
+        var query = new GetAllUsersQuery();
+        var result = await _getAllUsersQueryHandler.Handle(query);
+        
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error.Message);
+        }
+        
+        return Ok(result.Response);
     }
     
     // Get Current GetUser
@@ -46,67 +60,64 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> Get()
     {
         var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;
-        var id = Guid.Parse(currentUserId!);
-        
-        var user = await _mediator.Send(new GetUserByIdQuery(id));
+        var id = Guid.Parse(currentUserId);
 
-        return Ok(_mapper.Map<GetUserDto>(user));
+        var query = new GetUserByIdQuery(id);
+        var result = await _getUserByIdQueryHandler.Handle(query);
+        
+        if (!result.IsSuccess)
+        {
+            return NotFound(result.Error.Message);
+        }
+
+        return Ok(result.Response);
     }
     
     [AllowAnonymous]
     [HttpGet("getbyusername/{username}")]
     public async Task<IActionResult> GetByUsername(string username)
     {
-        var user = await _mediator.Send(new GetUserByUsernameQuery(username.ToLowerInvariant()));
+        var query = new GetUserByUsernameQuery(username.ToLowerInvariant());
+        var result = await _getUserByUsernameQueryHandler.Handle(query);
         
-        if (user == null)
+        if (!result.IsSuccess)
         {
-            return NotFound("User not found");
+            return NotFound(result.Error.Message);
         }
         
-        return Ok(_mapper.Map<GetUserDto>(user));
+        return Ok(result.Response);
     }
     
     [AllowAnonymous]
     [HttpPost("signup")]
-    public async Task<IActionResult> SignUp([FromBody] CreateUserDto? signUpDto)
+    public async Task<IActionResult> SignUp(string firstName, string lastName, string username, string email, string password, string confirmPassword)
     {
-        if (signUpDto == null)
+        var command = new AddUserCommand(firstName, lastName, username.ToLowerInvariant(), email, password, confirmPassword);
+        var result = await _addUserCommandHandler.Handle(command);
+
+        if (!result.IsSuccess)
         {
-            return BadRequest("Invalid user data.");
+            return BadRequest(result.Error.Message);
         }
 
-        signUpDto.Username = signUpDto.Username.ToLowerInvariant();
-        var token = await _mediator.Send(new AddUserCommand(signUpDto));
-
-        if (token == null)
-        {
-            return BadRequest("Failed to register user.");
-        }
-
-        _cookieService.Append("token", token);
+        _cookieService.Append("token", result.Response);
         
         return Ok(new { message = "User signed up successfully." });
     }
     
     [AllowAnonymous]
     [HttpPost("signin")]
-    public async Task<IActionResult> SignIn([FromBody] SignInDto? signInDto)
+    public async Task<IActionResult> SignIn(string username, string password)
     {
-        if (signInDto == null)
+        var command = new SignInCommand(username.ToLowerInvariant(), password);
+        var result = await _signInCommandHandler.Handle(command);
+        
+        if (!result.IsSuccess)
         {
-            return BadRequest("Invalid user data.");
-        }
-
-        signInDto.Username = signInDto.Username.ToLowerInvariant();
-        var token = await _mediator.Send(new SignInCommand(signInDto));
-
-        if (token == null)
-        {
-            return Unauthorized("Invalid username or password.");
+            return BadRequest(result.Error.Message);
         }
         
-        _cookieService.Append("token", token);
+        _cookieService.Append("token", result.Response);
         
         return Ok(new { message = "You signed in successfully." });
     }
@@ -126,7 +137,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpPut("update")]
-    public async Task<IActionResult> Update([FromBody] UpdateUserDto? updateUserDto)
+    public async Task<IActionResult> Update(string firstName, string lastName, string username, string email)
     {
         try
         {
@@ -136,15 +147,14 @@ public class AccountController : ControllerBase
             {
                 return NotFound("User id not found");
             }
-
-            var user = _mapper.Map<User>(updateUserDto);
-            user.Id = Guid.Parse(currentUserId);
             
-            var result = await _mediator.Send(new UpdateUserCommand(user));
+            var id = Guid.Parse(currentUserId);
+            var command = new UpdateUserCommand(id, firstName, lastName, username, email);
+            var result = await _updateUserCommandHandler.Handle(command);
 
-            if (!result)
+            if (!result.IsSuccess)
             {
-                return NotFound("User not found.");
+                return BadRequest(result.Error.Message);
             }
 
             return Ok( new { message = "User data updated successfully." });
@@ -166,13 +176,14 @@ public class AccountController : ControllerBase
         
         try
         {
-            var guidId = Guid.Parse(currentUserId!);
-            
-            var result = await _mediator.Send(new DeleteUserCommand(guidId));
+            var guidId = Guid.Parse(currentUserId);
 
-            if (!result)
+            var command = new DeleteUserCommand(guidId);
+            var result = await _deleteUserCommandHandler.Handle(command);
+
+            if (!result.IsSuccess)
             {
-                return NotFound("User not found.");
+                return BadRequest(result.Error.Message);
             }
             
             _cookieService.Delete("token");

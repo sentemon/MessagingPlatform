@@ -1,8 +1,12 @@
 ﻿using System.Text;
+using MessagingPlatform.Application.Common.Interfaces;
+using MessagingPlatform.Application.Services;
 using MessagingPlatform.Domain.Interfaces;
+using MessagingPlatform.Infrastructure.Interfaces;
 using MessagingPlatform.Infrastructure.Persistence;
 using MessagingPlatform.Infrastructure.Repositories;
 using MessagingPlatform.Infrastructure.Security;
+using MessagingPlatform.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +30,12 @@ public static class DependencyInjection
         services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
         services.AddScoped<IJwtProvider, JwtProvider>();
         
-        // Configure JWT Authentication
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IChatService, ChatService>();
+        services.AddScoped<ICookieService, CookieService>();
+        
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {

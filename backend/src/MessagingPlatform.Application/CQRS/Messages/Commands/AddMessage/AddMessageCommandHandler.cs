@@ -1,10 +1,11 @@
-using MediatR;
+using MessagingPlatform.Application.Abstractions;
+using MessagingPlatform.Application.Common;
 using MessagingPlatform.Domain.Entities;
 using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Messages.Commands.AddMessage;
 
-public class AddMessageCommandHandler : IRequestHandler<AddMessageCommand, Message>
+public class AddMessageCommandHandler : ICommandHandler<AddMessageCommand, Message>
 {
     private readonly IMessageRepository _messageRepository;
 
@@ -12,15 +13,15 @@ public class AddMessageCommandHandler : IRequestHandler<AddMessageCommand, Messa
     {
         _messageRepository = messageRepository;
     }
-        
-    public async Task<Message> Handle(AddMessageCommand request, CancellationToken cancellationToken)
+
+    public async Task<IResult<Message, Error>> Handle(AddMessageCommand command)
     {
         var message = await _messageRepository.CreateAsync(
-            senderId: request.SenderId,
-            chatId: request.CreateMessage.ChatId, 
-            content: request.CreateMessage.Content
+            senderId: command.SenderId,
+            chatId: command.CreateMessage.ChatId, 
+            content: command.CreateMessage.Content
         );
 
-        return message;
+        return Result<Message>.Success(message);
     }
 }

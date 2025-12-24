@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -20,7 +19,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Register controllers
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -29,7 +27,6 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
-// Add CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", corsPolicyBuilder =>
@@ -42,10 +39,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddSignalR();
 
-// Register layers
 builder.Services
     .AddInfrastructure(builder.Configuration)
     .AddApplication();
@@ -60,7 +55,6 @@ using (var scope = app.Services.CreateScope())
 
 app.UseCors("AllowAll");
 
-// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -70,8 +64,6 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = "swagger";
     });
 }
-
-// app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

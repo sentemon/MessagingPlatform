@@ -1,6 +1,5 @@
-using MediatR;
-using MessagingPlatform.Domain.Entities;
+using MessagingPlatform.Application.Abstractions;
 
 namespace MessagingPlatform.Application.CQRS.UserChats.Commands.AddUserToChat;
 
-public record AddUserToChatCommand : IRequest<UserChat>;
+public record AddUserToChatCommand : ICommand;

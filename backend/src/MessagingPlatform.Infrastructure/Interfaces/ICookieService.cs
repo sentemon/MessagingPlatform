@@ -1,4 +1,4 @@
-namespace MessagingPlatform.Application.Common.Interfaces;
+namespace MessagingPlatform.Infrastructure.Interfaces;
 
 public interface ICookieService
 {

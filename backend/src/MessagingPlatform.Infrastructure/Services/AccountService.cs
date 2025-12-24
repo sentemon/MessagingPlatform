@@ -1,8 +1,7 @@
-using MessagingPlatform.Application.Common.Interfaces;
-using MessagingPlatform.Application.Common.Models.UserDTOs;
 using MessagingPlatform.Domain.Interfaces;
+using MessagingPlatform.Infrastructure.Interfaces;
 
-namespace MessagingPlatform.Application.Services;
+namespace MessagingPlatform.Infrastructure.Services;
 
 public class AccountService : IAccountService
 {
@@ -17,11 +16,11 @@ public class AccountService : IAccountService
         _jwtProvider = jwtProvider;
     }
 
-    public async Task<string> SignUp(CreateUserDto? signUpDto)
+    public async Task<string> SignUp(string firstName, string lastName, string username, string email, string password, string confirmPassword)
     {
         try
         {
-            var userId = await _userService.Create(signUpDto);
+            var userId = await _userService.Create(firstName, lastName, username, email, password, confirmPassword);
 
             var user = await _userRepository.GetByIdAsync(userId);
             
@@ -40,16 +39,16 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<string> SignIn(SignInDto? signInDto)
+    public async Task<string> SignIn(string username, string password)
     {
-        var isValidUser = await _userService.IsExist(signInDto);
+        var isValidUser = await _userService.IsExist(username, password);
         
         if (!isValidUser)
         {
             throw new Exception("Not valid user!");
         }
         
-        var user = await _userRepository.GetByUsernameAsync(signInDto?.Username);
+        var user = await _userRepository.GetByUsernameAsync(username);
         
         if (user == null)
         {

@@ -1,14 +1,12 @@
-using MediatR;
-using MessagingPlatform.Application.Common.Models.UserDTOs;
+using MessagingPlatform.Application.Abstractions;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
 
-public class AddUserCommand : IRequest<string?>
-{
-    public AddUserCommand(CreateUserDto createUser)
-    {
-        CreateUser = createUser;
-    }
-
-    public CreateUserDto CreateUser { get; set; }
-}
+public record AddUserCommand(
+    string FirstName,
+    string LastName,
+    string Username,
+    string Email,
+    string Password,
+    string ConfirmPassword
+) : ICommand;

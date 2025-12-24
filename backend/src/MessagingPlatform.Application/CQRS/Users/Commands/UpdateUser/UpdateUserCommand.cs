@@ -1,14 +1,11 @@
-using MediatR;
-using MessagingPlatform.Domain.Entities;
+using MessagingPlatform.Application.Abstractions;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
 
-public class UpdateUserCommand : IRequest<bool>
-{
-    public UpdateUserCommand(User updateUser)
-    {
-        UpdateUser = updateUser;
-    }
-
-    public User UpdateUser { get; set; }
-}
+public record UpdateUserCommand(
+    Guid Id,
+    string FirstName,
+    string LastName,
+    string Email,
+    string Bio
+) : ICommand;

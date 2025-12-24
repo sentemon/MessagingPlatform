@@ -1,6 +1,5 @@
-using MediatR;
-using MessagingPlatform.Application.Common.Models.ChatDTOs;
+using MessagingPlatform.Application.Abstractions;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Commands.DeleteChat;
 
-public record DeleteChatCommand(Guid ChatId, Guid UserId) : IRequest<bool>;
+public record DeleteChatCommand(Guid ChatId, Guid UserId) : ICommand;

@@ -1,10 +1,11 @@
-using MediatR;
+using MessagingPlatform.Application.Abstractions;
+using MessagingPlatform.Application.Common;
 using MessagingPlatform.Domain.Entities;
 using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Users.Queries.GetUserById;
 
-public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, User>
+public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, User>
 {
     private readonly IUserRepository _userRepository;
     
@@ -12,11 +13,11 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, User>
     {
         _userRepository = userRepository;
     }
-    
-    public async Task<User> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
-    {
-        var user = await _userRepository.GetByIdAsync(request.Id);
 
-        return user;
+    public async Task<IResult<User, Error>> Handle(GetUserByIdQuery query)
+    {
+        var user = await _userRepository.GetByIdAsync(query.Id);
+
+        return Result<User>.Success(user);
     }
 }

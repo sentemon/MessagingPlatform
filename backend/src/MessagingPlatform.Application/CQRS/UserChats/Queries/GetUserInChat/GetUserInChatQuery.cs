@@ -1,6 +1,5 @@
-using MediatR;
-using MessagingPlatform.Domain.Entities;
+using MessagingPlatform.Application.Abstractions;
 
 namespace MessagingPlatform.Application.CQRS.UserChats.Queries.GetUserInChat;
 
-public record GetUserInChatQuery(Guid ChatId) : IRequest<UserChat>;
+public record GetUserInChatQuery(Guid ChatId) : IQuery, ICommand;

@@ -1,6 +1,4 @@
 using System.Security.Claims;
-using AutoMapper;
-using MediatR;
 using MessagingPlatform.Application.Common.Models.MessageDTOs;
 using MessagingPlatform.Application.CQRS.Messages.Commands.AddMessage;
 using Microsoft.AspNetCore.Authorization;
@@ -12,13 +10,10 @@ namespace MessagingPlatform.Api.Hubs;
 [Authorize]
 public class ChatHub : Hub
 {
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
-
-    public ChatHub(IMediator mediator, IMapper mapper)
+    private readonly AddMessageCommandHandler _addMessageCommandHandler;
+    public ChatHub(AddMessageCommandHandler addMessageCommandHandler)
     {
-        _mediator = mediator;
-        _mapper = mapper;
+        _addMessageCommandHandler = addMessageCommandHandler;
     }
 
     public async Task SendMessageToChat([FromBody] CreateMessageDto createMessage)
@@ -32,10 +27,11 @@ public class ChatHub : Hub
             }
 
             var senderId = Guid.Parse(userIdClaim.Value);
-            var message = await _mediator.Send(new AddMessageCommand(createMessage, senderId));
-            var messageDto = _mapper.Map<GetMessageDto>(message);
+            var command = new AddMessageCommand(createMessage, senderId);
+            var result = await _addMessageCommandHandler.Handle(command);
+            // var messageDto = _mapper.Map<GetMessageDto>(message);
 
-            await Clients.Others.SendAsync("ReceiveMessage", Context.User?.Identity?.Name, messageDto);
+            await Clients.Others.SendAsync("ReceiveMessage", Context.User?.Identity?.Name, result.Response);
         }
         catch (Exception ex)
         {

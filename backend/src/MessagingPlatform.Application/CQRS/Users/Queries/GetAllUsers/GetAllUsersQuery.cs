@@ -1,6 +1,5 @@
-using MediatR;
-using MessagingPlatform.Domain.Entities;
+using MessagingPlatform.Application.Abstractions;
 
 namespace MessagingPlatform.Application.CQRS.Users.Queries.GetAllUsers;
 
-public record GetAllUsersQuery() : IRequest<IQueryable<User>>;
+public record GetAllUsersQuery : IQuery;

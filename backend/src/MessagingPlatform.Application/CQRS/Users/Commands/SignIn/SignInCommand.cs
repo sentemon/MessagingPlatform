@@ -1,14 +1,5 @@
-using MediatR;
-using MessagingPlatform.Application.Common.Models.UserDTOs;
+using MessagingPlatform.Application.Abstractions;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.SignIn;
 
-public class SignInCommand : IRequest<string?>
-{
-    public SignInCommand(SignInDto signInDto)
-    {
-        SignInDto = signInDto;
-    }
-    
-    public SignInDto SignInDto { get; set; }
-}
+public record SignInCommand(string Username, string Password) : ICommand;

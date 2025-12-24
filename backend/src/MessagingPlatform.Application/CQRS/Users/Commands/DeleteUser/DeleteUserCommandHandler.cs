@@ -1,9 +1,10 @@
-using MediatR;
+using MessagingPlatform.Application.Abstractions;
+using MessagingPlatform.Application.Common;
 using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.DeleteUser;
 
-public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, bool>
+public class DeleteUserCommandHandler : ICommandHandler<DeleteUserCommand, bool>
 {
     private readonly IUserRepository _userRepository;
     
@@ -11,11 +12,11 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, bool>
     {
         _userRepository = userRepository;
     }
-    
-    public async Task<bool> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
-    {
-        var result = await _userRepository.DeleteAsync(request.Id);
 
-        return result;
+    public async Task<IResult<bool, Error>> Handle(DeleteUserCommand command)
+    {
+        var result = await _userRepository.DeleteAsync(command.Id);
+
+        return Result<bool>.Success(result);
     }
 }

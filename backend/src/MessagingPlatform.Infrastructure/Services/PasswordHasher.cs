@@ -1,6 +1,6 @@
 using MessagingPlatform.Application.Common.Interfaces;
 
-namespace MessagingPlatform.Application.Services;
+namespace MessagingPlatform.Infrastructure.Services;
 
 public class PasswordHasher : IPasswordHasher
 {

@@ -1,11 +1,11 @@
-using MediatR;
+using MessagingPlatform.Application.Abstractions;
+using MessagingPlatform.Application.Common;
 using MessagingPlatform.Application.Common.Models.ChatDTOs;
-using MessagingPlatform.Domain.Entities;
 using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Queries.GetChats;
 
-public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<GetChatSidebarDto>>
+public class GetChatsQueryHandler : IQueryHandler<GetChatsQuery, IEnumerable<GetChatSidebarDto>>
 {
     private readonly IChatRepository _chatRepository;
 
@@ -14,9 +14,9 @@ public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<G
         _chatRepository = chatRepository;
     }
 
-    public async Task<IEnumerable<GetChatSidebarDto>> Handle(GetChatsQuery request, CancellationToken cancellationToken)
+    public async Task<IResult<IEnumerable<GetChatSidebarDto>, Error>> Handle(GetChatsQuery query)
     {
-        var chats = await _chatRepository.GetAllAsync(request.UserId);
+        var chats = await _chatRepository.GetAllAsync(query.UserId);
 
         var chatsDto = new List<GetChatSidebarDto>();
 
@@ -34,7 +34,7 @@ public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<G
             var lastMessageSentAt = lastMessage?.SentAt;
             
             var unreadMessagesCount = chat.Messages?
-                .Count(m => m.IsRead == false && m.SenderId != request.UserId) ?? 0;
+                .Count(m => m.IsRead == false && m.SenderId != query.UserId) ?? 0;
 
             var chatDto = new GetChatSidebarDto
             {
@@ -49,8 +49,6 @@ public class GetChatsQueryHandler : IRequestHandler<GetChatsQuery, IEnumerable<G
             chatsDto.Add(chatDto);
         }
         
-        return chatsDto;
+        return Result<IEnumerable<GetChatSidebarDto>>.Success(chatsDto);
     }
-
-
 }

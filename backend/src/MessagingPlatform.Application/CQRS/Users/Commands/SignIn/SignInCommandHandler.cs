@@ -1,9 +1,10 @@
-using MediatR;
-using MessagingPlatform.Application.Common.Interfaces;
+using MessagingPlatform.Application.Abstractions;
+using MessagingPlatform.Application.Common;
+using MessagingPlatform.Infrastructure.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.SignIn;
 
-public class SignInCommandHandler : IRequestHandler<SignInCommand, string?>
+public class SignInCommandHandler : ICommandHandler<SignInCommand, string>
 {
     private readonly IAccountService _accountService;
 
@@ -12,10 +13,10 @@ public class SignInCommandHandler : IRequestHandler<SignInCommand, string?>
         _accountService = accountService;
     }
 
-    public async Task<string?> Handle(SignInCommand request, CancellationToken cancellationToken)
+    public async Task<IResult<string, Error>> Handle(SignInCommand command)
     {
-        var token = await _accountService.SignIn(request.SignInDto);
+        var token = await _accountService.SignIn(command.Username, command.Password);
         
-        return token;
+        return Result<string>.Success(token);
     }
 }

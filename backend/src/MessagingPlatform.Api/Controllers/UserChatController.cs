@@ -1,5 +1,3 @@
-using AutoMapper;
-using MediatR;
 using MessagingPlatform.Application.Common.Models.UserChatDTOs;
 using MessagingPlatform.Application.CQRS.UserChats.Commands.AddUserToChat;
 using MessagingPlatform.Application.CQRS.UserChats.Commands.RemoveUserFromChat;
@@ -18,52 +16,87 @@ namespace MessagingPlatform.Api.Controllers;
 [ApiController]
 public class UserChatController : ControllerBase
 {
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
-
-    public UserChatController(IMediator mediator, IMapper mapper)
+    private readonly GetUsersInChatQueryHandler _getUsersInChatQueryHandler;
+    private readonly GetUserInChatQueryHandler _getUserInChatQueryHandler;
+    private readonly AddUserToChatCommandHandler _addUserToChatCommandHandler;
+    private readonly UpdateUserPermissionsCommandHandler _updateUserPermissionsCommandHandler;
+    private readonly RemoveUserFromChatCommandHandler _removeUserFromChatCommandHandler;
+    
+    public UserChatController(GetUsersInChatQueryHandler getUsersInChatQueryHandler, GetUserInChatQueryHandler getUserInChatQueryHandler, AddUserToChatCommandHandler addUserToChatCommandHandler, UpdateUserPermissionsCommandHandler updateUserPermissionsCommandHandler, RemoveUserFromChatCommandHandler removeUserFromChatCommandHandler)
     {
-        _mediator = mediator;
-        _mapper = mapper;
+        _getUsersInChatQueryHandler = getUsersInChatQueryHandler;
+        _getUserInChatQueryHandler = getUserInChatQueryHandler;
+        _addUserToChatCommandHandler = addUserToChatCommandHandler;
+        _updateUserPermissionsCommandHandler = updateUserPermissionsCommandHandler;
+        _removeUserFromChatCommandHandler = removeUserFromChatCommandHandler;
     }
     
     [HttpGet("{chatId:guid}/users")]
     public async Task<IActionResult> GetUserChat(Guid chatId)
     {
-        var users = await _mediator.Send(new GetUsersInChatQuery(chatId));
+        var query = new GetUsersInChatQuery(chatId);
+        var result = await _getUsersInChatQueryHandler.Handle(query);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error.Message);
+        }
         
-        return Ok(users);
+        return Ok(result.Response);
     }
 
     [HttpGet("{chatId:guid}/{username}")]
     public async Task<IActionResult> GetUserChats(Guid chatId, string username)
     {
-        var user = await _mediator.Send(new GetUserInChatQuery(chatId));
+        var query = new GetUserInChatQuery(chatId);
+        var result = await _getUserInChatQueryHandler.Handle(query);
 
-        return Ok(user);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error.Message);
+        }
+        
+        return Ok(result.Response);
     }
     
     [HttpPost]
     public async Task<IActionResult> AddUserChat([FromBody] AddUserToChatCommand command)
     {
-        var result = await _mediator.Send(command);
+        var result = await _addUserToChatCommandHandler.Handle(command);
 
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error.Message);
+        }
+        
         return Ok(result);
     }
     
     [HttpPut("{chatId:guid}/users/{userId:guid}/permissions")]
     public async Task<IActionResult> UpdateUserPermissions(Guid chatId, Guid userId, [FromBody] UpdateUserPermissionsDto dto)
     {
-        var result = await _mediator.Send(new UpdateUserPermissionsCommand(chatId, userId, dto));
+        var command = new UpdateUserPermissionsCommand(chatId, userId, dto);
+        var result = await _updateUserPermissionsCommandHandler.Handle(command);
         
-        return Ok(result);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error.Message);
+        }
+        
+        return Ok(result.Response);
     }
     
     [HttpDelete("{chatId:guid}/users/{userId:guid}")]
     public async Task<IActionResult> RemoveUserChat(Guid chatId, Guid userId)
     {
-        var result = await _mediator.Send(new RemoveUserFromChatCommand(chatId, userId));
+        var command = new RemoveUserFromChatCommand(chatId, userId);
+        var result = await _removeUserFromChatCommandHandler.Handle(command);
         
-        return Ok(result);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Error.Message);
+        }
+        
+        return Ok(result.Response);
     }
 }

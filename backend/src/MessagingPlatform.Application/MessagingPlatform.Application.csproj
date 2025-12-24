@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MessagingPlatform.Domain\MessagingPlatform.Domain.csproj" />
+      <ProjectReference Include="..\MessagingPlatform.Infrastructure\MessagingPlatform.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -16,7 +17,6 @@
       <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
       <PackageReference Include="FluentValidation" Version="11.9.2" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
-      <PackageReference Include="MediatR" Version="12.4.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />

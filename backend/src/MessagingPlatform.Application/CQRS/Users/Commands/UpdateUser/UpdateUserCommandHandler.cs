@@ -1,9 +1,10 @@
-using MediatR;
-using MessagingPlatform.Application.Common.Interfaces;
+using MessagingPlatform.Application.Abstractions;
+using MessagingPlatform.Application.Common;
+using MessagingPlatform.Infrastructure.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
 
-public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, bool>
+public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand, bool>
 {
     private readonly IUserService _userService;
 
@@ -11,11 +12,12 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, bool>
     {
         _userService = userService;
     }
+    
 
-    public async Task<bool> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+    public async Task<IResult<bool, Error>> Handle(UpdateUserCommand command)
     {
-        var result = await _userService.Update(request.UpdateUser);
+        var result = await _userService.Update(command.Id, command.FirstName, command.LastName, command.Email, command.Bio);
         
-        return result;
+        return Result<bool>.Success(result);
     }
 }

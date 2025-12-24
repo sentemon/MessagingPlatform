@@ -1,6 +1,5 @@
-using MediatR;
-using MessagingPlatform.Application.Common.Models.ChatDTOs;
+using MessagingPlatform.Application.Abstractions;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Queries.GetChats;
 
-public record GetChatsQuery(Guid UserId) : IRequest<IEnumerable<GetChatSidebarDto>>;
+public record GetChatsQuery(Guid UserId) : IQuery;

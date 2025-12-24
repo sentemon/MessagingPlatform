@@ -1,9 +1,10 @@
-using MediatR;
-using MessagingPlatform.Application.Common.Interfaces;
+using MessagingPlatform.Application.Abstractions;
+using MessagingPlatform.Application.Common;
+using MessagingPlatform.Infrastructure.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Users.Commands.AddUser;
 
-public class AddUserCommandHandler : IRequestHandler<AddUserCommand, string?>
+public class AddUserCommandHandler : ICommandHandler<AddUserCommand, string>
 {
     private readonly IAccountService _accountService;
 
@@ -12,10 +13,10 @@ public class AddUserCommandHandler : IRequestHandler<AddUserCommand, string?>
         _accountService = accountService;
     }
 
-    public async Task<string?> Handle(AddUserCommand request, CancellationToken cancellationToken)
+    public async Task<IResult<string, Error>> Handle(AddUserCommand command)
     {
-        var token = await _accountService.SignUp(request.CreateUser);
+        var token = await _accountService.SignUp(command.FirstName, command.LastName, command.Username, command.Email, command.Password, command.ConfirmPassword);
         
-        return token;
+        return Result<string>.Success(token);
     }
 }
