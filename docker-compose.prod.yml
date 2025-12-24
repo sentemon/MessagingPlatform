@@ -12,7 +12,7 @@
 #       POSTGRES_PASSWORD: mysecretpassword
 #       POSTGRES_DB: postgres
 #     restart: always
-#     volumes: 
+#     volumes:
 #       - messagingplatform-data:/var/lib/postgresql/data
 #     healthcheck:
 #       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -38,10 +38,10 @@
 #     networks:
 #       - dev
 
-#   frontend:
-#     container_name: messagingplatform-frontend
+#   web:
+#     container_name: messagingplatform-web
 #     build:
-#       context: ./frontend
+#       context: ./web
 #       dockerfile: Dockerfile
 #     ports:
 #       - "4200:80"
@@ -50,6 +50,6 @@
 #         condition: service_healthy
 #     networks:
 #       - dev
-      
+
 # volumes:
 #   messagingplatform-data:

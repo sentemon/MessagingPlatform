@@ -17,9 +17,9 @@
   - **Docker** – Containerization for easy deployment and environment management.
   - **AutoMapper** – Object mapping to simplify transformations between DTOs and domain entities.
   
-- **Frontend**:
+- **web**:
   - **Angular** – Client-side framework for building responsive and dynamic user interfaces.
-  - **TypeScript** – Strongly typed language for frontend development.
+  - **TypeScript** – Strongly typed language for web development.
 
 - **Testing**:
   - **xUnit** – Unit testing framework.
@@ -38,7 +38,7 @@ This project follows the **Clean Architecture** pattern, which emphasizes separa
    
 4. **Presentation Layer (Web API)**: ASP.NET Core Web API exposing endpoints for user registration, authentication, and messaging functionalities.
 
-5. **Client (Frontend)**: Built using **Angular** and **TypeScript**, providing a user-friendly interface for account management and real-time messaging.
+5. **Client (web)**: Built using **Angular** and **TypeScript**, providing a user-friendly interface for account management and real-time messaging.
 
 ## Features
 
@@ -64,7 +64,7 @@ This project follows the **Clean Architecture** pattern, which emphasizes separa
    ```
 
 2. **Build and run the application**:
-   Use Docker Compose to build and start both the backend and the frontend along with the database:
+   Use Docker Compose to build and start both the backend and the web along with the database:
    ```bash
    docker compose up --build
    ```

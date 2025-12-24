@@ -3,10 +3,10 @@ networks:
     driver: bridge
 
 services:
-  frontend:
-    container_name: frontend
+  web:
+    container_name: web
     build:
-      context: ./frontend
+      context: ./web
       dockerfile: Dockerfile
     ports:
       - 4200:80
@@ -31,7 +31,7 @@ services:
         condition: service_healthy
     networks:
       - messagingplatform
-  
+
   postgres:
     container_name: postgres
     image: postgres:15-alpine
@@ -46,10 +46,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    volumes: 
+    volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - messagingplatform
-      
+
 volumes:
   postgres-data:
