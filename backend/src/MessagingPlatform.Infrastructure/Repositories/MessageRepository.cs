@@ -37,6 +37,7 @@ public class MessageRepository : IMessageRepository
         var chat = await _appDbContext.Chats
             .Include(c => c.UserChats)!
                 .ThenInclude(uc => uc.User)
+            .Include(c => c.Messages)
             .FirstOrDefaultAsync(c => c.Id == chatId);
 
         if (chat == null)
@@ -44,25 +45,17 @@ public class MessageRepository : IMessageRepository
             throw new ArgumentException("Invalid chat.");
         }
 
-        var sender = await _appDbContext.Users.FindAsync(senderId);
+        var sender = chat.UserChats.FirstOrDefault(uc => uc.UserId == senderId)?.User;
+
+        sender ??= await _appDbContext.Users.FirstOrDefaultAsync(u => u.Id == senderId);
 
         if (sender == null)
         {
             throw new ArgumentException("Invalid sender.");
         }
 
-        var message = new Message
-        {
-            Id = Guid.NewGuid(),
-            SenderId = senderId,
-            Sender = sender,
-            ChatId = chatId,
-            Chat = chat,
-            Content = content.Trim(),
-            SentAt = DateTime.UtcNow
-        };
+        var message = chat.AddMessage(sender, content, DateTime.UtcNow);
 
-        _appDbContext.Messages.Add(message);
         await _appDbContext.SaveChangesAsync();
 
         return message;
@@ -89,9 +82,14 @@ public class MessageRepository : IMessageRepository
     public async Task<bool> DeleteMessage(Guid senderId, Guid messageId)
     {
         var message = await _appDbContext.Messages
-            .FirstOrDefaultAsync(m => m.Id == messageId && m.SenderId == senderId);
+            .FirstOrDefaultAsync(m => m.Id == messageId);
 
         if (message == null)
+        {
+            return false;
+        }
+
+        if (!message.CanBeModifiedBy(senderId))
         {
             return false;
         }

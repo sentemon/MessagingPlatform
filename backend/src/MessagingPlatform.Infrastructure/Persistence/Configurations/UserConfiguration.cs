@@ -61,5 +61,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .WithOne(m => m.Sender)
             .HasForeignKey(m => m.SenderId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(u => u.UserChats)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.Navigation(u => u.Messages)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

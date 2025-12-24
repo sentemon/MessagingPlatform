@@ -26,17 +26,7 @@ public class UserService : IUserService  // ToDo: fix this (перенести �
         }
         
         var hashedPassword = _passwordHasher.Hash(password);
-
-        var newUser = new User
-        {
-            Id = Guid.NewGuid(),
-            FirstName = firstName,
-            LastName = lastName,
-            Username = username,
-            Email = email,
-            AccountCreatedAt = DateTime.UtcNow,
-            PasswordHash = hashedPassword
-        };
+        var newUser = User.Create(firstName, lastName, username, email, hashedPassword, DateTime.UtcNow);
 
         await _userRepository.AddAsync(newUser);
 
@@ -72,10 +62,8 @@ public class UserService : IUserService  // ToDo: fix this (перенести �
             return false;
         }
 
-        existingUser.FirstName = firstName;
-        existingUser.LastName = lastName;
-        existingUser.Email = email;
-        existingUser.Bio = bio;
+        existingUser.UpdateProfile(firstName, lastName, bio);
+        existingUser.UpdateEmail(email);
 
         await _userRepository.UpdateAsync(existingUser);
 

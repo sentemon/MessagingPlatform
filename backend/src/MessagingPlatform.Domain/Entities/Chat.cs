@@ -1,55 +1,134 @@
 using MessagingPlatform.Domain.Enums;
 using MessagingPlatform.Domain.Extensions;
+using MessagingPlatform.Domain.Primitives;
 
 namespace MessagingPlatform.Domain.Entities;
 
-public class Chat
+public sealed class Chat : AggregateRoot
 {
-    public Guid Id { get; set; }
-    
-    public required ChatType ChatType { get; set; }
+    private readonly List<UserChat> _userChats = new();
+    private readonly List<Message> _messages = new();
 
-    public ICollection<UserChat>? UserChats { get; set; } = [];
-
-    public ICollection<Message>? Messages { get; set; } = [];
-    
-    public string Title { get; set; } = "New Chat";
-    
-    private UserChat? GetUserChat(Guid userId)
+    private Chat()
     {
-        return UserChats?.FirstOrDefault(uc => uc.UserId == userId);
-    }
-    
-    private bool HasUserRights(Guid userId, ChatRights requiredRights)
-    {
-        var userChat = GetUserChat(userId);
-        return userChat != null && userChat.Rights.HasRight(requiredRights);
     }
 
-    public bool CanReadMessage(Guid userId) => HasUserRights(userId, ChatRights.Read);
-    public bool CanSendMessage(Guid userId) => HasUserRights(userId, ChatRights.Read | ChatRights.Write);
-    public bool CanUpdateMessage(Guid userId) => HasUserRights(userId, ChatRights.Read | ChatRights.Write | ChatRights.Update);
-    public bool CanDeleteMessage(Guid userId) => HasUserRights(userId, ChatRights.Read | ChatRights.Write | ChatRights.Update | ChatRights.Delete);
-
-    public bool CanAddUser()
+    private Chat(ChatType chatType, string title, Guid id)
     {
-        return ChatType switch
+        Id = id == Guid.Empty ? Guid.NewGuid() : id;
+        ChatType = chatType;
+        Title = NormalizeTitle(title);
+    }
+
+    public ChatType ChatType { get; private set; }
+
+    public string Title { get; private set; } = "New Chat";
+
+    public IReadOnlyCollection<UserChat> UserChats => _userChats.AsReadOnly();
+
+    public IReadOnlyCollection<Message> Messages => _messages.AsReadOnly();
+
+    public static Chat Create(ChatType chatType, string title, Guid? id = null)
+    {
+        return new Chat(chatType, title, id ?? Guid.NewGuid());
+    }
+
+    public void Rename(string title)
+    {
+        Title = NormalizeTitle(title);
+    }
+
+    public UserChat AddParticipant(User user, ChatRole role, ChatRights rights, DateTime joinedAtUtc)
+    {
+        ArgumentNullException.ThrowIfNull(user);
+
+        EnsureCanAddParticipant(user.Id);
+
+        if (_userChats.Any(uc => uc.UserId == user.Id))
         {
-            ChatType.Private => (UserChats?.Count ?? 0) < 2,
-            ChatType.Group => true,
-            ChatType.Channel => false,
-            _ => false
-        };
+            return _userChats.First(uc => uc.UserId == user.Id);
+        }
+
+        var participant = UserChat.Create(user, this, role, rights, joinedAtUtc);
+        _userChats.Add(participant);
+        user.AttachToChat(participant);
+
+        return participant;
     }
 
-    public bool CanDeleteUser()
+    public bool RemoveParticipant(Guid userId)
     {
-        return ChatType switch
+        var participant = _userChats.FirstOrDefault(uc => uc.UserId == userId);
+        if (participant == null)
         {
-            ChatType.Private => false,
-            ChatType.Group => true,
-            ChatType.Channel => true,
-            _ => false
-        };
+            return false;
+        }
+
+        if (ChatType == ChatType.Private)
+        {
+            throw new DomainException("Cannot remove users from a private chat.");
+        }
+
+        _userChats.Remove(participant);
+        participant.Detach();
+        return true;
+    }
+
+    public UserChat? GetParticipant(Guid userId) => _userChats.FirstOrDefault(uc => uc.UserId == userId);
+
+    public bool CanUserPerform(Guid userId, ChatRights requiredRights)
+    {
+        return GetParticipant(userId)?.Rights.HasRight(requiredRights) == true;
+    }
+
+    public void UpdateParticipantRights(Guid userId, ChatRights rights, ChatRole role)
+    {
+        var participant = GetParticipant(userId) ?? throw new DomainException("User is not part of this chat.");
+        participant.UpdatePermissions(rights, role);
+    }
+
+    public Message AddMessage(User sender, string content, DateTime sentAtUtc)
+    {
+        ArgumentNullException.ThrowIfNull(sender);
+
+        if (!CanUserPerform(sender.Id, ChatRights.Read | ChatRights.Write))
+        {
+            throw new DomainException("User does not have permission to send messages in this chat.");
+        }
+
+        var message = Message.Create(sender, this, content, sentAtUtc);
+        _messages.Add(message);
+        sender.AttachMessage(message);
+
+        return message;
+    }
+
+    private void EnsureCanAddParticipant(Guid userId)
+    {
+        if (ChatType != ChatType.Private)
+        {
+            return;
+        }
+
+        var uniqueUsers = _userChats.Select(uc => uc.UserId).Distinct().ToList();
+        if (uniqueUsers.Contains(userId))
+        {
+            return;
+        }
+
+        if (uniqueUsers.Count >= 2)
+        {
+            throw new DomainException("A private chat cannot have more than two participants.");
+        }
+    }
+
+    private static string NormalizeTitle(string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            throw new DomainException("Chat title cannot be empty.");
+        }
+
+        return title.Trim();
     }
 }

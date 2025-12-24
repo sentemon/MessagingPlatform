@@ -1,6 +1,7 @@
 using MessagingPlatform.Application.Abstractions;
 using MessagingPlatform.Application.Common;
 using MessagingPlatform.Domain.Enums;
+using MessagingPlatform.Domain.Primitives;
 using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Chats.Commands.UpdateChat;
@@ -32,7 +33,15 @@ public class UpdateChatCommandHandler : ICommandHandler<UpdateChatCommand, bool>
             return Result<bool>.Failure(new Error("User does not have permission to update the chat"));
         }
 
-        chat.Title = command.Title;
+        try
+        {
+            chat.Rename(command.Title);
+        }
+        catch (DomainException ex)
+        {
+            return Result<bool>.Failure(new Error(ex.Message));
+        }
+
         var result = await _chatRepository.UpdateAsync(chat);
 
         return Result<bool>.Success(result);

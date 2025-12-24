@@ -32,5 +32,11 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
             .WithOne(uc => uc.Chat)
             .HasForeignKey(uc => uc.ChatId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(c => c.Messages)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.Navigation(c => c.UserChats)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

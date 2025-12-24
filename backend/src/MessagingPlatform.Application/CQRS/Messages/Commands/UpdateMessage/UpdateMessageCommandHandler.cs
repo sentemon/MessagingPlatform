@@ -18,15 +18,12 @@ public class UpdateMessageCommandHandler : ICommandHandler<UpdateMessageCommand,
     {
         var message = await _messageRepository.GetById(command.UpdateMessage.MessageId);
 
-        var isItUserMessage = command.UserId == message.SenderId;
-
-        if (!isItUserMessage)
+        if (!message.CanBeModifiedBy(command.UserId))
         {
             return Result<Message>.Failure(new Error("You do not have rights to update this message."));
         }
-        
-        message.Content = command.UpdateMessage.Content;
-        message.UpdatedAt = DateTime.UtcNow;
+
+        message.UpdateContent(command.UpdateMessage.Content, DateTime.UtcNow);
 
         var updatedMessage = await _messageRepository.UpdateAsync(message);
 

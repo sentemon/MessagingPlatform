@@ -1,6 +1,7 @@
 using MessagingPlatform.Application.Abstractions;
 using MessagingPlatform.Application.Common;
 using MessagingPlatform.Domain.Entities;
+using MessagingPlatform.Domain.Primitives;
 using MessagingPlatform.Domain.Interfaces;
 
 namespace MessagingPlatform.Application.CQRS.Messages.Commands.AddMessage;
@@ -16,12 +17,19 @@ public class AddMessageCommandHandler : ICommandHandler<AddMessageCommand, Messa
 
     public async Task<IResult<Message, Error>> Handle(AddMessageCommand command)
     {
-        var message = await _messageRepository.CreateAsync(
-            senderId: command.SenderId,
-            chatId: command.CreateMessage.ChatId, 
-            content: command.CreateMessage.Content
-        );
+        try
+        {
+            var message = await _messageRepository.CreateAsync(
+                senderId: command.SenderId,
+                chatId: command.CreateMessage.ChatId,
+                content: command.CreateMessage.Content
+            );
 
-        return Result<Message>.Success(message);
+            return Result<Message>.Success(message);
+        }
+        catch (DomainException ex)
+        {
+            return Result<Message>.Failure(new Error(ex.Message));
+        }
     }
 }
