@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MessagingPlatform.Api.Controllers;
 
 [Authorize]
-[Route("api/[controller]")]
+[Route("api/chats")]
 [ApiController]
 public class ChatController : ControllerBase
 {
@@ -30,7 +30,7 @@ public class ChatController : ControllerBase
         _deleteChatCommandHandler = deleteChatCommandHandler;
     }
         
-    [HttpGet("getall")]
+    [HttpGet]
     public async Task<IActionResult> GetChats()
     {
         var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
@@ -46,7 +46,7 @@ public class ChatController : ControllerBase
         return Ok(result.Response);
     }
         
-    [HttpGet("get")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetChat(Guid id)
     {
         var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
@@ -62,7 +62,7 @@ public class ChatController : ControllerBase
         return Ok(result.Response);
     }
     
-    [HttpPost("create")]
+    [HttpPost]
     public async Task<IActionResult> CreateChat([FromBody] CreateChatDto createChatDto)
     {
         var creatorId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
@@ -74,14 +74,16 @@ public class ChatController : ControllerBase
             return BadRequest(result.Error.Message);
         }
 
-        return Ok(result.Response.Id); // maybe return the entity of chat
+        return Ok(result.Response.Id);
     }
-        
-    [HttpPut("update")]
-    public async Task<IActionResult> UpdateChat(Guid chatId, string title)
+
+    public record UpdateChatRequest(string Title);
+
+    [HttpPut("{chatId:guid}")]
+    public async Task<IActionResult> UpdateChat(Guid chatId, [FromBody] UpdateChatRequest request)
     {
         var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
-        var command = new UpdateChatCommand(userId, chatId, title);
+        var command = new UpdateChatCommand(userId, chatId, request.Title);
         var result = await _updateChatCommandHandler.Handle(command);
 
         if (!result.IsSuccess)
@@ -92,7 +94,7 @@ public class ChatController : ControllerBase
         return Ok("Chat updated successfully.");
     }
         
-    [HttpDelete("delete")]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteChat(Guid id)
     {
         var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);

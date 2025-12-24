@@ -8,7 +8,6 @@ using MessagingPlatform.Application.CQRS.Users.Commands.UpdateUser;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetAllUsers;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserById;
 using MessagingPlatform.Application.CQRS.Users.Queries.GetUserByUsername;
-using MessagingPlatform.Domain.Entities;
 using MessagingPlatform.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 
@@ -16,7 +15,7 @@ namespace MessagingPlatform.Api.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/account")]
 public class AccountController : ControllerBase
 {
     private readonly ICookieService _cookieService;
@@ -41,7 +40,7 @@ public class AccountController : ControllerBase
         _deleteUserCommandHandler = deleteUserCommandHandler;
     }
 
-    [HttpGet("getall")]
+    [HttpGet("users")]
     public async Task<IActionResult> GetAll() // ToDo: only for admins 
     {
         var query = new GetAllUsersQuery();
@@ -56,7 +55,7 @@ public class AccountController : ControllerBase
     }
     
     // Get Current GetUser
-    [HttpGet("get")]
+    [HttpGet("me")]
     public async Task<IActionResult> Get()
     {
         var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;
@@ -74,7 +73,7 @@ public class AccountController : ControllerBase
     }
     
     [AllowAnonymous]
-    [HttpGet("getbyusername/{username}")]
+    [HttpGet("users/{username}")]
     public async Task<IActionResult> GetByUsername(string username)
     {
         var query = new GetUserByUsernameQuery(username.ToLowerInvariant());
@@ -90,9 +89,9 @@ public class AccountController : ControllerBase
     
     [AllowAnonymous]
     [HttpPost("signup")]
-    public async Task<IActionResult> SignUp(string firstName, string lastName, string username, string email, string password, string confirmPassword)
+    public async Task<IActionResult> SignUp([FromBody] AddUserCommand request)
     {
-        var command = new AddUserCommand(firstName, lastName, username.ToLowerInvariant(), email, password, confirmPassword);
+        var command = new AddUserCommand(request.FirstName, request.LastName, request.Username.ToLowerInvariant(), request.Email, request.Password, request.ConfirmPassword);
         var result = await _addUserCommandHandler.Handle(command);
 
         if (!result.IsSuccess)
@@ -107,9 +106,9 @@ public class AccountController : ControllerBase
     
     [AllowAnonymous]
     [HttpPost("signin")]
-    public async Task<IActionResult> SignIn(string username, string password)
+    public async Task<IActionResult> SignIn([FromBody] SignInCommand request)
     {
-        var command = new SignInCommand(username.ToLowerInvariant(), password);
+        var command = new SignInCommand(request.Username.ToLowerInvariant(), request.Password);
         var result = await _signInCommandHandler.Handle(command);
         
         if (!result.IsSuccess)
@@ -136,8 +135,8 @@ public class AccountController : ControllerBase
         return Ok(User.Identity?.IsAuthenticated);
     }
     
-    [HttpPut("update")]
-    public async Task<IActionResult> Update(string firstName, string lastName, string username, string email)
+    [HttpPut("me")]
+    public async Task<IActionResult> Update([FromBody] UpdateUserDto dto)
     {
         try
         {
@@ -149,7 +148,7 @@ public class AccountController : ControllerBase
             }
             
             var id = Guid.Parse(currentUserId);
-            var command = new UpdateUserCommand(id, firstName, lastName, username, email);
+            var command = new UpdateUserCommand(id, dto.FirstName, dto.LastName, dto.Email, dto.Bio);
             var result = await _updateUserCommandHandler.Handle(command);
 
             if (!result.IsSuccess)
@@ -169,7 +168,7 @@ public class AccountController : ControllerBase
         }
     }
     
-    [HttpDelete("delete")]
+    [HttpDelete("me")]
     public async Task<IActionResult> Delete()
     {
         var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;

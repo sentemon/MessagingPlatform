@@ -12,7 +12,7 @@ namespace MessagingPlatform.Api.Controllers;
 
 // ToDo
 [Authorize]
-[Route("api/[controller]")]
+[Route("api/chats/{chatId:guid}/participants")]
 [ApiController]
 public class UserChatController : ControllerBase
 {
@@ -31,7 +31,7 @@ public class UserChatController : ControllerBase
         _removeUserFromChatCommandHandler = removeUserFromChatCommandHandler;
     }
     
-    [HttpGet("{chatId:guid}/users")]
+    [HttpGet]
     public async Task<IActionResult> GetUserChat(Guid chatId)
     {
         var query = new GetUsersInChatQuery(chatId);
@@ -45,7 +45,7 @@ public class UserChatController : ControllerBase
         return Ok(result.Response);
     }
 
-    [HttpGet("{chatId:guid}/{username}")]
+    [HttpGet("{username}")]
     public async Task<IActionResult> GetUserChats(Guid chatId, string username)
     {
         var query = new GetUserInChatQuery(chatId, username);
@@ -59,9 +59,10 @@ public class UserChatController : ControllerBase
         return Ok(result.Response);
     }
     
-    [HttpPost]
-    public async Task<IActionResult> AddUserChat([FromBody] AddUserToChatCommand command)
+    [HttpPost("{userId:guid}")]
+    public async Task<IActionResult> AddUserChat(Guid chatId, Guid userId)
     {
+        var command = new AddUserToChatCommand(chatId, userId);
         var result = await _addUserToChatCommandHandler.Handle(command);
 
         if (!result.IsSuccess)
@@ -69,10 +70,10 @@ public class UserChatController : ControllerBase
             return BadRequest(result.Error.Message);
         }
         
-        return Ok(result);
+        return Ok(result.Response);
     }
     
-    [HttpPut("{chatId:guid}/users/{userId:guid}/permissions")]
+    [HttpPut("{userId:guid}/permissions")]
     public async Task<IActionResult> UpdateUserPermissions(Guid chatId, Guid userId, [FromBody] UpdateUserPermissionsDto dto)
     {
         var command = new UpdateUserPermissionsCommand(chatId, userId, dto);
@@ -86,7 +87,7 @@ public class UserChatController : ControllerBase
         return Ok(result.Response);
     }
     
-    [HttpDelete("{chatId:guid}/users/{userId:guid}")]
+    [HttpDelete("{userId:guid}")]
     public async Task<IActionResult> RemoveUserChat(Guid chatId, Guid userId)
     {
         var command = new RemoveUserFromChatCommand(chatId, userId);

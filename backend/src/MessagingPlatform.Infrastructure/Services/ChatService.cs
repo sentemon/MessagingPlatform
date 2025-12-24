@@ -4,7 +4,7 @@ using MessagingPlatform.Domain.Enums;
 using MessagingPlatform.Domain.Extensions;
 using MessagingPlatform.Domain.Interfaces;
 
-namespace MessagingPlatform.Application.Services;
+namespace MessagingPlatform.Infrastructure.Services;
 
 public class ChatService : IChatService
 {
@@ -41,7 +41,7 @@ public class ChatService : IChatService
 
         foreach (var memberUserId in memberUserIds.Distinct())
         {
-            var member = await _userRepository.GetByIdAsync(memberUserId) ?? continue;
+            var member = await _userRepository.GetByIdAsync(memberUserId);
             chat.AddParticipant(member, ChatRole.Member, ChatRights.Read | ChatRights.Write, DateTime.UtcNow);
         }
 
@@ -59,7 +59,7 @@ public class ChatService : IChatService
         
         foreach (var viewerUserId in viewerUserIds.Distinct())
         {
-            var viewer = await _userRepository.GetByIdAsync(viewerUserId) ?? continue;
+            var viewer = await _userRepository.GetByIdAsync(viewerUserId);
             chat.AddParticipant(viewer, ChatRole.Viewer, ChatRights.Read, DateTime.UtcNow);
         }
 

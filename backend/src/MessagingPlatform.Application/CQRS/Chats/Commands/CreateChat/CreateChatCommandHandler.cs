@@ -32,7 +32,7 @@ public class CreateChatCommandHandler : ICommandHandler<CreateChatCommand, Chat>
             }
         }
 
-        if (userIds.Count == 0)
+        if (command.ChatType == ChatType.Private && userIds.Count == 0)
         {
             return Result<Chat>.Failure(new Error("No valid users found"));
         }

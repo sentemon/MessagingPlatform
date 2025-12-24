@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using MessagingPlatform.Application.Common.Interfaces;
-using MessagingPlatform.Application.Services;
 using MessagingPlatform.Domain.Interfaces;
 using MessagingPlatform.Infrastructure.Interfaces;
 using MessagingPlatform.Infrastructure.Persistence;

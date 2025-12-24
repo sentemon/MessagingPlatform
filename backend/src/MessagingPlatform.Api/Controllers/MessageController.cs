@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MessagingPlatform.Api.Controllers;
 
 [Authorize]
-[Route("api/[controller]")]
+[Route("api/chats/{chatId:guid}/messages")]
 [ApiController]
 public class MessageController : ControllerBase
 {
@@ -29,7 +29,7 @@ public class MessageController : ControllerBase
     }
     
     // ToDo: use instead of navigation property "Messages" in Chat entity for better productivity
-    [HttpGet("getall")]
+    [HttpGet]
     public async Task<IActionResult> GetAll(Guid chatId)
     {
         var query = new GetAllMessagesQuery(chatId);
@@ -43,10 +43,12 @@ public class MessageController : ControllerBase
         return Ok(result.Response);
     }
 
-    [HttpPost("add")]
-    public async Task<IActionResult> Add(CreateMessageDto createMessage)
+    [HttpPost]
+    public async Task<IActionResult> Add(Guid chatId, [FromBody] CreateMessageDto createMessage)
     {
         var senderId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
+
+        createMessage.ChatId = chatId;
 
         var command = new AddMessageCommand(createMessage, senderId);
         var result =  await _addMessageCommandHandler.Handle(command);
@@ -61,11 +63,12 @@ public class MessageController : ControllerBase
         return Ok(result.Response);
     }
 
-    [HttpPut("update")]
-    public async Task<IActionResult> Update([FromBody] UpdateMessageDto updateMessage)
+    [HttpPut("{messageId:guid}")]
+    public async Task<IActionResult> Update(Guid chatId, Guid messageId, [FromBody] UpdateMessageDto updateMessage)
     {
         var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
-        
+
+        updateMessage.MessageId = messageId;
         var command = new UpdateMessageCommand(updateMessage, userId);
         var result = await _updateMessageCommandHandler.Handle(command);
 
@@ -77,10 +80,11 @@ public class MessageController : ControllerBase
         return Ok(result.Response);
     }
 
-    [HttpDelete("delete")]
-    public async Task<IActionResult> Delete([FromBody] DeleteMessageDto deleteMessage)
+    [HttpDelete("{messageId:guid}")]
+    public async Task<IActionResult> Delete(Guid chatId, Guid messageId)
     {
-        var command = new DeleteMessageCommand(deleteMessage);
+        var senderId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.Sid).Value);
+        var command = new DeleteMessageCommand(new DeleteMessageDto { MessageId = messageId, SenderId = senderId });
         var result = await _deleteMessageCommandHandler.Handle(command);
         
         if (!result.IsSuccess)

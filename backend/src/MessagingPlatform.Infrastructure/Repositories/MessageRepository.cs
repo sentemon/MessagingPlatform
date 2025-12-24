@@ -56,6 +56,8 @@ public class MessageRepository : IMessageRepository
 
         var message = chat.AddMessage(sender, content, DateTime.UtcNow);
 
+        // Explicitly add the new message to the context to ensure EF tracks the insert.
+        await _appDbContext.Messages.AddAsync(message);
         await _appDbContext.SaveChangesAsync();
 
         return message;
