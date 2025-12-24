@@ -1,20 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{533118EF-BFBC-4140-83E1-A7F0701D92E2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "backend\src", "{533118EF-BFBC-4140-83E1-A7F0701D92E2}"
+	ProjectSection(SolutionItems) = preProject
+		backend\src\Dockerfile = backend\src\Dockerfile
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src/MessagingPlatform.Api", "src/MessagingPlatform.Api\MessagingPlatform.Api.csproj", "{871E8E55-1930-4200-814E-1ABCAD02953E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Api", "backend\src\MessagingPlatform.Api\MessagingPlatform.Api.csproj", "{871E8E55-1930-4200-814E-1ABCAD02953E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Domain", "src\MessagingPlatform.Domain\MessagingPlatform.Domain.csproj", "{FA908482-1173-4A8D-9D2C-3E7BE57BF43A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Domain", "backend\src\MessagingPlatform.Domain\MessagingPlatform.Domain.csproj", "{FA908482-1173-4A8D-9D2C-3E7BE57BF43A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Application", "src\MessagingPlatform.Application\MessagingPlatform.Application.csproj", "{414A56B7-0737-44FB-8BB6-5D063FBBC7AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Application", "backend\src\MessagingPlatform.Application\MessagingPlatform.Application.csproj", "{414A56B7-0737-44FB-8BB6-5D063FBBC7AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Infrastructure", "src\MessagingPlatform.Infrastructure\MessagingPlatform.Infrastructure.csproj", "{A56AE376-4622-45F6-85FC-3F8F1C3DCB92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Infrastructure", "backend\src\MessagingPlatform.Infrastructure\MessagingPlatform.Infrastructure.csproj", "{A56AE376-4622-45F6-85FC-3F8F1C3DCB92}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B514B680-BC2D-4147-8680-377A0DA089CF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "backend\tests", "{B514B680-BC2D-4147-8680-377A0DA089CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Domain.Tests", "tests\MessagingPlatform.Domain.Tests\MessagingPlatform.Domain.Tests.csproj", "{1B901EA5-06C3-45C5-B733-59399E4AB748}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Domain.Tests", "backend\tests\MessagingPlatform.Domain.Tests\MessagingPlatform.Domain.Tests.csproj", "{1B901EA5-06C3-45C5-B733-59399E4AB748}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Application.Tests", "tests\MessagingPlatform.Application.Tests\MessagingPlatform.Application.Tests.csproj", "{F56DB277-DFB7-4F57-9EDD-1E75E4177E65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagingPlatform.Application.Tests", "backend\tests\MessagingPlatform.Application.Tests\MessagingPlatform.Application.Tests.csproj", "{F56DB277-DFB7-4F57-9EDD-1E75E4177E65}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "items", "items", "{BD76CE15-C0A1-4420-B079-91F5D2CE8077}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		.github\workflows\backend.yml = .github\workflows\backend.yml
+		.github\workflows\compose-build.yml = .github\workflows\compose-build.yml
+		.github\workflows\web.yml = .github\workflows\web.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
