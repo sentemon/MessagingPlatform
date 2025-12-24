@@ -26,6 +26,6 @@ jobs:
           run: |
             echo "Checking health..."
             for i in {1..10}; do
-              curl --fail http://0.0.0.0:8000/health && break || sleep 5
+              curl --fail http://0.0.0.0:9000/health && break || sleep 5
             done
-            curl --fail http://0.0.0.0:8000/health || exit 1
+            curl --fail http://0.0.0.0:9000/health || exit 1

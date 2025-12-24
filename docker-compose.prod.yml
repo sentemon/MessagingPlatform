@@ -1,0 +1,55 @@
+# networks:
+#   dev:
+
+# services:
+#   db:
+#     container_name: messagingplatform-db
+#     image: postgres:15-alpine
+#     ports:
+#       - "5432:5432"
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: mysecretpassword
+#       POSTGRES_DB: postgres
+#     restart: always
+#     volumes: 
+#       - messagingplatform-data:/var/lib/postgresql/data
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -U postgres"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+#     networks:
+#       - dev
+
+#   backend:
+#     container_name: messagingplatform-backend
+#     build:
+#       context: ./backend
+#       dockerfile: Dockerfile
+#     ports:
+#       - "8080:8080"
+#     environment:
+#       ASPNETCORE_ENVIRONMENT: Development
+#       ConnectionStrings__DefaultConnection: "Host=db;Database=postgres;Username=postgres;Password=mysecretpassword"
+#     depends_on:
+#       db:
+#         condition: service_healthy
+#     networks:
+#       - dev
+
+#   frontend:
+#     container_name: messagingplatform-frontend
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+#     ports:
+#       - "4200:80"
+#     depends_on:
+#       db:
+#         condition: service_healthy
+#     networks:
+#       - dev
+      
+# volumes:
+#   messagingplatform-data:

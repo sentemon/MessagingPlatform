@@ -1,24 +1,29 @@
-FROM node:20.17.0 as build
+ARG ENVIRONMENT=Development
+
+FROM node:20.17.0 AS build
 WORKDIR /app
+
 COPY package*.json ./
 RUN npm install
+
 COPY . .
-RUN npm run build --prod
+
+ARG ENVIRONMENT
+RUN if [ "$ENVIRONMENT" = "Production" ]; then \
+      npm run build -- --configuration=production; \
+    else \
+      npm run build -- --configuration=development; \
+    fi
 
 FROM nginx:1.21.3-alpine
-COPY --from=build /app/dist/frontend /usr/share/nginx/html
 
-RUN echo 'server {\
-    listen       80;\
-    listen  [::]:80;\
-    server_name  localhost;\
-    location / {\
-        root   /usr/share/nginx/html/browser;\
-        try_files $uri $uri/ /index.html;\
-        index  index.html index.htm;\
-    }\
-    error_page   500 502 503 504  /50x.html;\
-    location = /50x.html {\
-        root   /usr/share/nginx/html/browser;\
-    }\
-}' > /etc/nginx/conf.d/default.conf
+ARG ENVIRONMENT
+
+COPY --from=build /app/dist/web/browser /usr/share/nginx/html
+
+COPY default.conf /etc/nginx/conf.d/default.conf
+COPY prod.conf /etc/nginx/conf.d/prod.conf
+
+RUN if [ "$ENVIRONMENT" = "Production" ]; then \
+      cp /etc/nginx/conf.d/prod.conf /etc/nginx/conf.d/default.conf; \
+    fi
