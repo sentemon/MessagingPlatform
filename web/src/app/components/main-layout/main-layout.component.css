@@ -3,9 +3,13 @@
 }
 
 .main-layout {
-  display: flex;
-  height: 100%;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 16px;
+  height: 100vh;
   width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(108, 230, 194, 0.06), rgba(23, 26, 36, 0.9)), var(--bg);
 }
 
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ChatDto } from "../../models/responses/chatdto";
 import { ChatSidebar } from "../../models/responses/chatsidebar";
 import { environment } from "../../../environments/environment";
@@ -19,7 +20,17 @@ export class ChatService {
 
   public get(id: string | null): Observable<ChatDto> {
     if (id !== null) {
-      return this.http.get<ChatDto>(`${this.baseUrl}/chats/${id}`, { withCredentials: true });
+      return this.http.get<ChatDto>(`${this.baseUrl}/chats/${id}`, { withCredentials: true }).pipe(
+        map((chat: any) => ({
+          id: chat.id ?? chat.Id,
+          chatType: chat.chatType ?? chat.ChatType,
+          userChats: chat.userChats ?? chat.UserChats,
+          messages: chat.messages ?? chat.Messages,
+          creatorId: chat.creatorId ?? chat.CreatorId,
+          creator: chat.creator ?? chat.Creator,
+          title: chat.title ?? chat.Title
+        } as ChatDto))
+      );
     } else {
       return of(new ChatDto());
     }

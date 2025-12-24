@@ -2,137 +2,128 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  width: 80vw;
-  background-color: #181818;
+  height: 100%;
+  background: var(--panel-strong);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
 }
 
 .chat-header {
-  text-align: center;
-  position: sticky;
-  top: 0;
-  padding: 10px;
-  background-color: #282828;
-  color: #fff;
-  z-index: 10;
-  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  background: rgba(255,255,255,0.02);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
 }
 
-.delete-chat {
-  width: 50px;
-  height: 50px;
-  float: right;
-  background-color: #444;
-  color: red;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-.delete-chat:hover {
-  background-color: #666;
+.chat-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
 }
 
 .messages-container {
   flex: 1;
-  padding: 10px;
+  padding: 18px;
   overflow-y: auto;
-  background-color: #2a2a2a;
-  scrollbar-width: thin;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent 22%), var(--panel-strong);
+  gap: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.08);
+  border-radius: 999px;
 }
 
 .select-chat {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  color: #ffffff;
-  font-size: 64px;
+  margin: auto;
+  color: var(--text-muted);
+  font-size: 28px;
   font-weight: 600;
 }
 
 .no-messages {
-  display: flex;
-  justify-content: center;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
+  margin: auto;
+  color: var(--text-muted);
+  font-size: 14px;
 }
 
 .message {
-  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  max-width: 640px;
 }
 
 .message-header {
-  font-size: 0.9em;
-  margin-bottom: 5px;
-  color: #d3d3d3;
-}
-
-.message-time {
-  float: right;
-  color: #aaa;
-  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-muted);
 }
 
 .message-body {
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #444;
+  color: var(--text);
+  line-height: 1.5;
 }
 
-.delete-message {
-  width: 20px;
-  height: 20px;
-  float: right;
-  background-color: #444;
-  color: red;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
+.message-time {
+  font-size: 11px;
+  color: var(--text-muted);
 }
 
 .message-input {
-  padding: 10px;
-  background-color: #282828;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.02);
+  border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
-  position: sticky;
-  bottom: 0;
-  z-index: 500;
+  gap: 10px;
 }
 
 .message-input textarea {
   flex: 1;
-  min-height: 50px;
-  max-height: 200px;
-  margin-right: 10px;
-  width: calc(100% - 100px);
-  background-color: #222;
-  border: none;
-  color: #ffffff;
-  padding: 10px;
-  border-radius: 5px;
-  resize: none;
-  font-size: 16px;
+  min-height: 52px;
+  max-height: 160px;
+  background: var(--card-muted);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  resize: vertical;
+  font-size: 15px;
 }
 
 .message-input textarea::placeholder {
-  color: #aaa;
+  color: var(--text-muted);
 }
 
-.message-input button {
-  padding: 10px 20px;
-  background-color: #444;
-  color: #fff;
+.send-button {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #08110d;
   border: none;
-  border-radius: 5px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s;
+  box-shadow: 0 10px 20px rgba(108, 230, 194, 0.2);
 }
 
-.message-input button:hover {
-  background-color: #666;
+.attach-icon {
+  opacity: 0.6;
 }

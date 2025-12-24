@@ -1,25 +1,48 @@
 <!-- create-chat.component.html -->
 <div class="sidebar">
   <div class="top">
-    <input type="text" placeholder="Search for a user by username..." class="search-bar">
-    <img (click)="onNewChat()" ngSrc="/new-message.png" alt="new chat" class="new-chat" height="32" width="32">
+    <input
+      type="text"
+      placeholder="Search or start a chat"
+      class="search-bar"
+    />
+    <button class="pill" (click)="onNewChat()">
+      <span>New</span>
+      <img ngSrc="/new-message.png" alt="new chat" height="20" width="20" />
+    </button>
   </div>
-  <div *ngFor="let chat of chats" (click)="onSelectChat(chat.chatId)" class="user">
-    <img ngSrc="/avatar.svg" alt="Chatsidebar's Avatar" class="avatar" height="800" width="800">
+
+  <div class="section-label">Chats</div>
+
+  <div
+    *ngFor="let chat of chats"
+    (click)="onSelectChat(chat.chatId)"
+    class="user"
+    [class.active]="activeChatId === chat.chatId"
+  >
+    <div class="avatar">{{ chat.title?.slice(0, 2)?.toUpperCase() }}</div>
     <div class="user-info">
-      <p class="user-firstname">{{ chat.title }}</p>
+      <div class="row">
+        <p class="user-firstname">{{ chat.title }}</p>
+        <span class="message-time">{{
+          chat.lastMessageSentAt | date : "shortTime"
+        }}</span>
+      </div>
       <p class="last-message" *ngIf="chat.lastMessageFrom">
         {{ chat.lastMessageFrom }}: {{ chat.lastMessageContent }}
       </p>
-      <p class="message-time">{{ chat.lastMessageSentAt | date:'shortTime' }}</p>
-      <span *ngIf="chat.unreadMessagesCount > 0" class="unread-count">
-        {{ chat.unreadMessagesCount }}
-      </span>
     </div>
-    <!-- ToDo: user can edit and delete the chat -->
-    <div (click)="toggleMenu(chat.chatId, $event)">
-      <img ngSrc="/more.svg" height="20" width="20" class="more-info-chat"  alt="more-info">
-
+    <span *ngIf="chat.unreadMessagesCount > 0" class="unread-count">{{
+      chat.unreadMessagesCount
+    }}</span>
+    <div class="actions" (click)="toggleMenu(chat.chatId, $event)">
+      <img
+        ngSrc="/more.svg"
+        height="18"
+        width="18"
+        class="more-info-chat"
+        alt="more-info"
+      />
       <div class="menu" *ngIf="activeChatId === chat.chatId">
         <ul>
           <li (click)="onEdit(chat.chatId)">Edit</li>
@@ -29,38 +52,61 @@
       </div>
     </div>
   </div>
+
+  <div class="section-label">Profile</div>
   <div class="profile">
-    <img ngSrc="/avatar.svg" alt="Profile Avatar" class="avatar" height="800" width="800">
+    <div class="avatar strong">
+      {{ (user?.firstName || "U").slice(0, 1)
+      }}{{ (user?.lastName || "").slice(0, 1) }}
+    </div>
     <div class="user-info">
       <p class="user-fullname">{{ user?.firstName }} {{ user?.lastName }}</p>
-      <p class="user-bio">{{ user?.bio }}</p>
+      <p class="user-bio">{{ user?.bio || "Stay curious, stay kind." }}</p>
     </div>
     <div class="settings">
-      <a routerLink="settings/"><img ngSrc="/settings.svg" alt="settings" height="24" width="24"></a>
+      <a routerLink="settings/"
+        ><img ngSrc="/settings.svg" alt="settings" height="20" width="20"
+      /></a>
     </div>
   </div>
-
 </div>
 
 <!-- Modal window -->
 <div *ngIf="isCreatingChat" class="modal">
   <div class="modal-content">
-    <h2>Create New Chat</h2>
-    <label for="chat-title">Chat Title:</label>
-    <input type="text" [(ngModel)]="newChat.title" id="chat-title" placeholder="Enter chat title">
+    <div class="modal-header">
+      <div>
+        <p class="eyebrow">New conversation</p>
+        <h2>Create chat</h2>
+      </div>
+      <button class="ghost" (click)="closeModal()">✕</button>
+    </div>
 
-    <label for="users">Usernames (comma separated):</label>
-    <input type="text" [(ngModel)]="newChat.usernames" id="users" placeholder="Enter usernames">
+    <label for="chat-title">Chat Title</label>
+    <input
+      type="text"
+      [(ngModel)]="newChat.title"
+      id="chat-title"
+      placeholder="Team sync or Evening plans"
+    />
 
-    <label for="chat-type">Chat Type:</label>
+    <label for="users">Usernames (comma separated)</label>
+    <input
+      type="text"
+      [(ngModel)]="newChat.usernames"
+      id="users"
+      placeholder="e.g. alice, bob, charlie"
+    />
+
+    <label for="chat-type">Chat Type</label>
     <select [(ngModel)]="newChat.chatType" id="chat-type">
       <option value="0">Private</option>
       <option value="1">Group</option>
     </select>
 
     <div class="modal-buttons">
-      <button (click)="createNewChat()">Create</button>
-      <button (click)="closeModal()">Cancel</button>
+      <button class="ghost" (click)="closeModal()">Cancel</button>
+      <button class="primary" (click)="createNewChat()">Create</button>
     </div>
   </div>
 </div>

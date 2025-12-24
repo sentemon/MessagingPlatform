@@ -1,7 +1,114 @@
 :host {
+  display: block;
+  width: 100%;
+}
+
+.auth-page {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  align-items: stretch;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+.auth-hero {
+  background: linear-gradient(150deg, rgba(108, 230, 194, 0.12), rgba(116, 138, 255, 0.14)), var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08), transparent 35%);
+  pointer-events: none;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12px;
+  width: fit-content;
+}
+
+.auth-hero h1 {
+  font-size: 36px;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.auth-hero p {
+  color: var(--text-muted);
+  max-width: 540px;
+  line-height: 1.6;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.hero-card {
+  background: var(--panel-strong);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--shadow);
+}
+
+.hero-card .pill {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 12px;
+  width: fit-content;
+}
+
+.hero-card p {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.auth-panel {
+  background: var(--panel-strong);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px;
+  min-height: 480px;
+  display: flex;
   align-items: center;
-  flex-grow: 1;
-  background-color: #1c1c1e;
+  justify-content: center;
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 720px) {
+  .auth-page {
+    padding: 20px;
+  }
+
+  .auth-hero h1 {
+    font-size: 28px;
+  }
 }

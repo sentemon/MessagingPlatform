@@ -1,0 +1,9 @@
+node_modules
+.angular
+dist
+.git
+.gitignore
+.idea
+npm-debug.log
+yarn.lock
+**/.DS_Store

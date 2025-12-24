@@ -4,7 +4,7 @@ networks:
 
 services:
   web:
-    container_name: web
+    container_name: messagingplatform-web
     build:
       context: ./web
       dockerfile: Dockerfile
@@ -17,7 +17,7 @@ services:
       - messagingplatform
 
   backend:
-    container_name: backend
+    container_name: messagingplatform-backend
     build:
       context: ./backend/src
       dockerfile: Dockerfile
@@ -25,9 +25,14 @@ services:
       - 9000:9000
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: "Host=postgres;Database=postgres;Username=postgres;Password=mysecretpassword"
+      ASPNETCORE_URLS: "http://0.0.0.0:9000"
+      ConnectionStrings__DefaultConnection: "Host=messagingplatform-postgres;Database=MessagingPlatformDb;Username=postgres;Password=mysecretpassword"
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://backend:9000/health || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://messagingplatform-backend:9000/health || exit 1",
+        ]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -38,10 +43,10 @@ services:
       - messagingplatform
 
   postgres:
-    container_name: postgres
+    container_name: messagingplatform-postgres
     image: postgres:15-alpine
     ports:
-      - 5432:5432
+      - 5433:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword

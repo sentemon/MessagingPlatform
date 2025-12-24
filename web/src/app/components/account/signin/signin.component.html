@@ -1,49 +1,61 @@
-<div class="form">
-  <form method="post" (ngSubmit)="signIn(signInUser)">
-    <h1>Sign In</h1>
+<div class="auth-card">
+  <div class="card-header">
+    <p class="eyebrow">Welcome back</p>
+    <h2>Sign in to continue</h2>
+    <p class="hint">
+      Access your spaces, sync chats, and pick up where you left off.
+    </p>
+  </div>
 
-    <div class="input-box">
-      <input
-        [(ngModel)]="signInUser.username"
-        name="username"
-      type="text"
-      placeholder="Username"
-      #username="ngModel"
-      required
-      />
+  <form method="post" (ngSubmit)="signIn(signInUser)" class="form-grid">
+    <label class="field">
+      <span>Username</span>
+      <div class="input">
+        <input
+          [(ngModel)]="signInUser.username"
+          name="username"
+          type="text"
+          placeholder="e.g. jessie"
+          #username="ngModel"
+          required
+        />
+      </div>
       <div *ngIf="username.invalid && username.touched" class="error-message">
         Username is required
       </div>
-      <i class='bx bxs-user'></i>
-    </div>
+    </label>
 
-    <div class="input-box">
-      <input
-        [(ngModel)]="signInUser.password"
-        name="password"
-      type="password"
-      placeholder="Password"
-      #password="ngModel"
-      required
-      />
+    <label class="field">
+      <span>Password</span>
+      <div class="input">
+        <input
+          [(ngModel)]="signInUser.password"
+          name="password"
+          type="password"
+          placeholder="Enter your password"
+          #password="ngModel"
+          required
+          minlength="6"
+        />
+      </div>
       <div *ngIf="password.invalid && password.touched" class="error-message">
         Password must be at least 6 characters long
       </div>
-      <i class='bx bxs-lock-alt'></i>
-    </div>
+    </label>
 
-    <div class="remember-forgot">
-      <label>
+    <div class="form-row">
+      <label class="checkbox">
         <input type="checkbox" />
-        Remember Me
+        <span>Remember me</span>
       </label>
-      <a href="#">Forgot Password</a>
+      <a class="link" href="#">Forgot password?</a>
     </div>
 
-    <button type="submit" class="btn">Sign In</button>
+    <button type="submit" class="primary-btn">Continue</button>
 
-    <div class="signup-link">
-      <p>Don't have an account? <a routerLink="/account/signup">Sign Up</a></p>
-    </div>
+    <p class="switch">
+      No account yet?
+      <a routerLink="/account/signup">Create one</a>
+    </p>
   </form>
 </div>

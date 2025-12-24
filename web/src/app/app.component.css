@@ -1,4 +1,75 @@
-.app-container {
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 20%, rgba(108, 230, 194, 0.1), transparent 26%),
+              radial-gradient(circle at 80% 0%, rgba(116, 138, 255, 0.08), transparent 24%),
+              var(--bg);
+  overflow: hidden;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
   display: flex;
-  height: 100vh;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  width: fit-content;
+  box-shadow: var(--shadow);
+}
+
+.brand-mark .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+}
+
+.brand-mark .wordmark {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+
+.bg-glow {
+  position: absolute;
+  filter: blur(120px);
+  opacity: 0.35;
+  transform: scale(1.1);
+}
+
+.glow-a {
+  width: 360px;
+  height: 360px;
+  top: -80px;
+  left: -60px;
+  background: var(--accent);
+}
+
+.glow-b {
+  width: 420px;
+  height: 420px;
+  bottom: -120px;
+  right: -80px;
+  background: #748aff;
+}
+
+.noise {
+  position: absolute;
+  inset: 0;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="200" height="200" filter="url(%23n)" opacity="0.08"/></svg>');
+  mix-blend-mode: soft-light;
+  pointer-events: none;
 }

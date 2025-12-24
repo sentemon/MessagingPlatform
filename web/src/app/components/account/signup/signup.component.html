@@ -1,102 +1,131 @@
-<div class="form">
-  <form method="post" (ngSubmit)="signUp(signUpUser)">
-    <h1>Sign Up</h1>
+<div class="auth-card">
+  <div class="card-header">
+    <p class="eyebrow">Create account</p>
+    <h2>Join the workspace</h2>
+    <p class="hint">
+      Spin up a profile and start messaging with your team in under a minute.
+    </p>
+  </div>
 
-    <div class="input-box">
-      <input
-        [(ngModel)]="signUpUser.firstName"
-        name="firstName"
-      type="text"
-      placeholder="First Name"
-      #firstName="ngModel"
-      required
-      />
-      <div *ngIf="firstName.invalid && firstName.touched" class="error-message">
-        First Name is required
-      </div>
-      <i class='bx bxs-user'></i>
+  <form method="post" (ngSubmit)="signUp(signUpUser)" class="form-grid">
+    <div class="two-col">
+      <label class="field">
+        <span>First name</span>
+        <div class="input">
+          <input
+            [(ngModel)]="signUpUser.firstName"
+            name="firstName"
+            type="text"
+            placeholder="Jessie"
+            #firstName="ngModel"
+            required
+          />
+        </div>
+        <div
+          *ngIf="firstName.invalid && firstName.touched"
+          class="error-message"
+        >
+          First name is required
+        </div>
+      </label>
+
+      <label class="field">
+        <span>Last name</span>
+        <div class="input">
+          <input
+            [(ngModel)]="signUpUser.lastName"
+            name="lastName"
+            type="text"
+            placeholder="Kim"
+            #lastName="ngModel"
+            required
+          />
+        </div>
+        <div *ngIf="lastName.invalid && lastName.touched" class="error-message">
+          Last name is required
+        </div>
+      </label>
     </div>
 
-    <div class="input-box">
-      <input
-        [(ngModel)]="signUpUser.lastName"
-        name="lastName"
-      type="text"
-      placeholder="Last Name"
-      #lastName="ngModel"
-      required
-      />
-      <div *ngIf="lastName.invalid && lastName.touched" class="error-message">
-        Last Name is required
+    <label class="field">
+      <span>Username</span>
+      <div class="input">
+        <input
+          [(ngModel)]="signUpUser.username"
+          name="username"
+          type="text"
+          placeholder="jessie.k"
+          #username="ngModel"
+          required
+        />
       </div>
-      <i class='bx bxs-user'></i>
-    </div>
-
-    <div class="input-box">
-      <input
-        [(ngModel)]="signUpUser.username"
-        name="username"
-        type="text"
-        placeholder="Username"
-        #username="ngModel"
-        required
-      />
       <div *ngIf="username.invalid && username.touched" class="error-message">
         Username is required
       </div>
-      <i class='bx bxs-user'></i>
-    </div>
+    </label>
 
-    <div class="input-box">
-      <input
-        [(ngModel)]="signUpUser.email"
-        name="email"
-      type="email"
-      placeholder="Email"
-      #email="ngModel"
-      required
-      />
+    <label class="field">
+      <span>Email</span>
+      <div class="input">
+        <input
+          [(ngModel)]="signUpUser.email"
+          name="email"
+          type="email"
+          placeholder="you@example.com"
+          #email="ngModel"
+          required
+        />
+      </div>
       <div *ngIf="email.invalid && email.touched" class="error-message">
         A valid email is required
       </div>
-      <i class='bx bxs-envelope'></i>
+    </label>
+
+    <div class="two-col">
+      <label class="field">
+        <span>Password</span>
+        <div class="input">
+          <input
+            [(ngModel)]="signUpUser.password"
+            name="password"
+            type="password"
+            placeholder="At least 6 characters"
+            #password="ngModel"
+            minlength="6"
+            required
+          />
+        </div>
+        <div *ngIf="password.invalid && password.touched" class="error-message">
+          Password must be at least 6 characters long
+        </div>
+      </label>
+
+      <label class="field">
+        <span>Confirm password</span>
+        <div class="input">
+          <input
+            [(ngModel)]="signUpUser.confirmPassword"
+            name="confirmPassword"
+            type="password"
+            placeholder="Repeat password"
+            #confirmPassword="ngModel"
+            required
+          />
+        </div>
+        <div
+          *ngIf="confirmPassword.invalid && confirmPassword.touched"
+          class="error-message"
+        >
+          Confirm password is required
+        </div>
+      </label>
     </div>
 
-    <div class="input-box">
-      <input
-        [(ngModel)]="signUpUser.password"
-        name="password"
-      type="password"
-      placeholder="Password"
-      #password="ngModel"
-      minlength="6"
-      required
-      />
-      <div *ngIf="password.invalid && password.touched" class="error-message">
-        Password must be at least 6 characters long
-      </div>
-      <i class='bx bxs-lock-alt'></i>
-    </div>
+    <button type="submit" class="primary-btn">Create account</button>
 
-    <div class="input-box">
-      <input
-        [(ngModel)]="signUpUser.confirmPassword"
-        name="confirmPassword"
-      type="password"
-      placeholder="Confirm Password"
-      #confirmPassword="ngModel"
-      required
-      />
-      <div *ngIf="confirmPassword.invalid && confirmPassword.touched" class="error-message">
-        Confirm Password is required
-      </div>
-      <i class='bx bxs-lock-alt'></i>
-    </div>
-
-    <button type="submit" class="btn">Sign Up</button>
-
-    <div class="signup-link">
-      <p>Already have an account? <a routerLink="/account/signin">Sign In</a></p>
-    </div>
+    <p class="switch">
+      Already have an account?
+      <a routerLink="/account/signin">Sign in</a>
+    </p>
   </form>
 </div>

@@ -10,12 +10,11 @@
 
     <div *ngFor="let message of messages" class="message">
       <div class="message-header">
-        <strong>{{ message.sender?.firstName }} {{ message.sender?.lastName }}</strong>
+        <strong>{{ getSenderLabel(message) }}</strong>
         <span class="message-time">{{ message.sentAt | date: 'shortTime' }}</span>
       </div>
       <div class="message-body">
         <p>{{ message.content }}</p>
-        <!-- <button (click)="deleteMessage(message.sender.id, message.id)" class="delete-message">x</button> -->
       </div>
     </div>
   </div>
